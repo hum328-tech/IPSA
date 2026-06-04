@@ -487,10 +487,19 @@ h1{
     <p id="colorPronunciation" style="font-size:28px;">hóng sè</p>
     <p id="colorMeaning" style="font-size:26px;">Rojo</p>
 
-    <button class="enter-btn" onclick="speakColor()">🔊 Escuchar</button>
-    <button class="enter-btn" onclick="nextColor()">➡ Siguiente</button>
-    <button class="enter-btn" onclick="finishColors()">⭐ Terminar</button>
-  </div>
+   <button class="enter-btn" onclick="speakColor()">🔊 Escuchar</button>
+<button class="enter-btn" onclick="listenStudentColor()">🎤 Repetir</button>
+<button class="enter-btn" onclick="nextColor()">➡ Siguiente</button>
+<button class="enter-btn" onclick="finishColors()">⭐ Terminar</button>
+
+<div id="voiceFeedback" style="
+  margin-top:20px;
+  font-size:28px;
+  font-weight:bold;
+  background:white;
+  border-radius:25px;
+  padding:15px;">
+  🎧 Escucha y repite
 </div>
 <div class="rewards">
   <span id="stars">⭐ 0</span>
@@ -665,6 +674,8 @@ function updateColorCard(){
   document.getElementById("colorWord").innerText = color.zh;
   document.getElementById("colorPronunciation").innerText = color.py;
   document.getElementById("colorMeaning").innerText = color.es;
+  document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
+document.getElementById("voiceFeedback").style.background = "white";
 }
 
 function nextColor(){
@@ -702,6 +713,71 @@ function finishColors(){
 }
   
   updateAdventureMap();
+  function normalizeChinese(text){
+  return text
+    .replace(/\s/g, "")
+    .replace(/[，。！？,.!?]/g, "");
+}
+
+function listenStudentColor(){
+  const feedback = document.getElementById("voiceFeedback");
+  const color = activeColors[currentColorIndex];
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+    feedback.innerText = "⚠️ Usa Google Chrome para activar el micrófono.";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "zh-CN";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  feedback.innerText = "🎧 Te escucho...";
+
+  recognition.start();
+
+  recognition.onresult = function(event){
+    let said = event.results[0][0].transcript;
+    let cleanSaid = normalizeChinese(said);
+    let expected = normalizeChinese(color.zh);
+
+    if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
+      feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
+      feedback.style.background = "#B9FBC0";
+      speakPraise();
+    }else{
+      feedback.innerText = "🔄 Dijiste: " + said + " | Intenta decir: " + color.zh + " (" + color.py + ")";
+      feedback.style.background = "#FFD6D6";
+      speakTryAgain();
+    }
+  };
+
+  recognition.onerror = function(){
+    feedback.innerText = "🔄 No escuché bien. Inténtalo otra vez.";
+    feedback.style.background = "#FFF3B0";
+  };
+
+  recognition.onend = function(){
+    // termina solo; el alumno puede volver a tocar 🎤 Repetir
+  };
+}
+
+function speakPraise(){
+  const utterance = new SpeechSynthesisUtterance("很好");
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
+
+function speakTryAgain(){
+  const utterance = new SpeechSynthesisUtterance("再来一次");
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
 </script>
 
 </body>
