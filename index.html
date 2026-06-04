@@ -125,10 +125,21 @@ h1{
 .k2{background:#B9FBC0}
 .k3{background:#CDB4DB}
 
-.chino{background:#FFADAD}
-.frances{background:#A0C4FF}
-.ingles{background:#CAFFBF}
-.espanol{background:#FFD6A5}
+.chino{
+  background:linear-gradient(180deg,#FFADAD,#FFD6A5);
+}
+
+.frances{
+  background:linear-gradient(180deg,#A0C4FF,#FFFFFF);
+}
+
+.ingles{
+  background:linear-gradient(180deg,#FFD166,#FFE8A3);
+}
+
+.espanol{
+  background:linear-gradient(180deg,#B9FBC0,#FFE66D);
+}
 
 .enter-btn{
   margin-top:15px;
@@ -359,41 +370,44 @@ h1{
   </div>
 
   <!-- PANTALLA DE IDIOMAS -->
-  <div id="languages" class="screen">
-    <button class="back" onclick="goHome()">⬅ Volver</button>
+<!-- PANTALLA DE IDIOMAS -->
+<div id="languages" class="screen">
+  <button class="back" onclick="goHome()">⬅ Volver</button>
 
-    <h2 class="title" id="levelTitle">Elige un idioma</h2>
+  <h2 class="title" id="levelTitle">Elige tu amigo</h2>
 
-    <div class="grid">
-      <div class="card chino" onclick="enterLanguage('Chino')">
-        <div class="big-icon">🐼 🇨🇳</div>
-        <h2>Chino</h2>
-        <p>Panda Pangpang</p>
-        <button class="enter-btn">Entrar</button>
-      </div>
+  <div class="grid">
 
-      <div class="card frances" onclick="enterLanguage('Francés')">
-        <div class="big-icon">🦊 🇫🇷</div>
-        <h2>Francés</h2>
-        <p>Zorrito París</p>
-        <button class="enter-btn">Entrar</button>
-      </div>
-
-      <div class="card ingles" onclick="enterLanguage('Inglés')">
-        <div class="big-icon">🐶 🇺🇸</div>
-        <h2>Inglés</h2>
-        <p>Perrito Buddy</p>
-        <button class="enter-btn">Entrar</button>
-      </div>
-
-      <div class="card espanol" onclick="enterLanguage('Español')">
-        <div class="big-icon">🦜 🇲🇽</div>
-        <h2>Español</h2>
-        <p>Perico Lalo</p>
-        <button class="enter-btn">Entrar</button>
-      </div>
+    <div class="card chino" onclick="enterLanguage('Chino')">
+      <div class="big-icon">🐼</div>
+      <h2>Pang Pang</h2>
+      <p>🇨🇳 Chino</p>
+      <button class="enter-btn">Entrar</button>
     </div>
+
+    <div class="card frances" onclick="enterLanguage('Francés')">
+      <div class="big-icon">🐓</div>
+      <h2>Coco</h2>
+      <p>🇫🇷 Francés</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
+    <div class="card ingles" onclick="enterLanguage('Inglés')">
+      <div class="big-icon">🦁</div>
+      <h2>Leo</h2>
+      <p>🇬🇧 Inglés</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
+    <div class="card espanol" onclick="enterLanguage('Español')">
+      <div class="big-icon">🦅</div>
+      <h2>Mexi</h2>
+      <p>🇲🇽 Español</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
   </div>
+</div>
 
   <!-- PANTALLA DE UNIDADES -->
   <!-- PANTALLA MAPA DE AVENTURAS -->
