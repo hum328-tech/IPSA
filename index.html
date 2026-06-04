@@ -556,25 +556,21 @@ function reward(){
   let unlockedLessons = 1;
 
 function openAdventure(index){
+
+  if(index === 0){
+    openColorsLesson();
+    return;
+  }
+
   if(index >= unlockedLessons){
     alert("🔒 Primero termina la aventura anterior.");
     sound();
     return;
   }
 
-  stars++;
-  document.getElementById("stars").innerText = "⭐ " + stars;
-
-  if(unlockedLessons < 4){
-    unlockedLessons++;
-  }
-
-  updateAdventureMap();
+  alert("Esta lección todavía no está construida.");
   sound();
-
-  alert("🎉 ¡Aventura completada! Ganaste una estrella.");
 }
-
 function updateAdventureMap(){
   const lessons = document.querySelectorAll(".lesson-node");
 
