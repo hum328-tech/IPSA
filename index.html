@@ -303,6 +303,62 @@ h1{
 #colorsLesson .adventure-map{
   margin-bottom:90px;
 }
+  .magic-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.magic-card{
+  width:90%;
+  max-width:450px;
+  background:white;
+  border-radius:35px;
+  padding:35px;
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  animation:popupBounce .35s ease;
+}
+
+.magic-icon{
+  font-size:90px;
+}
+
+.magic-card h2{
+  font-size:42px;
+  color:#FF9F1C;
+  margin:10px 0;
+}
+
+.magic-card p{
+  font-size:28px;
+}
+
+.magic-card button{
+  margin-top:15px;
+  background:#FFD93D;
+  border:none;
+  border-radius:25px;
+  padding:16px 35px;
+  font-size:24px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+@keyframes popupBounce{
+  0%{
+    transform:scale(.6);
+    opacity:0;
+  }
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
 @media(max-width:768px){
   .header{
     flex-direction:column;
@@ -724,7 +780,7 @@ function finishColors(){
   showScreen("units");
   sound();
 
-  alert("🎉 ¡Colores completado! Ganaste una estrella.");
+  showMagicPopup("🌟 ¡Terminaste la aventura de colores y ganaste una estrella!");
 }
   
   updateAdventureMap();
@@ -801,6 +857,824 @@ function speakTryAgain(){
   return array;
 }
 </script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instituto Políglota Kids</title>
 
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Trebuchet MS','Comic Sans MS',sans-serif;
+  background:linear-gradient(180deg,#7DDCFF,#FFF3B0);
+  color:#17445E;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.app{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+.header{
+  background:white;
+  border-radius:30px;
+  padding:18px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.logo-icon{
+  font-size:60px;
+}
+
+h1{
+  margin:0;
+  font-size:34px;
+}
+
+.subtitle{
+  margin:4px 0 0;
+  font-size:18px;
+}
+
+.teacher{
+  background:#FFD93D;
+  padding:14px 20px;
+  border-radius:22px;
+  font-weight:bold;
+}
+
+.screen{
+  display:none;
+  margin-top:30px;
+}
+
+.screen.active{
+  display:block;
+}
+
+.title{
+  text-align:center;
+  font-size:38px;
+  margin-bottom:25px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:white;
+  border-radius:35px;
+  padding:30px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(0,0,0,.18);
+  transition:.25s;
+  border:6px solid transparent;
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.card:hover{
+  transform:scale(1.05) rotate(-1deg);
+  border-color:#FFD93D;
+}
+
+.card:active{
+  transform:scale(.96);
+}
+
+.big-icon{
+  font-size:95px;
+  margin-bottom:10px;
+}
+
+.card h2{
+  font-size:38px;
+  margin:10px 0;
+}
+
+.card p{
+  font-size:22px;
+  margin:5px 0;
+}
+
+.k1{background:#FFE8A3}
+.k2{background:#B9FBC0}
+.k3{background:#CDB4DB}
+
+.chino{
+  background:linear-gradient(180deg,#FFADAD,#FFD6A5);
+}
+
+.frances{
+  background:linear-gradient(180deg,#A0C4FF,#FFFFFF);
+}
+
+.ingles{
+  background:linear-gradient(180deg,#FFD166,#FFE8A3);
+}
+
+.espanol{
+  background:linear-gradient(180deg,#B9FBC0,#FFE66D);
+}
+
+.enter-btn{
+  margin-top:15px;
+  background:#FFB703;
+  color:#17324D;
+  border:none;
+  border-radius:25px;
+  padding:16px 30px;
+  font-size:24px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 6px 12px rgba(0,0,0,.18);
+}
+
+.enter-btn:hover{
+  transform:scale(1.05);
+}
+
+.back{
+  background:#FF6B6B;
+  color:white;
+  border:none;
+  border-radius:22px;
+  padding:14px 24px;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-bottom:20px;
+}
+
+.rewards{
+  position:fixed;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  border-radius:35px;
+  padding:12px 25px;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  display:flex;
+  gap:25px;
+  font-size:28px;
+  z-index:10;
+}
+
+.cloud{
+  position:absolute;
+  font-size:70px;
+  opacity:.7;
+  animation:float 8s infinite ease-in-out;
+  z-index:-1;
+}
+
+.cloud.one{top:120px;left:5%}
+.cloud.two{top:250px;right:8%;animation-delay:2s}
+.cloud.three{bottom:120px;left:15%;animation-delay:4s}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+}
+
+.pop{
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(.8)}
+  60%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+.progress-box{
+  background:white;
+  border-radius:25px;
+  padding:18px;
+  margin:0 auto 25px;
+  max-width:600px;
+  box-shadow:0 8px 18px rgba(0,0,0,.15);
+}
+
+.progress-text{
+  font-size:24px;
+  font-weight:bold;
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.progress-bar{
+  background:#E9ECEF;
+  border-radius:20px;
+  height:28px;
+  overflow:hidden;
+}
+
+#progressFill{
+  background:linear-gradient(90deg,#FFD93D,#FF9F1C);
+  width:25%;
+  height:100%;
+  transition:.4s;
+}
+
+.adventure-map{
+  max-width:520px;
+  margin:auto;
+  background:rgba(255,255,255,.55);
+  border-radius:40px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.lesson-node{
+  background:white;
+  border-radius:35px;
+  padding:22px;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  border:6px solid transparent;
+  transition:.25s;
+}
+
+.lesson-node:hover{
+  transform:scale(1.05);
+}
+
+.lesson-node h2{
+  margin:5px 0;
+  font-size:30px;
+}
+
+.path-icon{
+  font-size:70px;
+}
+
+.unlocked{
+  border-color:#FFD93D;
+}
+
+.locked{
+  opacity:.55;
+  filter:grayscale(.4);
+}
+
+.road{
+  font-size:35px;
+  margin:12px 0;
+}
+
+.treasure{
+  font-size:85px;
+  margin-top:20px;
+  cursor:pointer;
+  animation:float 2s infinite ease-in-out;
+}
+  .only-stars{
+  bottom:25px;
+  padding:12px 28px;
+  font-size:32px;
+}
+
+#colorsLesson .adventure-map{
+  margin-bottom:90px;
+}
+@media(max-width:768px){
+  .header{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+
+  h1{
+    font-size:28px;
+  }
+
+  .title{
+    font-size:30px;
+  }
+
+  .card{
+    min-height:220px;
+  }
+
+  .big-icon{
+    font-size:80px;
+  }
+
+  .rewards{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cloud one">☁️</div>
+<div class="cloud two">☁️</div>
+<div class="cloud three">☁️</div>
+
+<div class="app">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">🌈</div>
+      <div>
+        <h1>Instituto Políglota Kids</h1>
+        <p class="subtitle">Aprende jugando, escuchando y tocando</p>
+      </div>
+    </div>
+
+    <div class="teacher">Modo Kinder</div>
+  </div>
+
+  <!-- PANTALLA INICIAL -->
+  <div id="home" class="screen active">
+    <h2 class="title">Elige tu mundo</h2>
+
+    <div class="grid">
+      <div class="card k1" onclick="openLevel('K1')">
+        <div class="big-icon">🧸</div>
+        <h2>K1</h2>
+        <p>Primer mundo</p>
+      </div>
+
+      <div class="card k2" onclick="openLevel('K2')">
+        <div class="big-icon">🚀</div>
+        <h2>K2</h2>
+        <p>Mundo espacial</p>
+      </div>
+
+      <div class="card k3" onclick="openLevel('K3')">
+        <div class="big-icon">🌟</div>
+        <h2>K3</h2>
+        <p>Mundo estrella</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE IDIOMAS -->
+<!-- PANTALLA DE IDIOMAS -->
+<div id="languages" class="screen">
+  <button class="back" onclick="goHome()">⬅ Volver</button>
+
+  <h2 class="title" id="levelTitle">Elige tu amigo</h2>
+
+  <div class="grid">
+
+    <div class="card chino" onclick="enterLanguage('Chino')">
+      <div class="big-icon">🐼</div>
+      <h2>Pang Pang</h2>
+      <p>🇨🇳 Chino</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
+    <div class="card frances" onclick="enterLanguage('Francés')">
+      <div class="big-icon">🐓</div>
+      <h2>Coco</h2>
+      <p>🇫🇷 Francés</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
+    <div class="card ingles" onclick="enterLanguage('Inglés')">
+      <div class="big-icon">🦁</div>
+      <h2>Leo</h2>
+      <p>🇬🇧 Inglés</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
+    <div class="card espanol" onclick="enterLanguage('Español')">
+      <div class="big-icon">🦅</div>
+      <h2>Mexi</h2>
+      <p>🇲🇽 Español</p>
+      <button class="enter-btn">Entrar</button>
+    </div>
+
+  </div>
+</div>
+
+  <!-- PANTALLA DE UNIDADES -->
+  <!-- PANTALLA MAPA DE AVENTURAS -->
+<div id="units" class="screen">
+  <button class="back" onclick="goLanguages()">⬅ Volver</button>
+
+  <h2 class="title" id="unitTitle">Mapa de aventuras</h2>
+
+  <div class="progress-box">
+    <div class="progress-text">Progreso</div>
+    <div class="progress-bar">
+      <div id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="adventure-map">
+
+    <div class="lesson-node unlocked" onclick="openColorsLesson()">
+      <div class="path-icon">🌈</div>
+      <h2>Colores</h2>
+      <p>⭐ ⭐ ⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node locked" onclick="openAdventure(1)">
+      <div class="path-icon">🐶</div>
+      <h2>Animales</h2>
+      <p>🔒</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node locked" onclick="openAdventure(2)">
+      <div class="path-icon">🔢</div>
+      <h2>Números</h2>
+      <p>🔒</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node locked" onclick="openAdventure(3)">
+      <div class="path-icon">👨‍👩‍👧</div>
+      <h2>Familia</h2>
+      <p>🔒</p>
+    </div>
+
+    <div class="treasure" onclick="openChest()">🎁</div>
+
+  </div>
+</div>
+  <!-- LECCIÓN DE COLORES -->
+<div id="colorsLesson" class="screen">
+  <button class="back" onclick="showScreen('units')">⬅ Volver</button>
+
+  <h2 class="title" id="colorsTitle">🌈 Colores</h2>
+
+  <div class="adventure-map">
+    <div id="colorMascot" style="font-size:90px;">🐼</div>
+
+    <div id="colorBox" style="
+      width:220px;
+      height:220px;
+      border-radius:40px;
+      margin:20px auto;
+      background:red;
+      border:8px solid white;
+      box-shadow:0 10px 20px rgba(0,0,0,.2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:80px;">
+      🟥
+    </div>
+
+    <h2 id="colorWord" style="font-size:50px;margin:10px;">红色</h2>
+    <p id="colorPronunciation" style="font-size:28px;">hóng sè</p>
+    <p id="colorMeaning" style="font-size:26px;">Rojo</p>
+
+   <button class="enter-btn" onclick="speakColor()">🔊 Escuchar</button>
+<button class="enter-btn" onclick="listenStudentColor()">🎤 Repetir</button>
+<button class="enter-btn" onclick="nextColor()">➡ Siguiente</button>
+<button id="finishBtn" class="enter-btn" onclick="finishColors()" style="display:none;">⭐ Terminar</button>
+
+<div id="voiceFeedback" style="
+  margin-top:20px;
+  font-size:28px;
+  font-weight:bold;
+  background:white;
+  border-radius:25px;
+  padding:15px;">
+  🎧 Escucha y repite
+</div>
+  
+</div> <!-- adventure-map -->
+</div> <!-- colorsLesson -->
+
+<div class="rewards only-stars">
+  <span id="stars">⭐ 0</span>
+</div>
+<script>
+let currentLevel = "";
+let currentLanguage = "";
+let stars = 0;
+
+function sound(){
+  const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+  audio.volume = 0.35;
+  audio.play();
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+}
+
+function openLevel(level){
+  currentLevel = level;
+  document.getElementById("levelTitle").innerText = level + " - Elige un idioma";
+  showScreen("languages");
+  sound();
+}
+
+function goHome(){
+  showScreen("home");
+  sound();
+}
+
+function goLanguages(){
+  showScreen("languages");
+  sound();
+}
+
+function enterLanguage(language){
+  currentLanguage = language;
+  document.getElementById("unitTitle").innerText = currentLevel + " - " + currentLanguage;
+  showScreen("units");
+  sound();
+}
+
+function reward(){
+  stars++;
+  document.getElementById("stars").innerText = "⭐ " + stars;
+
+  const rewards = document.querySelector(".rewards");
+  rewards.classList.remove("pop");
+  void rewards.offsetWidth;
+  rewards.classList.add("pop");
+
+  sound();
+
+  alert("🎉 ¡Muy bien! Ganaste una estrella.");
+}
+  let unlockedLessons = 1;
+
+function openAdventure(index){
+
+  if(index === 0){
+    openColorsLesson();
+    return;
+  }
+
+  if(index >= unlockedLessons){
+    alert("🔒 Primero termina la aventura anterior.");
+    sound();
+    return;
+  }
+
+  alert("Esta lección todavía no está construida.");
+  sound();
+}
+function updateAdventureMap(){
+  const lessons = document.querySelectorAll(".lesson-node");
+
+  lessons.forEach((lesson, index) => {
+    if(index < unlockedLessons){
+      lesson.classList.remove("locked");
+      lesson.classList.add("unlocked");
+      lesson.querySelector("p").innerText = "⭐ ⭐ ⭐";
+    }else{
+      lesson.classList.remove("unlocked");
+      lesson.classList.add("locked");
+      lesson.querySelector("p").innerText = "🔒";
+    }
+  });
+
+  lessons[0].setAttribute("onclick","openColorsLesson()");
+
+  let percent = (unlockedLessons / 4) * 100;
+  document.getElementById("progressFill").style.width = percent + "%";
+}
+function openChest(){
+  if(unlockedLessons >= 4){
+    alert("🎁 ¡Felicidades! Desbloqueaste el cofre mágico.");
+  }else{
+    alert("🔒 Termina todas las aventuras para abrir el cofre.");
+  }
+
+  sound();
+}
+  updateAdventureMap();
+  const colorLessons = {
+  K1: [
+    { es:"Rojo", zh:"红色", py:"hóng sè", emoji:"🟥", bg:"#E63946" },
+    { es:"Azul", zh:"蓝色", py:"lán sè", emoji:"🟦", bg:"#457B9D" },
+    { es:"Verde", zh:"绿色", py:"lǜ sè", emoji:"🟩", bg:"#2A9D8F" },
+    { es:"Amarillo", zh:"黄色", py:"huáng sè", emoji:"🟨", bg:"#FFD93D" }
+  ],
+
+  K2: [
+    { es:"Rojo", zh:"红色", py:"hóng sè", emoji:"🟥", bg:"#E63946" },
+    { es:"Azul", zh:"蓝色", py:"lán sè", emoji:"🟦", bg:"#457B9D" },
+    { es:"Verde", zh:"绿色", py:"lǜ sè", emoji:"🟩", bg:"#2A9D8F" },
+    { es:"Amarillo", zh:"黄色", py:"huáng sè", emoji:"🟨", bg:"#FFD93D" },
+    { es:"Blanco", zh:"白色", py:"bái sè", emoji:"⬜", bg:"#FFFFFF" },
+    { es:"Negro", zh:"黑色", py:"hēi sè", emoji:"⬛", bg:"#111111" },
+    { es:"Gris", zh:"灰色", py:"huī sè", emoji:"◻️", bg:"#9CA3AF" },
+    { es:"Rosa", zh:"粉红色", py:"fěn hóng sè", emoji:"🩷", bg:"#FF8FAB" }
+  ],
+
+  K3: [
+    { es:"Rojo", zh:"红色", py:"hóng sè", emoji:"🟥", bg:"#E63946" },
+    { es:"Azul", zh:"蓝色", py:"lán sè", emoji:"🟦", bg:"#457B9D" },
+    { es:"Verde", zh:"绿色", py:"lǜ sè", emoji:"🟩", bg:"#2A9D8F" },
+    { es:"Amarillo", zh:"黄色", py:"huáng sè", emoji:"🟨", bg:"#FFD93D" },
+    { es:"Blanco", zh:"白色", py:"bái sè", emoji:"⬜", bg:"#FFFFFF" },
+    { es:"Negro", zh:"黑色", py:"hēi sè", emoji:"⬛", bg:"#111111" },
+    { es:"Gris", zh:"灰色", py:"huī sè", emoji:"◻️", bg:"#9CA3AF" },
+    { es:"Rosa", zh:"粉红色", py:"fěn hóng sè", emoji:"🩷", bg:"#FF8FAB" },
+    { es:"Celeste", zh:"天蓝色", py:"tiān lán sè", emoji:"🩵", bg:"#7DDCFF" },
+    { es:"Café", zh:"棕色", py:"zōng sè", emoji:"🟫", bg:"#8B5E34" },
+    { es:"Naranja", zh:"橙色", py:"chéng sè", emoji:"🟧", bg:"#F97316" },
+    { es:"Dorado", zh:"金色", py:"jīn sè", emoji:"🏅", bg:"#D4AF37" },
+    { es:"Plateado", zh:"银色", py:"yín sè", emoji:"⚪", bg:"#C0C0C0" },
+    { es:"Morado", zh:"紫色", py:"zǐ sè", emoji:"🟪", bg:"#8E44AD" }
+  ]
+};
+
+let currentColorIndex = 0;
+let activeColors = [];
+
+function openColorsLesson(){
+  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+  currentColorIndex = 0;
+
+  document.getElementById("colorsTitle").innerText = currentLevel + " - " + currentLanguage + " - Colores";
+
+  if(currentLanguage === "Chino") document.getElementById("colorMascot").innerText = "🐼";
+  if(currentLanguage === "Francés") document.getElementById("colorMascot").innerText = "🐓";
+  if(currentLanguage === "Inglés") document.getElementById("colorMascot").innerText = "🦁";
+  if(currentLanguage === "Español") document.getElementById("colorMascot").innerText = "🦅";
+
+  updateColorCard();
+  showScreen("colorsLesson");
+  sound();
+}
+
+function updateColorCard(){
+  const color = activeColors[currentColorIndex];
+
+  document.getElementById("colorBox").style.background = color.bg;
+  document.getElementById("colorBox").innerText = color.emoji;
+  document.getElementById("colorWord").innerText = color.zh;
+  document.getElementById("colorPronunciation").innerText = color.py;
+  document.getElementById("colorMeaning").innerText = color.es;
+  document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
+document.getElementById("voiceFeedback").style.background = "white";
+  if(currentColorIndex === activeColors.length - 1){
+  document.getElementById("finishBtn").style.display = "inline-block";
+}else{
+  document.getElementById("finishBtn").style.display = "none";
+}
+}
+
+function nextColor(){
+  currentColorIndex++;
+
+  if(currentColorIndex >= activeColors.length){
+    currentColorIndex = 0;
+  }
+
+  updateColorCard();
+  speakColor();
+}
+
+function speakColor(){
+  const color = activeColors[currentColorIndex];
+  const utterance = new SpeechSynthesisUtterance(color.zh);
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.75;
+  speechSynthesis.speak(utterance);
+}
+
+function finishColors(){
+  stars++;
+  document.getElementById("stars").innerText = "⭐ " + stars;
+
+  if(unlockedLessons < 2){
+    unlockedLessons = 2;
+  }
+
+  updateAdventureMap();
+  showScreen("units");
+  sound();
+
+  showMagicPopup("🌟 ¡Terminaste la aventura de colores y ganaste una estrella!");
+}
+  
+  updateAdventureMap();
+  function normalizeChinese(text){
+  return text
+    .replace(/\s/g, "")
+    .replace(/[，。！？,.!?]/g, "");
+}
+
+function listenStudentColor(){
+  const feedback = document.getElementById("voiceFeedback");
+  const color = activeColors[currentColorIndex];
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+    feedback.innerText = "⚠️ Usa Google Chrome para activar el micrófono.";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "zh-CN";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  feedback.innerText = "🎧 Te escucho...";
+
+  recognition.start();
+
+  recognition.onresult = function(event){
+    let said = event.results[0][0].transcript;
+    let cleanSaid = normalizeChinese(said);
+    let expected = normalizeChinese(color.zh);
+
+    if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
+      feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
+      feedback.style.background = "#B9FBC0";
+      speakPraise();
+    }else{
+      feedback.innerText = "🔄 Dijiste: " + said + " | Intenta decir: " + color.zh + " (" + color.py + ")";
+      feedback.style.background = "#FFD6D6";
+      speakTryAgain();
+    }
+  };
+
+  recognition.onerror = function(){
+    feedback.innerText = "🔄 No escuché bien. Inténtalo otra vez.";
+    feedback.style.background = "#FFF3B0";
+  };
+
+  recognition.onend = function(){
+    // termina solo; el alumno puede volver a tocar 🎤 Repetir
+  };
+}
+
+function speakPraise(){
+  const utterance = new SpeechSynthesisUtterance("很好");
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
+
+function speakTryAgain(){
+  const utterance = new SpeechSynthesisUtterance("再来一次");
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
+  function shuffleArray(array){
+  for(let i = array.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+  function showMagicPopup(message){
+
+  document.getElementById("magicText").innerText = message;
+
+  document.getElementById("magicPopup").style.display = "flex";
+
+}
+
+function closeMagicPopup(){
+
+  document.getElementById("magicPopup").style.display = "none";
+
+}
+</script>
+
+</body>
+</html>
 </body>
 </html>
