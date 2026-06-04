@@ -425,7 +425,7 @@ h1{
 
   <div class="adventure-map">
 
-    <div class="lesson-node unlocked" onclick="openAdventure(0)">
+    <div class="lesson-node unlocked" onclick="openColorsLesson()">
       <div class="path-icon">🌈</div>
       <h2>Colores</h2>
       <p>⭐ ⭐ ⭐</p>
@@ -457,6 +457,39 @@ h1{
 
     <div class="treasure" onclick="openChest()">🎁</div>
 
+  </div>
+</div>
+  <!-- LECCIÓN DE COLORES -->
+<div id="colorsLesson" class="screen">
+  <button class="back" onclick="showScreen('units')">⬅ Volver</button>
+
+  <h2 class="title" id="colorsTitle">🌈 Colores</h2>
+
+  <div class="adventure-map">
+    <div id="colorMascot" style="font-size:90px;">🐼</div>
+
+    <div id="colorBox" style="
+      width:220px;
+      height:220px;
+      border-radius:40px;
+      margin:20px auto;
+      background:red;
+      border:8px solid white;
+      box-shadow:0 10px 20px rgba(0,0,0,.2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:80px;">
+      🟥
+    </div>
+
+    <h2 id="colorWord" style="font-size:50px;margin:10px;">红色</h2>
+    <p id="colorPronunciation" style="font-size:28px;">hóng sè</p>
+    <p id="colorMeaning" style="font-size:26px;">Rojo</p>
+
+    <button class="enter-btn" onclick="speakColor()">🔊 Escuchar</button>
+    <button class="enter-btn" onclick="nextColor()">➡ Siguiente</button>
+    <button class="enter-btn" onclick="finishColors()">⭐ Terminar</button>
   </div>
 </div>
 <div class="rewards">
@@ -571,6 +604,105 @@ function openChest(){
   sound();
 }
   updateAdventureMap();
+  const colorLessons = {
+  K1: [
+    { es:"Rojo", zh:"红色", py:"hóng sè", emoji:"🟥", bg:"#E63946" },
+    { es:"Azul", zh:"蓝色", py:"lán sè", emoji:"🟦", bg:"#457B9D" },
+    { es:"Verde", zh:"绿色", py:"lǜ sè", emoji:"🟩", bg:"#2A9D8F" },
+    { es:"Amarillo", zh:"黄色", py:"huáng sè", emoji:"🟨", bg:"#FFD93D" }
+  ],
+
+  K2: [
+    { es:"Rojo", zh:"红色", py:"hóng sè", emoji:"🟥", bg:"#E63946" },
+    { es:"Azul", zh:"蓝色", py:"lán sè", emoji:"🟦", bg:"#457B9D" },
+    { es:"Verde", zh:"绿色", py:"lǜ sè", emoji:"🟩", bg:"#2A9D8F" },
+    { es:"Amarillo", zh:"黄色", py:"huáng sè", emoji:"🟨", bg:"#FFD93D" },
+    { es:"Blanco", zh:"白色", py:"bái sè", emoji:"⬜", bg:"#FFFFFF" },
+    { es:"Negro", zh:"黑色", py:"hēi sè", emoji:"⬛", bg:"#111111" },
+    { es:"Gris", zh:"灰色", py:"huī sè", emoji:"◻️", bg:"#9CA3AF" },
+    { es:"Rosa", zh:"粉红色", py:"fěn hóng sè", emoji:"🩷", bg:"#FF8FAB" }
+  ],
+
+  K3: [
+    { es:"Rojo", zh:"红色", py:"hóng sè", emoji:"🟥", bg:"#E63946" },
+    { es:"Azul", zh:"蓝色", py:"lán sè", emoji:"🟦", bg:"#457B9D" },
+    { es:"Verde", zh:"绿色", py:"lǜ sè", emoji:"🟩", bg:"#2A9D8F" },
+    { es:"Amarillo", zh:"黄色", py:"huáng sè", emoji:"🟨", bg:"#FFD93D" },
+    { es:"Blanco", zh:"白色", py:"bái sè", emoji:"⬜", bg:"#FFFFFF" },
+    { es:"Negro", zh:"黑色", py:"hēi sè", emoji:"⬛", bg:"#111111" },
+    { es:"Gris", zh:"灰色", py:"huī sè", emoji:"◻️", bg:"#9CA3AF" },
+    { es:"Rosa", zh:"粉红色", py:"fěn hóng sè", emoji:"🩷", bg:"#FF8FAB" },
+    { es:"Celeste", zh:"天蓝色", py:"tiān lán sè", emoji:"🩵", bg:"#7DDCFF" },
+    { es:"Café", zh:"棕色", py:"zōng sè", emoji:"🟫", bg:"#8B5E34" },
+    { es:"Naranja", zh:"橙色", py:"chéng sè", emoji:"🟧", bg:"#F97316" },
+    { es:"Dorado", zh:"金色", py:"jīn sè", emoji:"🏅", bg:"#D4AF37" },
+    { es:"Plateado", zh:"银色", py:"yín sè", emoji:"⚪", bg:"#C0C0C0" },
+    { es:"Morado", zh:"紫色", py:"zǐ sè", emoji:"🟪", bg:"#8E44AD" }
+  ]
+};
+
+let currentColorIndex = 0;
+let activeColors = [];
+
+function openColorsLesson(){
+  activeColors = colorLessons[currentLevel] || colorLessons.K1;
+  currentColorIndex = 0;
+
+  document.getElementById("colorsTitle").innerText = currentLevel + " - " + currentLanguage + " - Colores";
+
+  if(currentLanguage === "Chino") document.getElementById("colorMascot").innerText = "🐼";
+  if(currentLanguage === "Francés") document.getElementById("colorMascot").innerText = "🐓";
+  if(currentLanguage === "Inglés") document.getElementById("colorMascot").innerText = "🦁";
+  if(currentLanguage === "Español") document.getElementById("colorMascot").innerText = "🦅";
+
+  updateColorCard();
+  showScreen("colorsLesson");
+  sound();
+}
+
+function updateColorCard(){
+  const color = activeColors[currentColorIndex];
+
+  document.getElementById("colorBox").style.background = color.bg;
+  document.getElementById("colorBox").innerText = color.emoji;
+  document.getElementById("colorWord").innerText = color.zh;
+  document.getElementById("colorPronunciation").innerText = color.py;
+  document.getElementById("colorMeaning").innerText = color.es;
+}
+
+function nextColor(){
+  currentColorIndex++;
+
+  if(currentColorIndex >= activeColors.length){
+    currentColorIndex = 0;
+  }
+
+  updateColorCard();
+  speakColor();
+}
+
+function speakColor(){
+  const color = activeColors[currentColorIndex];
+  const utterance = new SpeechSynthesisUtterance(color.zh);
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.75;
+  speechSynthesis.speak(utterance);
+}
+
+function finishColors(){
+  stars++;
+  document.getElementById("stars").innerText = "⭐ " + stars;
+
+  if(unlockedLessons < 2){
+    unlockedLessons = 2;
+  }
+
+  updateAdventureMap();
+  showScreen("units");
+  sound();
+
+  alert("🎉 ¡Colores completado! Ganaste una estrella.");
+}
 </script>
 
 </body>
