@@ -200,7 +200,89 @@ h1{
   60%{transform:scale(1.12)}
   100%{transform:scale(1)}
 }
+.progress-box{
+  background:white;
+  border-radius:25px;
+  padding:18px;
+  margin:0 auto 25px;
+  max-width:600px;
+  box-shadow:0 8px 18px rgba(0,0,0,.15);
+}
 
+.progress-text{
+  font-size:24px;
+  font-weight:bold;
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.progress-bar{
+  background:#E9ECEF;
+  border-radius:20px;
+  height:28px;
+  overflow:hidden;
+}
+
+#progressFill{
+  background:linear-gradient(90deg,#FFD93D,#FF9F1C);
+  width:25%;
+  height:100%;
+  transition:.4s;
+}
+
+.adventure-map{
+  max-width:520px;
+  margin:auto;
+  background:rgba(255,255,255,.55);
+  border-radius:40px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.lesson-node{
+  background:white;
+  border-radius:35px;
+  padding:22px;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  border:6px solid transparent;
+  transition:.25s;
+}
+
+.lesson-node:hover{
+  transform:scale(1.05);
+}
+
+.lesson-node h2{
+  margin:5px 0;
+  font-size:30px;
+}
+
+.path-icon{
+  font-size:70px;
+}
+
+.unlocked{
+  border-color:#FFD93D;
+}
+
+.locked{
+  opacity:.55;
+  filter:grayscale(.4);
+}
+
+.road{
+  font-size:35px;
+  margin:12px 0;
+}
+
+.treasure{
+  font-size:85px;
+  margin-top:20px;
+  cursor:pointer;
+  animation:float 2s infinite ease-in-out;
+}
 @media(max-width:768px){
   .header{
     flex-direction:column;
@@ -314,40 +396,55 @@ h1{
   </div>
 
   <!-- PANTALLA DE UNIDADES -->
-  <div id="units" class="screen">
-    <button class="back" onclick="goLanguages()">⬅ Volver</button>
+  <!-- PANTALLA MAPA DE AVENTURAS -->
+<div id="units" class="screen">
+  <button class="back" onclick="goLanguages()">⬅ Volver</button>
 
-    <h2 class="title" id="unitTitle">Elige una aventura</h2>
+  <h2 class="title" id="unitTitle">Mapa de aventuras</h2>
 
-    <div class="grid">
-      <div class="card" onclick="reward()">
-        <div class="big-icon">🌈</div>
-        <h2>Colores</h2>
-        <p>Escucha y toca</p>
-      </div>
-
-      <div class="card" onclick="reward()">
-        <div class="big-icon">🐶</div>
-        <h2>Animales</h2>
-        <p>Encuentra la imagen</p>
-      </div>
-
-      <div class="card" onclick="reward()">
-        <div class="big-icon">🔢</div>
-        <h2>Números</h2>
-        <p>Cuenta jugando</p>
-      </div>
-
-      <div class="card" onclick="reward()">
-        <div class="big-icon">👨‍👩‍👧</div>
-        <h2>Familia</h2>
-        <p>Saluda y repite</p>
-      </div>
+  <div class="progress-box">
+    <div class="progress-text">Progreso</div>
+    <div class="progress-bar">
+      <div id="progressFill"></div>
     </div>
   </div>
 
-</div>
+  <div class="adventure-map">
 
+    <div class="lesson-node unlocked" onclick="openAdventure(0)">
+      <div class="path-icon">🌈</div>
+      <h2>Colores</h2>
+      <p>⭐ ⭐ ⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node locked" onclick="openAdventure(1)">
+      <div class="path-icon">🐶</div>
+      <h2>Animales</h2>
+      <p>🔒</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node locked" onclick="openAdventure(2)">
+      <div class="path-icon">🔢</div>
+      <h2>Números</h2>
+      <p>🔒</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node locked" onclick="openAdventure(3)">
+      <div class="path-icon">👨‍👩‍👧</div>
+      <h2>Familia</h2>
+      <p>🔒</p>
+    </div>
+
+    <div class="treasure" onclick="openChest()">🎁</div>
+
+  </div>
+</div>
 <div class="rewards">
   <span id="stars">⭐ 0</span>
   <span>🎁</span>
@@ -408,6 +505,56 @@ function reward(){
   sound();
 
   alert("🎉 ¡Muy bien! Ganaste una estrella.");
+}
+  let unlockedLessons = 1;
+
+function openAdventure(index){
+  if(index >= unlockedLessons){
+    alert("🔒 Primero termina la aventura anterior.");
+    sound();
+    return;
+  }
+
+  stars++;
+  document.getElementById("stars").innerText = "⭐ " + stars;
+
+  if(unlockedLessons < 4){
+    unlockedLessons++;
+  }
+
+  updateAdventureMap();
+  sound();
+
+  alert("🎉 ¡Aventura completada! Ganaste una estrella.");
+}
+
+function updateAdventureMap(){
+  const lessons = document.querySelectorAll(".lesson-node");
+
+  lessons.forEach((lesson, index) => {
+    if(index < unlockedLessons){
+      lesson.classList.remove("locked");
+      lesson.classList.add("unlocked");
+      lesson.querySelector("p").innerText = "⭐ ⭐ ⭐";
+    }else{
+      lesson.classList.remove("unlocked");
+      lesson.classList.add("locked");
+      lesson.querySelector("p").innerText = "🔒";
+    }
+  });
+
+  let percent = (unlockedLessons / 4) * 100;
+  document.getElementById("progressFill").style.width = percent + "%";
+}
+
+function openChest(){
+  if(unlockedLessons >= 4){
+    alert("🎁 ¡Felicidades! Desbloqueaste el cofre mágico.");
+  }else{
+    alert("🔒 Termina todas las aventuras para abrir el cofre.");
+  }
+
+  sound();
 }
 </script>
 
