@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instituto Políglota Kids</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Trebuchet MS','Comic Sans MS',sans-serif;
+  background:linear-gradient(180deg,#7DDCFF,#FFF3B0);
+  color:#17445E;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.app{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+.header{
+  background:white;
+  border-radius:30px;
+  padding:18px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.logo-icon{
+  font-size:60px;
+}
+
+h1{
+  margin:0;
+  font-size:34px;
+}
+
+.subtitle{
+  margin:4px 0 0;
+  font-size:18px;
+}
+
+.teacher{
+  background:#FFD93D;
+  padding:14px 20px;
+  border-radius:22px;
+  font-weight:bold;
+}
+
+.screen{
+  display:none;
+  margin-top:30px;
+}
+
+.screen.active{
+  display:block;
+}
+
+.title{
+  text-align:center;
+  font-size:38px;
+  margin-bottom:25px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:white;
+  border-radius:35px;
+  padding:30px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(0,0,0,.18);
+  transition:.25s;
+  border:6px solid transparent;
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.card:hover{
+  transform:scale(1.05) rotate(-1deg);
+  border-color:#FFD93D;
+}
+
+.card:active{
+  transform:scale(.96);
+}
+
+.big-icon{
+  font-size:95px;
+  margin-bottom:10px;
+}
+
+.card h2{
+  font-size:38px;
+  margin:10px 0;
+}
+
+.card p{
+  font-size:22px;
+  margin:5px 0;
+}
+
+.k1{background:#FFE8A3}
+.k2{background:#B9FBC0}
+.k3{background:#CDB4DB}
+
+.chino{background:#FFADAD}
+.frances{background:#A0C4FF}
+.ingles{background:#CAFFBF}
+.espanol{background:#FFD6A5}
+
+.enter-btn{
+  margin-top:15px;
+  background:#FFB703;
+  color:#17324D;
+  border:none;
+  border-radius:25px;
+  padding:16px 30px;
+  font-size:24px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 6px 12px rgba(0,0,0,.18);
+}
+
+.enter-btn:hover{
+  transform:scale(1.05);
+}
+
+.back{
+  background:#FF6B6B;
+  color:white;
+  border:none;
+  border-radius:22px;
+  padding:14px 24px;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-bottom:20px;
+}
+
+.rewards{
+  position:fixed;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  border-radius:35px;
+  padding:12px 25px;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  display:flex;
+  gap:25px;
+  font-size:28px;
+  z-index:10;
+}
+
+.cloud{
+  position:absolute;
+  font-size:70px;
+  opacity:.7;
+  animation:float 8s infinite ease-in-out;
+  z-index:-1;
+}
+
+.cloud.one{top:120px;left:5%}
+.cloud.two{top:250px;right:8%;animation-delay:2s}
+.cloud.three{bottom:120px;left:15%;animation-delay:4s}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+}
+
+.pop{
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(.8)}
+  60%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+
+@media(max-width:768px){
+  .header{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+
+  h1{
+    font-size:28px;
+  }
+
+  .title{
+    font-size:30px;
+  }
+
+  .card{
+    min-height:220px;
+  }
+
+  .big-icon{
+    font-size:80px;
+  }
+
+  .rewards{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cloud one">☁️</div>
+<div class="cloud two">☁️</div>
+<div class="cloud three">☁️</div>
+
+<div class="app">
+
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">🌈</div>
+      <div>
+        <h1>Instituto Políglota Kids</h1>
+        <p class="subtitle">Aprende jugando, escuchando y tocando</p>
+      </div>
+    </div>
+
+    <div class="teacher">Modo Kinder</div>
+  </div>
+
+  <!-- PANTALLA INICIAL -->
+  <div id="home" class="screen active">
+    <h2 class="title">Elige tu mundo</h2>
+
+    <div class="grid">
+      <div class="card k1" onclick="openLevel('K1')">
+        <div class="big-icon">🧸</div>
+        <h2>K1</h2>
+        <p>Primer mundo</p>
+      </div>
+
+      <div class="card k2" onclick="openLevel('K2')">
+        <div class="big-icon">🚀</div>
+        <h2>K2</h2>
+        <p>Mundo espacial</p>
+      </div>
+
+      <div class="card k3" onclick="openLevel('K3')">
+        <div class="big-icon">🌟</div>
+        <h2>K3</h2>
+        <p>Mundo estrella</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE IDIOMAS -->
+  <div id="languages" class="screen">
+    <button class="back" onclick="goHome()">⬅ Volver</button>
+
+    <h2 class="title" id="levelTitle">Elige un idioma</h2>
+
+    <div class="grid">
+      <div class="card chino" onclick="enterLanguage('Chino')">
+        <div class="big-icon">🐼 🇨🇳</div>
+        <h2>Chino</h2>
+        <p>Panda Pangpang</p>
+        <button class="enter-btn">Entrar</button>
+      </div>
+
+      <div class="card frances" onclick="enterLanguage('Francés')">
+        <div class="big-icon">🦊 🇫🇷</div>
+        <h2>Francés</h2>
+        <p>Zorrito París</p>
+        <button class="enter-btn">Entrar</button>
+      </div>
+
+      <div class="card ingles" onclick="enterLanguage('Inglés')">
+        <div class="big-icon">🐶 🇺🇸</div>
+        <h2>Inglés</h2>
+        <p>Perrito Buddy</p>
+        <button class="enter-btn">Entrar</button>
+      </div>
+
+      <div class="card espanol" onclick="enterLanguage('Español')">
+        <div class="big-icon">🦜 🇲🇽</div>
+        <h2>Español</h2>
+        <p>Perico Lalo</p>
+        <button class="enter-btn">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE UNIDADES -->
+  <div id="units" class="screen">
+    <button class="back" onclick="goLanguages()">⬅ Volver</button>
+
+    <h2 class="title" id="unitTitle">Elige una aventura</h2>
+
+    <div class="grid">
+      <div class="card" onclick="reward()">
+        <div class="big-icon">🌈</div>
+        <h2>Colores</h2>
+        <p>Escucha y toca</p>
+      </div>
+
+      <div class="card" onclick="reward()">
+        <div class="big-icon">🐶</div>
+        <h2>Animales</h2>
+        <p>Encuentra la imagen</p>
+      </div>
+
+      <div class="card" onclick="reward()">
+        <div class="big-icon">🔢</div>
+        <h2>Números</h2>
+        <p>Cuenta jugando</p>
+      </div>
+
+      <div class="card" onclick="reward()">
+        <div class="big-icon">👨‍👩‍👧</div>
+        <h2>Familia</h2>
+        <p>Saluda y repite</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="rewards">
+  <span id="stars">⭐ 0</span>
+  <span>🎁</span>
+  <span>🏠</span>
+</div>
+
+<script>
+let currentLevel = "";
+let currentLanguage = "";
+let stars = 0;
+
+function sound(){
+  const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+  audio.volume = 0.35;
+  audio.play();
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+}
+
+function openLevel(level){
+  currentLevel = level;
+  document.getElementById("levelTitle").innerText = level + " - Elige un idioma";
+  showScreen("languages");
+  sound();
+}
+
+function goHome(){
+  showScreen("home");
+  sound();
+}
+
+function goLanguages(){
+  showScreen("languages");
+  sound();
+}
+
+function enterLanguage(language){
+  currentLanguage = language;
+  document.getElementById("unitTitle").innerText = currentLevel + " - " + currentLanguage;
+  showScreen("units");
+  sound();
+}
+
+function reward(){
+  stars++;
+  document.getElementById("stars").innerText = "⭐ " + stars;
+
+  const rewards = document.querySelector(".rewards");
+  rewards.classList.remove("pop");
+  void rewards.offsetWidth;
+  rewards.classList.add("pop");
+
+  sound();
+
+  alert("🎉 ¡Muy bien! Ganaste una estrella.");
+}
+</script>
+
+</body>
+</html>
