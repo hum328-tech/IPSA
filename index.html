@@ -294,6 +294,15 @@ h1{
   cursor:pointer;
   animation:float 2s infinite ease-in-out;
 }
+  .only-stars{
+  bottom:25px;
+  padding:12px 28px;
+  font-size:32px;
+}
+
+#colorsLesson .adventure-map{
+  margin-bottom:90px;
+}
 @media(max-width:768px){
   .header{
     flex-direction:column;
@@ -490,7 +499,7 @@ h1{
    <button class="enter-btn" onclick="speakColor()">🔊 Escuchar</button>
 <button class="enter-btn" onclick="listenStudentColor()">🎤 Repetir</button>
 <button class="enter-btn" onclick="nextColor()">➡ Siguiente</button>
-<button class="enter-btn" onclick="finishColors()">⭐ Terminar</button>
+<button id="finishBtn" class="enter-btn" onclick="finishColors()" style="display:none;">⭐ Terminar</button>
 
 <div id="voiceFeedback" style="
   margin-top:20px;
@@ -505,10 +514,8 @@ h1{
 </div> <!-- adventure-map -->
 </div> <!-- colorsLesson -->
 
-<div class="rewards">
+<div class="rewards only-stars">
   <span id="stars">⭐ 0</span>
-  <span>🎁</span>
-  <span>🏠</span>
 </div>
 <script>
 let currentLevel = "";
@@ -654,7 +661,7 @@ let currentColorIndex = 0;
 let activeColors = [];
 
 function openColorsLesson(){
-  activeColors = colorLessons[currentLevel] || colorLessons.K1;
+  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
   currentColorIndex = 0;
 
   document.getElementById("colorsTitle").innerText = currentLevel + " - " + currentLanguage + " - Colores";
@@ -679,6 +686,11 @@ function updateColorCard(){
   document.getElementById("colorMeaning").innerText = color.es;
   document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
 document.getElementById("voiceFeedback").style.background = "white";
+  if(currentColorIndex === activeColors.length - 1){
+  document.getElementById("finishBtn").style.display = "inline-block";
+}else{
+  document.getElementById("finishBtn").style.display = "none";
+}
 }
 
 function nextColor(){
@@ -780,6 +792,13 @@ function speakTryAgain(){
   utterance.lang = "zh-CN";
   utterance.rate = 0.8;
   speechSynthesis.speak(utterance);
+}
+  function shuffleArray(array){
+  for(let i = array.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 </script>
 
