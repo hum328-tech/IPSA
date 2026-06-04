@@ -590,10 +590,11 @@ function updateAdventureMap(){
     }
   });
 
+  lessons[0].setAttribute("onclick","openColorsLesson()");
+
   let percent = (unlockedLessons / 4) * 100;
   document.getElementById("progressFill").style.width = percent + "%";
 }
-
 function openChest(){
   if(unlockedLessons >= 4){
     alert("🎁 ¡Felicidades! Desbloqueaste el cofre mágico.");
@@ -703,6 +704,8 @@ function finishColors(){
 
   alert("🎉 ¡Colores completado! Ganaste una estrella.");
 }
+  
+  updateAdventureMap();
 </script>
 
 </body>
