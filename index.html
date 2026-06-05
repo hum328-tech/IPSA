@@ -770,6 +770,9 @@ function openColorsLesson(){
   colorAnsweredCorrectly = false;
 document.getElementById("nextColorBtn").disabled = true;
 document.getElementById("nextColorBtn").style.opacity = ".45";
+  colorAnsweredCorrectly = false;
+document.getElementById("nextColorBtn").disabled = true;
+document.getElementById("nextColorBtn").style.opacity = ".45";
 }
 
 function updateColorCard(){
@@ -816,10 +819,9 @@ function finishColors(){
   }
 
   updateAdventureMap();
-  showScreen("units");
-  sound();
+  soundVictory();
 
-  showMagicPopup("🌟 ¡Terminaste la aventura de colores y ganaste una estrella!");
+  showMagicPopup("🎉 ¡Excelente! ⭐ Ganaste una estrella. Ahora vamos al juego de colores.");
 }
   
   updateAdventureMap();
@@ -918,6 +920,11 @@ function closeMagicPopup(){
 
   showScreen("units");
 
+}
+  function soundVictory(){
+  const victory = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
+  victory.volume = 0.45;
+  victory.play();
 }
 </script>
 <!-- DUPLICADO BORRADO -->
