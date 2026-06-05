@@ -971,11 +971,14 @@ function loadQuizQuestion(){
 
   let options = shuffleArray([...activeColors]).slice(0,4);
 
-  if(!options.some(c => c.es === target.es)){
-    options[0] = target;
-  }
+ if(!options.some(c => c.es === target.es)){
 
-  options = shuffleArray(options);
+  const randomPosition = Math.floor(Math.random() * options.length);
+
+  options[randomPosition] = target;
+}
+
+options = shuffleArray(options);
 
   options.forEach(color => {
     const btn = document.createElement("button");
