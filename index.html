@@ -973,7 +973,7 @@ function updateColorCard(){
 
   document.getElementById("colorWord").innerText = color.fr;
   document.getElementById("colorPronunciation").innerText = "";
-  document.getElementById("colorMeaning").innerText = color.frHelp;
+  document.getElementById("colorMeaning").innerText = "";
 
 }else{
 
@@ -1003,9 +1003,19 @@ function nextColor(){
 
 function speakColor(){
   const color = activeColors[currentColorIndex];
-  const utterance = new SpeechSynthesisUtterance(color.zh);
-  utterance.lang = "zh-CN";
+
+  let textToSpeak = color.zh;
+  let langToSpeak = "zh-CN";
+
+  if(currentLanguage === "Francés"){
+    textToSpeak = color.fr;
+    langToSpeak = "fr-FR";
+  }
+
+  const utterance = new SpeechSynthesisUtterance(textToSpeak);
+  utterance.lang = langToSpeak;
   utterance.rate = 0.75;
+
   speechSynthesis.speak(utterance);
 }
 
