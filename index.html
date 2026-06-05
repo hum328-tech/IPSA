@@ -1082,7 +1082,11 @@ function listenStudentColor(){
       expected = normalizeChinese(color.zh);
     }
 
-    if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
+    if(
+  cleanSaid.includes(expected) ||
+  expected.includes(cleanSaid) ||
+  (currentLanguage === "Francés" && expected === "vert" && (cleanSaid.includes("ver") || cleanSaid.includes("vair") || cleanSaid.includes("vert")))
+){
       feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
       feedback.style.background = "#B9FBC0";
 
@@ -1107,15 +1111,31 @@ function listenStudentColor(){
   
 
 function speakPraise(){
-  const utterance = new SpeechSynthesisUtterance("很好");
-  utterance.lang = "zh-CN";
+  let text = "很好";
+  let lang = "zh-CN";
+
+  if(currentLanguage === "Francés"){
+    text = "Très bien";
+    lang = "fr-FR";
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
   utterance.rate = 0.8;
   speechSynthesis.speak(utterance);
 }
 
 function speakTryAgain(){
-  const utterance = new SpeechSynthesisUtterance("再来一次");
-  utterance.lang = "zh-CN";
+  let text = "再来一次";
+  let lang = "zh-CN";
+
+  if(currentLanguage === "Francés"){
+    text = "Encore une fois";
+    lang = "fr-FR";
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
   utterance.rate = 0.8;
   speechSynthesis.speak(utterance);
 }
