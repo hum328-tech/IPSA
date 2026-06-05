@@ -611,8 +611,8 @@ function goLanguages(){
 function enterLanguage(language){
   currentLanguage = language;
   document.getElementById("unitTitle").innerText = currentLevel + " - " + currentLanguage;
-  soundVictory();
-showMagicPopup("🌟 ¡Terminaste la aventura de colores y ganaste una estrella!");
+  showScreen("units");
+  sound();
 }
 
 function reward(){
