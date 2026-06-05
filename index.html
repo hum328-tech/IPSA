@@ -1034,18 +1034,30 @@ function updateColorCard(){
 
   document.getElementById("colorBox").style.background = color.bg;
   document.getElementById("colorBox").innerText = color.emoji;
+
   if(currentLanguage === "Francés"){
+    document.getElementById("colorWord").innerText = color.fr;
+    document.getElementById("colorPronunciation").innerText = "";
+    document.getElementById("colorMeaning").innerText = "";
+  }else{
+    document.getElementById("colorWord").innerText = color.zh;
+    document.getElementById("colorPronunciation").innerText = color.py;
+    document.getElementById("colorMeaning").innerText = "";
+  }
 
-  document.getElementById("colorWord").innerText = color.fr;
-  document.getElementById("colorPronunciation").innerText = "";
-  document.getElementById("colorMeaning").innerText = "";
+  document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
+  document.getElementById("voiceFeedback").style.background = "white";
 
-}else{
+  if(currentColorIndex === activeColors.length - 1){
+    document.getElementById("finishBtn").style.display = "inline-block";
+  }else{
+    document.getElementById("finishBtn").style.display = "none";
+  }
 
-  document.getElementById("colorWord").innerText = color.zh;
-  document.getElementById("colorPronunciation").innerText = color.py;
-  document.getElementById("colorMeaning").innerText = color.es;
-
+  colorAnsweredCorrectly = false;
+  document.getElementById("nextColorBtn").disabled = true;
+  document.getElementById("nextColorBtn").style.opacity = ".45";
+}
 }
   document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
 document.getElementById("voiceFeedback").style.background = "white";
@@ -1053,7 +1065,6 @@ document.getElementById("voiceFeedback").style.background = "white";
   document.getElementById("finishBtn").style.display = "inline-block";
 }else{
   document.getElementById("finishBtn").style.display = "none";
-}
 }
 
 function nextColor(){
