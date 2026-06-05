@@ -1156,14 +1156,6 @@ function updateColorCard(){
   document.getElementById("nextColorBtn").disabled = true;
   document.getElementById("nextColorBtn").style.opacity = ".45";
 }
-}
-  document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
-document.getElementById("voiceFeedback").style.background = "white";
-  if(currentColorIndex === activeColors.length - 1){
-  document.getElementById("finishBtn").style.display = "inline-block";
-}else{
-  document.getElementById("finishBtn").style.display = "none";
-}
 
 function nextColor(){
   currentColorIndex++;
