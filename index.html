@@ -824,6 +824,7 @@ localStorage.setItem("language", currentLanguage);
 localStorage.setItem("stars", stars);
 localStorage.setItem("unlockedLessons", unlockedLessons);
 localStorage.setItem("colorIndex", currentColorIndex);
+localStorage.setItem("quizIndex", currentQuiz);
 }   
 function openLevel(level){
   currentLevel = level;
@@ -1295,6 +1296,9 @@ function speakQuizColor(){
   const savedLevel = localStorage.getItem("level");
   const savedLanguage = localStorage.getItem("language");
 
+  if(savedLevel) currentLevel = savedLevel;
+  if(savedLanguage) currentLanguage = savedLanguage;
+
   if(localStorage.getItem("stars")){
     stars = parseInt(localStorage.getItem("stars"));
     document.getElementById("starsCount").innerText = stars;
@@ -1310,23 +1314,41 @@ function speakQuizColor(){
       parseInt(localStorage.getItem("colorIndex"));
   }
 
-  if(savedLevel) currentLevel = savedLevel;
-  if(savedLanguage) currentLanguage = savedLanguage;
+  if(localStorage.getItem("quizIndex")){
+    currentQuiz =
+      parseInt(localStorage.getItem("quizIndex"));
+  }
 
   updateAdventureMap();
 
+  if(savedScreen === "colorsLesson"){
+
+    activeColors =
+      shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+
+    showScreen("colorsLesson");
+    updateColorCard();
+    return;
+  }
+
+  if(savedScreen === "colorQuiz"){
+
+    activeColors =
+      shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+
+    quizColors = [...activeColors];
+
+    showScreen("colorQuiz");
+    loadQuizQuestion();
+    return;
+  }
+
   if(savedScreen){
     showScreen(savedScreen);
-
-    if(savedScreen === "colorsLesson"){
-      activeColors =
-        shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
-
-      updateColorCard();
-    }
   }
+
 };
-</script>
+  </script>
 <!-- DUPLICADO BORRADO -->
 
 </body>
