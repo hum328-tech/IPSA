@@ -591,6 +591,25 @@ h1{
   </div>
 
 </div>
+  <div id="magicPopup" class="magic-popup">
+
+  <div class="magic-card">
+
+    <div class="magic-icon">🎉</div>
+
+    <h2>¡Excelente!</h2>
+
+    <p id="magicText">
+      Ganaste una estrella
+    </p>
+
+    <button onclick="closeMagicPopup()">
+      Continuar
+    </button>
+
+  </div>
+
+</div>
 <script>
 let currentLevel = "";
 let currentLanguage = "";
@@ -884,6 +903,21 @@ function speakTryAgain(){
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+}
+  function showMagicPopup(message){
+
+  document.getElementById("magicText").innerText = message;
+
+  document.getElementById("magicPopup").style.display = "flex";
+
+}
+
+function closeMagicPopup(){
+
+  document.getElementById("magicPopup").style.display = "none";
+
+  showScreen("units");
+
 }
 </script>
 <!-- DUPLICADO BORRADO -->
