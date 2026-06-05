@@ -368,6 +368,33 @@ h1{
     opacity:1;
   }
 }
+  #colorsLesson,
+#colorQuiz{
+  margin-top:0;
+}
+
+#colorsLesson .adventure-map,
+#colorQuiz .adventure-map{
+  max-width:620px;
+  padding:22px;
+}
+
+#colorBox{
+  width:160px !important;
+  height:160px !important;
+  margin:10px auto !important;
+}
+
+#colorWord{
+  font-size:42px !important;
+  margin:5px !important;
+}
+
+#colorPronunciation,
+#colorMeaning{
+  font-size:24px !important;
+  margin:5px;
+}
 @media(max-width:768px){
   .header{
     flex-direction:column;
@@ -654,7 +681,16 @@ function showScreen(id){
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
   });
+
   document.getElementById(id).classList.add("active");
+
+  const header = document.querySelector(".header");
+
+  if(id === "colorsLesson" || id === "colorQuiz"){
+    header.style.display = "none";
+  }else{
+    header.style.display = "flex";
+  }
 }
 
 function openLevel(level){
