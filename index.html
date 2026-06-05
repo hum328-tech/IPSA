@@ -789,6 +789,7 @@ let currentLevel = "";
 let currentLanguage = "";
 let stars = 0;
 let nextAfterPopup = "";
+let currentScreen = "home";
   
 function sound(){
   const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
@@ -815,7 +816,14 @@ function showScreen(id){
 }else{
   header.style.display = "flex";
   }
+currentScreen = id;
 
+localStorage.setItem("screen", id);
+localStorage.setItem("level", currentLevel);
+localStorage.setItem("language", currentLanguage);
+localStorage.setItem("stars", stars);
+localStorage.setItem("unlockedLessons", unlockedLessons);
+localStorage.setItem("colorIndex", currentColorIndex);
 }   
 function openLevel(level){
   currentLevel = level;
@@ -1281,7 +1289,43 @@ function speakQuizColor(){
 
   speechSynthesis.speak(utterance);
 }
-  
+  window.onload = function(){
+
+  const savedScreen = localStorage.getItem("screen");
+  const savedLevel = localStorage.getItem("level");
+  const savedLanguage = localStorage.getItem("language");
+
+  if(localStorage.getItem("stars")){
+    stars = parseInt(localStorage.getItem("stars"));
+    document.getElementById("starsCount").innerText = stars;
+  }
+
+  if(localStorage.getItem("unlockedLessons")){
+    unlockedLessons =
+      parseInt(localStorage.getItem("unlockedLessons"));
+  }
+
+  if(localStorage.getItem("colorIndex")){
+    currentColorIndex =
+      parseInt(localStorage.getItem("colorIndex"));
+  }
+
+  if(savedLevel) currentLevel = savedLevel;
+  if(savedLanguage) currentLanguage = savedLanguage;
+
+  updateAdventureMap();
+
+  if(savedScreen){
+    showScreen(savedScreen);
+
+    if(savedScreen === "colorsLesson"){
+      activeColors =
+        shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+
+      updateColorCard();
+    }
+  }
+};
 </script>
 <!-- DUPLICADO BORRADO -->
 
