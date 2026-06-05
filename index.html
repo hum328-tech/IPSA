@@ -790,6 +790,7 @@ let currentLanguage = "";
 let stars = 0;
 let nextAfterPopup = "";
 let currentScreen = "home";
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbyMYujmCiKigHTfG_bUbUCJNHVR4DwX-UH6oawXTABCMufsx-PEMAVjIL9DBPJN158R/exec";
   
 function sound(){
   const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
@@ -1188,6 +1189,7 @@ function speakColor(){
 function finishColors(){
   stars++;
   document.getElementById("starsCount").innerText = stars;
+  sendProgress("Colores - Pronunciación");
 
   if(unlockedLessons < 2){
     unlockedLessons = 2;
@@ -1387,6 +1389,7 @@ function checkColorQuiz(answer){
       if(currentQuiz >= quizColors.length){
         stars++;
         document.getElementById("starsCount").innerText = stars;
+        sendProgress("Colores - Juego auditivo");
 
         soundVictory();
 
@@ -1505,6 +1508,26 @@ function speakQuizColor(){
   }
 
 };
+  function sendProgress(activityName){
+
+  const studentName = localStorage.getItem("studentName") || "Sin nombre";
+
+  fetch(SHEET_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      alumno: studentName,
+      nivel: currentLevel,
+      idioma: currentLanguage,
+      actividad: activityName,
+      estrellas: 1
+    })
+  });
+
+}
   </script>
 <!-- DUPLICADO BORRADO -->
 
