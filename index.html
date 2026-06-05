@@ -591,6 +591,34 @@ h1{
   </div>
 
 </div>
+  <div id="colorQuiz" class="screen">
+  <button class="back" onclick="showScreen('units')">⬅ Volver</button>
+
+  <h2 class="title">🎯 Encuentra el color</h2>
+
+  <div class="adventure-map">
+    <div id="quizMascot" style="font-size:90px;">🐼</div>
+
+    <h2 id="quizQuestion">Toca el color:</h2>
+
+    <div id="quizTarget" style="font-size:42px;font-weight:bold;margin:20px;">
+      Rojo
+    </div>
+
+    <div id="quizGrid" style="
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+      margin-top:20px;">
+    </div>
+
+    <div id="quizFeedback" style="
+      margin-top:20px;
+      font-size:28px;
+      font-weight:bold;">
+    </div>
+  </div>
+</div>
   <div id="magicPopup" class="magic-popup">
 
   <div class="magic-card">
@@ -812,7 +840,6 @@ function speakColor(){
 }
 
 function finishColors(){
-
   stars++;
   document.getElementById("starsCount").innerText = stars;
 
@@ -821,7 +848,6 @@ function finishColors(){
   }
 
   updateAdventureMap();
-
   soundVictory();
 
   nextAfterPopup = "colorQuiz";
@@ -830,9 +856,8 @@ function finishColors(){
     "🎉 ¡Excelente! ⭐ Ganaste una estrella. Ahora vamos al juego de colores."
   );
 }
-  
-  updateAdventureMap();
-  function normalizeChinese(text){
+
+function normalizeChinese(text){
   return text
     .replace(/\s/g, "")
     .replace(/[，。！？,.!?]/g, "");
@@ -922,7 +947,6 @@ function speakTryAgain(){
 }
 
 function closeMagicPopup(){
-
   document.getElementById("magicPopup").style.display = "none";
 
   if(nextAfterPopup === "colorQuiz"){
