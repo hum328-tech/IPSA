@@ -614,7 +614,8 @@ h1{
 let currentLevel = "";
 let currentLanguage = "";
 let stars = 0;
-
+let nextAfterPopup = "";
+  
 function sound(){
   const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
   audio.volume = 0.35;
@@ -811,6 +812,7 @@ function speakColor(){
 }
 
 function finishColors(){
+
   stars++;
   document.getElementById("starsCount").innerText = stars;
 
@@ -819,9 +821,14 @@ function finishColors(){
   }
 
   updateAdventureMap();
+
   soundVictory();
 
-  showMagicPopup("🎉 ¡Excelente! ⭐ Ganaste una estrella. Ahora vamos al juego de colores.");
+  nextAfterPopup = "colorQuiz";
+
+  showMagicPopup(
+    "🎉 ¡Excelente! ⭐ Ganaste una estrella. Ahora vamos al juego de colores."
+  );
 }
   
   updateAdventureMap();
@@ -918,8 +925,13 @@ function closeMagicPopup(){
 
   document.getElementById("magicPopup").style.display = "none";
 
-  showScreen("units");
+  if(nextAfterPopup === "colorQuiz"){
+    nextAfterPopup = "";
+    startColorQuiz();
+    return;
+  }
 
+  showScreen("units");
 }
   function soundVictory(){
   const victory = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
