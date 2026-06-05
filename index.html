@@ -563,7 +563,7 @@ h1{
 
    <button class="enter-btn" onclick="speakColor()">🔊 Escuchar</button>
 <button class="enter-btn" onclick="listenStudentColor()">🎤 Repetir</button>
-<button class="enter-btn" onclick="nextColor()">➡ Siguiente</button>
+<button id="nextColorBtn" class="enter-btn" onclick="nextColor()" disabled style="opacity:.45;">➡ Siguiente</button>
 <button id="finishBtn" class="enter-btn" onclick="finishColors()" style="display:none;">⭐ Terminar</button>
 
 <div id="voiceFeedback" style="
@@ -733,7 +733,7 @@ function openChest(){
 
 let currentColorIndex = 0;
 let activeColors = [];
-
+let colorAnsweredCorrectly = false;
 function openColorsLesson(){
   activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
   currentColorIndex = 0;
@@ -748,6 +748,9 @@ function openColorsLesson(){
   updateColorCard();
   showScreen("colorsLesson");
   sound();
+  colorAnsweredCorrectly = false;
+document.getElementById("nextColorBtn").disabled = true;
+document.getElementById("nextColorBtn").style.opacity = ".45";
 }
 
 function updateColorCard(){
@@ -833,11 +836,16 @@ function listenStudentColor(){
     let cleanSaid = normalizeChinese(said);
     let expected = normalizeChinese(color.zh);
 
-    if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
-      feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
-      feedback.style.background = "#B9FBC0";
-      speakPraise();
-    }else{
+   if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
+  feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
+  feedback.style.background = "#B9FBC0";
+
+  colorAnsweredCorrectly = true;
+  document.getElementById("nextColorBtn").disabled = false;
+  document.getElementById("nextColorBtn").style.opacity = "1";
+
+  speakPraise();
+}else{
       feedback.innerText = "🔄 Dijiste: " + said + " | Intenta decir: " + color.zh + " (" + color.py + ")";
       feedback.style.background = "#FFD6D6";
       speakTryAgain();
