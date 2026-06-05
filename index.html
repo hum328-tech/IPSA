@@ -1055,7 +1055,11 @@ function listenStudentColor(){
   }
 
   const recognition = new SpeechRecognition();
+  if(currentLanguage === "Francés"){
+  recognition.lang = "fr-FR";
+}else{
   recognition.lang = "zh-CN";
+}
   recognition.interimResults = false;
   recognition.maxAlternatives = 3;
 
@@ -1066,12 +1070,18 @@ function listenStudentColor(){
   recognition.onresult = function(event){
     let said = event.results[0][0].transcript;
     let cleanSaid = normalizeChinese(said);
-    let expected = normalizeChinese(color.zh);
+    let expected;
+
+if(currentLanguage === "Francés"){
+  expected = color.fr.toLowerCase();
+  cleanSaid = said.toLowerCase().trim();
+}else{
+  expected = normalizeChinese(color.zh);
+}
 
    if(
   cleanSaid.includes(expected) ||
-  expected.includes(cleanSaid) ||
-  cleanSaid.includes(color.zh[0])
+expected.includes(cleanSaid)
 ){
   feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
   feedback.style.background = "#B9FBC0";
