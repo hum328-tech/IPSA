@@ -836,7 +836,11 @@ function listenStudentColor(){
     let cleanSaid = normalizeChinese(said);
     let expected = normalizeChinese(color.zh);
 
-   if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
+   if(
+  cleanSaid.includes(expected) ||
+  expected.includes(cleanSaid) ||
+  cleanSaid.includes(color.zh[0])
+){
   feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
   feedback.style.background = "#B9FBC0";
 
@@ -853,7 +857,7 @@ function listenStudentColor(){
   };
 
   recognition.onerror = function(){
-    feedback.innerText = "🔄 No escuché bien. Inténtalo otra vez.";
+    feedback.innerText = "🎤 Toca repetir e inténtalo otra vez.";
     feedback.style.background = "#FFF3B0";
   };
 
