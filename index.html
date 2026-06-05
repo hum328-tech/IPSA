@@ -1263,10 +1263,20 @@ function soundVictory(){
   victory.play();
 }
 function speakQuizColor(){
+
   const target = quizColors[currentQuiz];
 
-  const utterance = new SpeechSynthesisUtterance(target.zh);
-  utterance.lang = "zh-CN";
+  let text = target.zh;
+  let lang = "zh-CN";
+
+  if(currentLanguage === "Francés"){
+    text = target.fr;
+    lang = "fr-FR";
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = lang;
   utterance.rate = 0.75;
 
   speechSynthesis.speak(utterance);
