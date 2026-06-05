@@ -1055,11 +1055,13 @@ function listenStudentColor(){
   }
 
   const recognition = new SpeechRecognition();
+
   if(currentLanguage === "Francés"){
-  recognition.lang = "fr-FR";
-}else{
-  recognition.lang = "zh-CN";
-}
+    recognition.lang = "fr-FR";
+  }else{
+    recognition.lang = "zh-CN";
+  }
+
   recognition.interimResults = false;
   recognition.maxAlternatives = 3;
 
@@ -1069,30 +1071,28 @@ function listenStudentColor(){
 
   recognition.onresult = function(event){
     let said = event.results[0][0].transcript;
-    let cleanSaid = normalizeChinese(said);
+    let cleanSaid;
     let expected;
 
-if(currentLanguage === "Francés"){
-  expected = color.fr.toLowerCase();
-  cleanSaid = said.toLowerCase().trim();
-}else{
-  expected = normalizeChinese(color.zh);
-}
+    if(currentLanguage === "Francés"){
+      cleanSaid = said.toLowerCase().trim();
+      expected = color.fr.toLowerCase().trim();
+    }else{
+      cleanSaid = normalizeChinese(said);
+      expected = normalizeChinese(color.zh);
+    }
 
-   if(
-  cleanSaid.includes(expected) ||
-expected.includes(cleanSaid)
-){
-  feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
-  feedback.style.background = "#B9FBC0";
+    if(cleanSaid.includes(expected) || expected.includes(cleanSaid)){
+      feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
+      feedback.style.background = "#B9FBC0";
 
-  colorAnsweredCorrectly = true;
-  document.getElementById("nextColorBtn").disabled = false;
-  document.getElementById("nextColorBtn").style.opacity = "1";
+      colorAnsweredCorrectly = true;
+      document.getElementById("nextColorBtn").disabled = false;
+      document.getElementById("nextColorBtn").style.opacity = "1";
 
-  speakPraise();
-}else{
-      feedback.innerText = "🔄 Dijiste: " + said + " | Intenta decir: " + color.zh + " (" + color.py + ")";
+      speakPraise();
+    }else{
+      feedback.innerText = "🔄 Dijiste: " + said + " | Intenta otra vez";
       feedback.style.background = "#FFD6D6";
       speakTryAgain();
     }
@@ -1102,6 +1102,7 @@ expected.includes(cleanSaid)
     feedback.innerText = "🎤 Toca repetir e inténtalo otra vez.";
     feedback.style.background = "#FFF3B0";
   };
+}
 
   recognition.onend = function(){
     // termina solo; el alumno puede volver a tocar 🎤 Repetir
