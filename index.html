@@ -961,7 +961,9 @@ function startColorQuiz(){
 function loadQuizQuestion(){
   const target = quizColors[currentQuiz];
 
-  document.getElementById("quizTarget").innerText = target.es;
+  document.getElementById("quizTarget").innerHTML = `
+  <button class="enter-btn" onclick="speakQuizColor()">🔊 Escuchar color</button>
+`;
   document.getElementById("quizFeedback").innerText = "";
 
   const grid = document.getElementById("quizGrid");
@@ -1049,7 +1051,15 @@ function soundVictory(){
   victory.volume = 0.45;
   victory.play();
 }
+function speakQuizColor(){
+  const target = quizColors[currentQuiz];
 
+  const utterance = new SpeechSynthesisUtterance(target.zh);
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.75;
+
+  speechSynthesis.speak(utterance);
+}
 </script>
 <!-- DUPLICADO BORRADO -->
 
