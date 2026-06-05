@@ -310,7 +310,7 @@ h1{
 }
 
 #colorsLesson .adventure-map{
-  margin-bottom:90px;
+  margin-bottom:20px;
 }
   .magic-popup{
   position:fixed;
@@ -394,6 +394,75 @@ h1{
 #colorMeaning{
   font-size:24px !important;
   margin:5px;
+}
+  /* MODO JUEGO COMPACTO */
+#colorsLesson,
+#colorQuiz{
+  margin-top:0;
+  min-height:calc(100vh - 20px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+#colorsLesson.active,
+#colorQuiz.active{
+  display:flex;
+  flex-direction:column;
+}
+
+#colorsLesson .title,
+#colorQuiz .title{
+  font-size:30px;
+  margin:5px 0 12px;
+}
+
+#colorsLesson .adventure-map,
+#colorQuiz .adventure-map{
+  max-width:560px;
+  padding:18px;
+  border-radius:32px;
+}
+
+#colorMascot,
+#quizMascot{
+  font-size:65px !important;
+}
+
+#colorBox{
+  width:130px !important;
+  height:130px !important;
+  margin:8px auto !important;
+  border-radius:28px !important;
+  font-size:55px !important;
+}
+
+#colorWord{
+  font-size:36px !important;
+  margin:4px !important;
+}
+
+#colorPronunciation,
+#colorMeaning{
+  font-size:22px !important;
+  margin:3px;
+}
+
+#voiceFeedback{
+  font-size:22px !important;
+  padding:10px !important;
+  margin-top:10px !important;
+}
+
+#colorsLesson .enter-btn{
+  padding:12px 22px;
+  font-size:22px;
+  margin-top:8px;
+}
+
+#quizGrid button{
+  height:95px !important;
+  font-size:42px !important;
 }
 @media(max-width:768px){
   .header{
