@@ -598,7 +598,10 @@ h1{
         <h2>K1</h2>
         <p>Primer mundo</p>
       </div>
-
+<button onclick="testSheet()"
+style="font-size:20px;padding:10px;margin:10px;">
+  Probar Google Sheet
+</button>
       <div class="card k2" onclick="openLevel('K2')">
         <div class="big-icon">🚀</div>
         <h2>K2</h2>
@@ -815,7 +818,9 @@ let stars = 0;
 let nextAfterPopup = "";
 let currentScreen = "home";
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbyMYujmCiKigHTfG_bUbUCJNHVR4DwX-UH6oawXTABCMufsx-PEMAVjIL9DBPJN158R/exec";
-  
+  function testSheet(){
+  sendProgress("PRUEBA MANUAL");
+}
 function sound(){
   const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
   audio.volume = 0.35;
