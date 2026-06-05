@@ -499,6 +499,21 @@ h1{
 #languages .grid{
   gap:18px;
 }
+  .game-screen{
+  margin-top:0 !important;
+}
+
+.game-screen .title{
+  margin-top:5px;
+}
+
+.game-screen .progress-box{
+  margin-bottom:15px;
+}
+
+.game-screen .adventure-map{
+  margin-top:0;
+}
 @media(max-width:768px){
   .header{
     flex-direction:column;
@@ -616,7 +631,7 @@ h1{
 
   <!-- PANTALLA DE UNIDADES -->
   <!-- PANTALLA MAPA DE AVENTURAS -->
-<div id="units" class="screen">
+<div id="units" class="screen game-screen">
   <button class="back" onclick="goLanguages()">⬅ Volver</button>
 
   <h2 class="title" id="unitTitle">Mapa de aventuras</h2>
@@ -790,7 +805,12 @@ function showScreen(id){
 
   const header = document.querySelector(".header");
 
- if(id === "languages" || id === "colorsLesson" || id === "colorQuiz"){
+ if(
+  id === "languages" ||
+  id === "units" ||
+  id === "colorsLesson" ||
+  id === "colorQuiz"
+){
   header.style.display = "none";
 }else{
   header.style.display = "flex";
