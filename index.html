@@ -969,9 +969,19 @@ function updateColorCard(){
 
   document.getElementById("colorBox").style.background = color.bg;
   document.getElementById("colorBox").innerText = color.emoji;
+  if(currentLanguage === "Francés"){
+
+  document.getElementById("colorWord").innerText = color.fr;
+  document.getElementById("colorPronunciation").innerText = "";
+  document.getElementById("colorMeaning").innerText = color.frHelp;
+
+}else{
+
   document.getElementById("colorWord").innerText = color.zh;
   document.getElementById("colorPronunciation").innerText = color.py;
   document.getElementById("colorMeaning").innerText = color.es;
+
+}
   document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
 document.getElementById("voiceFeedback").style.background = "white";
   if(currentColorIndex === activeColors.length - 1){
