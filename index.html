@@ -172,17 +172,27 @@ h1{
 
 .rewards{
   position:fixed;
-  bottom:15px;
-  left:50%;
-  transform:translateX(-50%);
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+
   background:white;
-  border-radius:35px;
-  padding:12px 25px;
+  border-radius:25px;
+
+  padding:15px 20px;
+
   box-shadow:0 8px 18px rgba(0,0,0,.18);
+
   display:flex;
-  gap:25px;
-  font-size:28px;
-  z-index:10;
+  flex-direction:column;
+
+  align-items:center;
+
+  gap:10px;
+
+  font-size:34px;
+
+  z-index:999;
 }
 
 .cloud{
@@ -294,10 +304,9 @@ h1{
   cursor:pointer;
   animation:float 2s infinite ease-in-out;
 }
-  .only-stars{
-  bottom:25px;
-  padding:12px 28px;
-  font-size:32px;
+.only-stars{
+  width:90px;
+  min-height:120px;
 }
 
 #colorsLesson .adventure-map{
@@ -571,7 +580,16 @@ h1{
 </div> <!-- colorsLesson -->
 
 <div class="rewards only-stars">
-  <span id="stars">⭐ 0</span>
+
+  <div style="font-size:48px;">⭐</div>
+
+  <div id="starsCount"
+       style="
+       font-size:40px;
+       font-weight:bold;">
+       0
+  </div>
+
 </div>
 <script>
 let currentLevel = "";
@@ -617,7 +635,7 @@ function enterLanguage(language){
 
 function reward(){
   stars++;
-  document.getElementById("stars").innerText = "⭐ " + stars;
+  document.getElementById("starsCount").innerText = stars;
 
   const rewards = document.querySelector(".rewards");
   rewards.classList.remove("pop");
@@ -770,7 +788,7 @@ function speakColor(){
 
 function finishColors(){
   stars++;
-  document.getElementById("stars").innerText = "⭐ " + stars;
+  document.getElementById("starsCount").innerText = stars;
 
   if(unlockedLessons < 2){
     unlockedLessons = 2;
