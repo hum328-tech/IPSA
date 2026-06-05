@@ -464,6 +464,41 @@ h1{
   height:95px !important;
   font-size:42px !important;
 }
+  #languages{
+  margin-top:0;
+}
+
+#languages .title{
+  margin-top:0;
+  margin-bottom:18px;
+  font-size:34px;
+}
+
+#languages .card{
+  min-height:230px;
+  padding:22px;
+}
+
+#languages .big-icon{
+  font-size:72px;
+}
+
+#languages .card h2{
+  font-size:34px;
+}
+
+#languages .card p{
+  font-size:21px;
+}
+
+#languages .enter-btn{
+  padding:12px 26px;
+  font-size:22px;
+}
+
+#languages .grid{
+  gap:18px;
+}
 @media(max-width:768px){
   .header{
     flex-direction:column;
@@ -755,11 +790,10 @@ function showScreen(id){
 
   const header = document.querySelector(".header");
 
-  if(id === "colorsLesson" || id === "colorQuiz"){
-    header.style.display = "none";
-  }else{
-    header.style.display = "flex";
-  }
+ if(id === "languages" || id === "colorsLesson" || id === "colorQuiz"){
+  header.style.display = "none";
+}else{
+  header.style.display = "flex";
 }
 
 function openLevel(level){
