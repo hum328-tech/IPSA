@@ -564,8 +564,32 @@ h1{
     <div class="teacher">Modo Kinder</div>
   </div>
 
-  <!-- PANTALLA INICIAL -->
-  <div id="home" class="screen active">
+ <!-- PANTALLA NOMBRE DEL ALUMNO -->
+<div id="studentLogin" class="screen active">
+  <h2 class="title">👋 ¿Cómo te llamas?</h2>
+
+  <div class="adventure-map">
+    <input id="studentNameInput"
+      type="text"
+      placeholder="Escribe tu nombre"
+      style="
+        width:90%;
+        padding:18px;
+        font-size:28px;
+        border-radius:22px;
+        border:4px solid #FFD93D;
+        text-align:center;
+        margin-bottom:20px;
+      ">
+
+    <button class="enter-btn" onclick="saveStudentName()">
+      🎮 Entrar
+    </button>
+  </div>
+</div>
+
+<!-- PANTALLA INICIAL -->
+<div id="home" class="screen">
     <h2 class="title">Elige tu mundo</h2>
 
     <div class="grid">
