@@ -938,6 +938,94 @@ function speakTryAgain(){
   }
   return array;
 }
+  function soundVictory(){
+  ...
+}
+
+let quizColors = [];
+let currentQuiz = 0;
+
+function startColorQuiz(){
+  quizColors = shuffleArray([...activeColors]);
+  currentQuiz = 0;
+
+  document.getElementById("quizMascot").innerText =
+    document.getElementById("colorMascot").innerText;
+
+  showScreen("colorQuiz");
+  loadQuizQuestion();
+}
+
+function loadQuizQuestion(){
+  const target = quizColors[currentQuiz];
+
+  document.getElementById("quizTarget").innerText = target.es;
+  document.getElementById("quizFeedback").innerText = "";
+
+  const grid = document.getElementById("quizGrid");
+  grid.innerHTML = "";
+
+  let options = shuffleArray([...activeColors]).slice(0,4);
+
+  if(!options.some(c => c.es === target.es)){
+    options[0] = target;
+  }
+
+  options = shuffleArray(options);
+
+  options.forEach(color => {
+    const btn = document.createElement("button");
+
+    btn.innerText = color.emoji;
+    btn.onclick = () => checkColorQuiz(color.es);
+
+    btn.style.height = "120px";
+    btn.style.border = "none";
+    btn.style.borderRadius = "25px";
+    btn.style.fontSize = "50px";
+    btn.style.background = color.bg;
+    btn.style.cursor = "pointer";
+    btn.style.boxShadow = "0 8px 15px rgba(0,0,0,.18)";
+
+    grid.appendChild(btn);
+  });
+}
+
+function checkColorQuiz(answer){
+  const target = quizColors[currentQuiz];
+
+  if(answer === target.es){
+    document.getElementById("quizFeedback").innerText = "🎉 ¡Correcto!";
+    document.getElementById("quizFeedback").style.color = "#2A9D8F";
+
+    sound();
+
+    currentQuiz++;
+
+    setTimeout(() => {
+      if(currentQuiz >= quizColors.length){
+        stars++;
+        document.getElementById("starsCount").innerText = stars;
+
+        soundVictory();
+
+        nextAfterPopup = "";
+
+        showMagicPopup(
+          "🏆 ¡Ganaste el juego de colores! ⭐ Otra estrella para ti."
+        );
+      }else{
+        loadQuizQuestion();
+      }
+    }, 800);
+
+  }else{
+    document.getElementById("quizFeedback").innerText = "🔄 Intenta otra vez";
+    document.getElementById("quizFeedback").style.color = "#E63946";
+  }
+}
+
+function showMagicPopup(message){
   function showMagicPopup(message){
 
   document.getElementById("magicText").innerText = message;
