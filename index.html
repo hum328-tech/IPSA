@@ -995,11 +995,11 @@ function openChest(){
 }
   updateAdventureMap();
   const colorLessons = {
- K1: [
-  { es:"Rojo", zh:"红色", py:"hóng sè", fr:"Rouge", frHelp:"Rojo", emoji:"🟥", bg:"#E63946" },
-  { es:"Azul", zh:"蓝色", py:"lán sè", fr:"Bleu", frHelp:"Azul", emoji:"🟦", bg:"#457B9D" },
-  { es:"Verde", zh:"绿色", py:"lǜ sè", fr:"Vert", frHelp:"Verde", emoji:"🟩", bg:"#2A9D8F" },
-  { es:"Amarillo", zh:"黄色", py:"huáng sè", fr:"Jaune", frHelp:"Amarillo", emoji:"🟨", bg:"#FFD93D" }
+K1: [
+  { es:"Rojo", zh:"红", py:"hóng", fr:"Rouge", emoji:"🟥", bg:"#E63946", accept:["红","hong","hóng","on"] },
+  { es:"Azul", zh:"蓝", py:"lán", fr:"Bleu", emoji:"🟦", bg:"#457B9D", accept:["蓝","lan","lán","la"] },
+  { es:"Amarillo", zh:"黄", py:"huáng", fr:"Jaune", emoji:"🟨", bg:"#FFD93D", accept:["黄","huang","huáng","wan","juan"] },
+  { es:"Verde", zh:"绿", py:"lǜ", fr:"Vert", emoji:"🟩", bg:"#2A9D8F", accept:["绿","lü","lv","lu","yu"] }
 ],
 
 K2: [
@@ -1332,10 +1332,20 @@ function listenStudentColor(){
       expected = normalizeChinese(color.zh);
     }
 
-    if(
+let accepted = color.accept || [expected];
+
+if(
   cleanSaid.includes(expected) ||
   expected.includes(cleanSaid) ||
-  (currentLanguage === "Francés" && expected === "vert" && (cleanSaid.includes("ver") || cleanSaid.includes("vair") || cleanSaid.includes("vert")))
+  accepted.some(option => cleanSaid.includes(option)) ||
+  (currentLanguage === "Francés" &&
+    expected === "vert" &&
+    (
+      cleanSaid.includes("ver") ||
+      cleanSaid.includes("vair") ||
+      cleanSaid.includes("vert")
+    )
+  )
 ){
       feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
       feedback.style.background = "#B9FBC0";
