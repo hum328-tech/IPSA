@@ -541,6 +541,21 @@ h1{
     font-size:24px;
   }
 }
+  .home-btn{
+  position:fixed;
+  top:15px;
+  left:15px;
+  width:60px;
+  height:60px;
+  border:none;
+  border-radius:50%;
+  background:#4CAF50;
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  z-index:9999;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
 </style>
 </head>
 
@@ -740,6 +755,9 @@ h1{
 </div>
   <!-- LECCIÓN DE COLORES -->
 <div id="colorsLesson" class="screen">
+  <button class="home-btn" onclick="goHome()">
+🏠
+</button>
   <button class="back" onclick="showScreen('units')">⬅ Volver</button>
 
   <h2 class="title" id="colorsTitle">🌈 Colores</h2>
@@ -797,6 +815,9 @@ h1{
 
 </div>
   <div id="colorQuiz" class="screen">
+    <button class="home-btn" onclick="goHome()">
+🏠
+</button>
   <button class="back" onclick="showScreen('units')">⬅ Volver</button>
 
   <h2 class="title">🎯 Encuentra el color</h2>
@@ -1624,6 +1645,13 @@ if(!savedStudentName || !savedStudentLastName || !savedStudentYear){
   localStorage.setItem("studentYear", ano);
 
   showScreen("home");
+}
+  function goHome(){
+
+  if(confirm("¿Volver al inicio?")){
+    showScreen("home");
+  }
+
 }
   </script>
 <!-- DUPLICADO BORRADO -->
