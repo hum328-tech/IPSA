@@ -1598,9 +1598,7 @@ if(!savedStudentName || !savedStudentLastName || !savedStudentYear){
   }
 
 };
-  function sendProgress(activityName){
-
-  const studentName = localStorage.getItem("studentName") || "Sin nombre";
+function sendProgress(activityName){
 
   fetch(SHEET_URL, {
     method: "POST",
@@ -1608,15 +1606,15 @@ if(!savedStudentName || !savedStudentLastName || !savedStudentYear){
     headers: {
       "Content-Type": "application/json"
     },
-   body: JSON.stringify({
-  nombre: localStorage.getItem("studentName") || "",
-  apellido: localStorage.getItem("studentLastName") || "",
-  ano: localStorage.getItem("studentYear") || "",
-  nivel: currentLevel,
-  idioma: currentLanguage,
-  actividad: activityName,
-  estrellas: 1
-})
+    body: JSON.stringify({
+      nombre: localStorage.getItem("studentName") || "",
+      apellido: localStorage.getItem("studentLastName") || "",
+      ano: localStorage.getItem("studentYear") || "",
+      nivel: currentLevel,
+      idioma: currentLanguage,
+      actividad: activityName,
+      estrellas: 1
+    })
   });
 
 }
