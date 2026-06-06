@@ -1541,6 +1541,14 @@ function speakQuizColor(){
   }
 
   updateAdventureMap();
+    const savedStudentName = localStorage.getItem("studentName");
+const savedStudentLastName = localStorage.getItem("studentLastName");
+const savedStudentYear = localStorage.getItem("studentYear");
+
+if(!savedStudentName || !savedStudentLastName || !savedStudentYear){
+  showScreen("studentLogin");
+  return;
+}
 
   if(savedScreen === "colorsLesson"){
 
