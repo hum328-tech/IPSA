@@ -1587,13 +1587,15 @@ if(!savedStudentName || !savedStudentLastName || !savedStudentYear){
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      alumno: studentName,
-      nivel: currentLevel,
-      idioma: currentLanguage,
-      actividad: activityName,
-      estrellas: 1
-    })
+   body: JSON.stringify({
+  nombre: localStorage.getItem("studentName") || "",
+  apellido: localStorage.getItem("studentLastName") || "",
+  ano: localStorage.getItem("studentYear") || "",
+  nivel: currentLevel,
+  idioma: currentLanguage,
+  actividad: activityName,
+  estrellas: 1
+})
   });
 
 }
