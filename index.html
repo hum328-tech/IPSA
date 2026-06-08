@@ -655,7 +655,7 @@ h1{
   <!-- PANTALLA DE IDIOMAS -->
 <!-- PANTALLA DE IDIOMAS -->
 <div id="languages" class="screen">
-  <button class="back" onclick="goHome()">⬅ Volver</button>
+  <button class="back" onclick="showScreen('studentLogin')">👤 Perfil</button>
 
   <h2 class="title" id="levelTitle">Elige tu amigo</h2>
 
@@ -1709,9 +1709,12 @@ function saveStudentName(){
   const apellido =
     document.getElementById("studentLastNameInput").value.trim();
 
-  if(!nombre || !apellido){
+  const level =
+    document.getElementById("studentLevelInput").value;
 
-    alert("⚠️ Debes escribir nombre y apellido.");
+  if(!nombre || !apellido || !level){
+
+    alert("⚠️ Debes escribir nombre, apellido y elegir tu mundo.");
 
     return;
   }
@@ -1719,7 +1722,12 @@ function saveStudentName(){
   localStorage.setItem("studentName", nombre);
   localStorage.setItem("studentLastName", apellido);
 
-  showScreen("home");
+  localStorage.setItem("studentLevel", level);
+  localStorage.setItem("level", level);
+
+  currentLevel = level;
+
+  showScreen("languages");
 }
   function goHome(){
 
@@ -1753,13 +1761,25 @@ function checkProfileOnLoad(){
 
   const nombre = localStorage.getItem("studentName");
   const apellido = localStorage.getItem("studentLastName");
+<h2>Elige tu mundo</h2>
 
+<div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+  <button class="enter-btn" onclick="selectProfileLevel('K1')">🧸 K1</button>
+  <button class="enter-btn" onclick="selectProfileLevel('K2')">🚀 K2</button>
+  <button class="enter-btn" onclick="selectProfileLevel('K3')">🌟 K3</button>
+</div>
+
+<input id="studentLevelInput" type="hidden">
   if(nombre && apellido){
     showScreen("home");
   }else{
     showScreen("studentLogin");
   }
 
+}
+  function selectProfileLevel(level){
+  document.getElementById("studentLevelInput").value = level;
+  alert("Mundo seleccionado: " + level);
 }
   </script>
 <!-- DUPLICADO BORRADO -->
