@@ -1708,12 +1708,9 @@ function saveStudentName(){
   const apellido =
     document.getElementById("studentLastNameInput").value.trim();
 
-  const level =
-    document.getElementById("studentLevelInput").value;
+  if(!nombre || !apellido){
 
-  if(!nombre || !apellido || !level){
-
-    alert("⚠️ Debes escribir nombre, apellido y elegir tu mundo.");
+    alert("⚠️ Debes escribir nombre y apellido.");
 
     return;
   }
@@ -1721,12 +1718,7 @@ function saveStudentName(){
   localStorage.setItem("studentName", nombre);
   localStorage.setItem("studentLastName", apellido);
 
-  localStorage.setItem("studentLevel", level);
-  localStorage.setItem("level", level);
-
-  currentLevel = level;
-
-  showScreen("languages");
+  showScreen("home");
 }
   function goHome(){
 
