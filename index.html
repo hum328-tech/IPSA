@@ -929,7 +929,9 @@ function showScreen(id){
   }
 currentScreen = id;
 
-localStorage.setItem("screen", id);
+if(id !== "studentLogin"){
+  localStorage.setItem("screen", id);
+}
 localStorage.setItem("level", currentLevel);
 localStorage.setItem("language", currentLanguage);
 localStorage.setItem("stars", stars);
@@ -1623,79 +1625,28 @@ function speakQuizColor(){
 
   speechSynthesis.speak(utterance);
 }
- window.onload = function(){
+window.onload = function(){
 
   const savedStudentName = localStorage.getItem("studentName");
   const savedStudentLastName = localStorage.getItem("studentLastName");
-const savedStudentLevel = localStorage.getItem("studentLevel");
- if(!savedStudentName || !savedStudentLastName){
-  showScreen("studentLogin");
-  return;
-}
+  const savedStudentLevel = localStorage.getItem("studentLevel");
 
-if(!savedStudentLevel){
-  showScreen("home");
-  return;
-}
-
-currentLevel = savedStudentLevel;
-showScreen("languages");
-return;
-
-  const savedScreen = localStorage.getItem("screen");
-  const savedLevel = localStorage.getItem("level");
-  const savedLanguage = localStorage.getItem("language");
-
-  if(savedLevel) currentLevel = savedLevel;
-  if(savedLanguage) currentLanguage = savedLanguage;
-
-  if(localStorage.getItem("stars")){
-    stars = parseInt(localStorage.getItem("stars"));
-    document.getElementById("starsCount").innerText = stars;
-  }
-
-  if(localStorage.getItem("unlockedLessons")){
-    unlockedLessons =
-      parseInt(localStorage.getItem("unlockedLessons"));
-  }
-
-  if(localStorage.getItem("colorIndex")){
-    currentColorIndex =
-      parseInt(localStorage.getItem("colorIndex"));
-  }
-
-  if(localStorage.getItem("quizIndex")){
-    currentQuiz =
-      parseInt(localStorage.getItem("quizIndex"));
-  }
-
-  updateAdventureMap();
-
-  if(savedScreen === "colorsLesson"){
-    activeColors =
-      shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
-
-    showScreen("colorsLesson");
-    updateColorCard();
+  if(!savedStudentName || !savedStudentLastName){
+    showScreen("studentLogin");
     return;
   }
 
-  if(savedScreen === "colorQuiz"){
-    activeColors =
-      shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
-
-    quizColors = [...activeColors];
-
-    showScreen("colorQuiz");
-    loadQuizQuestion();
-    return;
-  }
-
-  if(savedScreen){
-    showScreen(savedScreen);
-  }else{
+  if(!savedStudentLevel){
     showScreen("home");
+    return;
   }
+
+  currentLevel = savedStudentLevel;
+
+  document.getElementById("levelTitle").innerText =
+    currentLevel + " - Elige un idioma";
+
+  showScreen("languages");
 
 };
   function sendProgress(activityName){
