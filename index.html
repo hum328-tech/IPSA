@@ -1705,8 +1705,6 @@ function sendProgress(activityName){
   const apellido =
     document.getElementById("studentLastNameInput").value.trim();
 
-  const ano =
-    document.getElementById("studentYearInput").value;
 
   if(!nombre || !apellido || !ano){
 
@@ -1719,7 +1717,7 @@ function sendProgress(activityName){
 
   localStorage.setItem("studentName", nombre);
   localStorage.setItem("studentLastName", apellido);
-  localStorage.setItem("studentYear", ano);
+  
 
   showScreen("home");
 }
