@@ -739,7 +739,9 @@ h1{
 
   <h2 class="title" id="lessonGamesTitle">Elige un juego</h2>
 
-  <div class="adventure-map">
+  <div class="adventure-map" id="lessonGamesMap">
+  </div>
+</div>
 
     <div class="lesson-node unlocked" onclick="openColorsLesson()">
       <div class="path-icon">🎤</div>
@@ -1701,9 +1703,45 @@ function saveStudentName(){
 }
 
 function openLessonGames(lesson){
+
   currentLesson = lesson;
+
   document.getElementById("lessonGamesTitle").innerText =
     currentLevel + " - " + currentLanguage + " - " + lesson;
+
+  const map = document.getElementById("lessonGamesMap");
+
+  map.innerHTML = `
+    <div class="lesson-node unlocked" onclick="startGameOne()">
+      <div class="path-icon">🎤</div>
+      <h2>Escucha y repite</h2>
+      <p>⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node unlocked" onclick="startGameTwo()">
+      <div class="path-icon">🎧</div>
+      <h2>Escucha y toca</h2>
+      <p>⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node unlocked" onclick="startGameThree()">
+      <div class="path-icon">🎯</div>
+      <h2>Caza del color</h2>
+      <p>⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node unlocked" onclick="startGameFour()">
+      <div class="path-icon">🖼️</div>
+      <h2>Di el color</h2>
+      <p>⭐</p>
+    </div>
+  `;
 
   showScreen("lessonGames");
   sound();
