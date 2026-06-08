@@ -708,48 +708,81 @@ h1{
 <div id="units" class="screen game-screen">
   <button class="back" onclick="goLanguages()">⬅ Volver</button>
 
-  <h2 class="title" id="unitTitle">Elige un juego</h2>
-
-  <div class="progress-box">
-    <div class="progress-text">Progreso</div>
-    <div class="progress-bar">
-      <div id="progressFill"></div>
-    </div>
-  </div>
+ <h2 class="title" id="unitTitle">Elige una lección</h2>
 
  <div class="adventure-map">
 
-  <div class="lesson-node unlocked" onclick="openColorsLesson()">
-    <div class="path-icon">🎤</div>
-    <h2>Escucha y repite</h2>
+  <div class="lesson-node unlocked" onclick="openLessonGames('Colores')">
+    <div class="path-icon">🌈</div>
+    <h2>Colores</h2>
     <p>⭐</p>
   </div>
 
   <div class="road">⬇️</div>
 
-  <div class="lesson-node unlocked" onclick="startColorQuiz()">
-    <div class="path-icon">🎧</div>
-    <h2>Escucha y toca</h2>
+  <div class="lesson-node unlocked" onclick="openLessonGames('Animales')">
+    <div class="path-icon">🐶</div>
+    <h2>Animales</h2>
     <p>⭐</p>
   </div>
 
   <div class="road">⬇️</div>
 
-  <div class="lesson-node unlocked" onclick="alert('Próximamente: Caza del color')">
-    <div class="path-icon">🎯</div>
-    <h2>Caza del color</h2>
+  <div class="lesson-node unlocked" onclick="openLessonGames('Números')">
+    <div class="path-icon">🔢</div>
+    <h2>Números</h2>
     <p>⭐</p>
   </div>
 
   <div class="road">⬇️</div>
 
-  <div class="lesson-node unlocked" onclick="alert('Próximamente: Di el color')">
-    <div class="path-icon">🖼️</div>
-    <h2>Di el color</h2>
+  <div class="lesson-node unlocked" onclick="openLessonGames('Familia')">
+    <div class="path-icon">👨‍👩‍👧</div>
+    <h2>Familia</h2>
     <p>⭐</p>
   </div>
 
+</div> 
+  <div id="lessonGames" class="screen">
+  <button class="back" onclick="showScreen('units')">⬅ Volver</button>
+
+  <h2 class="title" id="lessonGamesTitle">Elige un juego</h2>
+
+  <div class="adventure-map">
+
+    <div class="lesson-node unlocked" onclick="openColorsLesson()">
+      <div class="path-icon">🎤</div>
+      <h2>Escucha y repite</h2>
+      <p>⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node unlocked" onclick="startColorQuiz()">
+      <div class="path-icon">🎧</div>
+      <h2>Escucha y toca</h2>
+      <p>⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node unlocked" onclick="alert('Próximamente: Caza del color')">
+      <div class="path-icon">🎯</div>
+      <h2>Caza del color</h2>
+      <p>⭐</p>
+    </div>
+
+    <div class="road">⬇️</div>
+
+    <div class="lesson-node unlocked" onclick="alert('Próximamente: Di el color')">
+      <div class="path-icon">🖼️</div>
+      <h2>Di el color</h2>
+      <p>⭐</p>
+    </div>
+
+  </div>
 </div>
+  
   <!-- LECCIÓN DE COLORES -->
 <div id="colorsLesson" class="screen">
   <button class="home-btn" onclick="goHome()">
@@ -1696,6 +1729,16 @@ function sendProgress(activityName){
     showScreen("home");
   }
 
+}
+  let currentLesson = "";
+
+function openLessonGames(lesson){
+  currentLesson = lesson;
+  document.getElementById("lessonGamesTitle").innerText =
+    currentLevel + " - " + currentLanguage + " - " + lesson;
+
+  showScreen("lessonGames");
+  sound();
 }
   </script>
 <!-- DUPLICADO BORRADO -->
