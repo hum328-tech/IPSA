@@ -612,23 +612,7 @@ h1{
         margin-bottom:15px;
       ">
 
-    <select id="studentYearInput"
-      style="
-        width:90%;
-        padding:18px;
-        font-size:28px;
-        border-radius:22px;
-        border:4px solid #FFD93D;
-        text-align:center;
-        margin-bottom:20px;
-      ">
-
-      <option value="">Selecciona tu año</option>
-      <option>K1</option>
-      <option>K2</option>
-      <option>K3</option>
-
-    </select>
+ 
 
     <button class="enter-btn" onclick="saveStudentName()">
       🎮 Entrar
@@ -1643,9 +1627,9 @@ function speakQuizColor(){
   updateAdventureMap();
     const savedStudentName = localStorage.getItem("studentName");
 const savedStudentLastName = localStorage.getItem("studentLastName");
-const savedStudentYear = localStorage.getItem("studentYear");
 
-if(!savedStudentName || !savedStudentLastName || !savedStudentYear){
+
+if(!savedStudentName || !savedStudentLastName){
   showScreen("studentLogin");
   return;
 }
@@ -1688,7 +1672,7 @@ function sendProgress(activityName){
     body: JSON.stringify({
       nombre: localStorage.getItem("studentName") || "",
       apellido: localStorage.getItem("studentLastName") || "",
-      ano: localStorage.getItem("studentYear") || "",
+      ano: currentLevel,
       nivel: currentLevel,
       idioma: currentLanguage,
       actividad: activityName,
@@ -1697,7 +1681,7 @@ function sendProgress(activityName){
   });
 
 }
-  function saveStudentName(){
+function saveStudentName(){
 
   const nombre =
     document.getElementById("studentNameInput").value.trim();
@@ -1705,19 +1689,15 @@ function sendProgress(activityName){
   const apellido =
     document.getElementById("studentLastNameInput").value.trim();
 
+  if(!nombre || !apellido){
 
-  if(!nombre || !apellido || !ano){
-
-    alert(
-      "⚠️ Debes escribir nombre, apellido y seleccionar tu año."
-    );
+    alert("⚠️ Debes escribir nombre y apellido.");
 
     return;
   }
 
   localStorage.setItem("studentName", nombre);
   localStorage.setItem("studentLastName", apellido);
-  
 
   showScreen("home");
 }
