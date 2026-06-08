@@ -1699,23 +1699,6 @@ function saveStudentName(){
     showScreen("home");
   }
 }
- function goHome(){
-
-  const savedLevel = localStorage.getItem("studentLevel");
-
-  if(savedLevel){
-    currentLevel = savedLevel;
-
-    document.getElementById("levelTitle").innerText =
-      currentLevel + " - Elige un idioma";
-
-    showScreen("languages");
-  }else{
-    showScreen("home");
-  }
-
-  sound();
-}
 
 function openLessonGames(lesson){
   currentLesson = lesson;
