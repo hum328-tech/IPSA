@@ -1725,7 +1725,14 @@ function saveStudentName(){
   localStorage.setItem("studentName", nombre);
   localStorage.setItem("studentLastName", apellido);
 
-  showScreen("home");
+  const savedLevel = localStorage.getItem("studentLevel");
+
+  if(savedLevel){
+    currentLevel = savedLevel;
+    showScreen("languages");
+  }else{
+    showScreen("home");
+  }
 }
   function goHome(){
 
