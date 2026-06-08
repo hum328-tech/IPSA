@@ -611,13 +611,6 @@ h1{
         text-align:center;
         margin-bottom:15px;
       ">
-    <h2>Elige tu mundo</h2>
-
-<div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-  <button class="enter-btn" onclick="selectProfileLevel('K1')">🧸 K1</button>
-  <button class="enter-btn" onclick="selectProfileLevel('K2')">🚀 K2</button>
-  <button class="enter-btn" onclick="selectProfileLevel('K3')">🌟 K3</button>
-</div>
 
 <input id="studentLevelInput" type="hidden">
  <button class="enter-btn" onclick="saveStudentName()">
@@ -1774,10 +1767,6 @@ function checkProfileOnLoad(){
     showScreen("studentLogin");
   }
 
-}
-  function selectProfileLevel(level){
-  document.getElementById("studentLevelInput").value = level;
-  alert("Mundo seleccionado: " + level);
 }
   </script>
 <!-- DUPLICADO BORRADO -->
