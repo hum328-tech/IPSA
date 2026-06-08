@@ -702,7 +702,7 @@ h1{
 
  <div class="adventure-map">
 
-  <div class="lesson-node unlocked" onclick="openLessonGames('Colores')">
+  <div class="lesson-node unlocked" onclick="openColorsLesson()">
     <div class="path-icon">🌈</div>
     <h2>Colores</h2>
     <p>⭐</p>
@@ -741,7 +741,7 @@ h1{
 
   <div class="adventure-map">
 
-    <div class="lesson-node unlocked" onclick="openLessonGames('Colores')">
+    <div class="lesson-node unlocked" onclick="openColorsLesson()">
       <div class="path-icon">🎤</div>
       <h2>Escucha y repite</h2>
       <p>⭐</p>
@@ -999,19 +999,23 @@ function openAdventure(index){
   sound();
 }
 function updateAdventureMap(){
+
   const lessons = document.querySelectorAll(".lesson-node");
 
-  lessons.forEach((lesson, index) => {
-    if(index < unlockedLessons){
-      lesson.classList.remove("locked");
-      lesson.classList.add("unlocked");
-      lesson.querySelector("p").innerText = "⭐ ⭐ ⭐";
-    }else{
-      lesson.classList.remove("unlocked");
-      lesson.classList.add("locked");
-      lesson.querySelector("p").innerText = "🔒";
+  lessons.forEach(lesson => {
+
+    lesson.classList.remove("locked");
+    lesson.classList.add("unlocked");
+
+    const p = lesson.querySelector("p");
+
+    if(p){
+      p.innerText = "⭐ ⭐ ⭐";
     }
+
   });
+
+}
 
   lessons[0].setAttribute(
   "onclick",
