@@ -616,7 +616,9 @@ h1{
  <button class="enter-btn" onclick="saveStudentName()">
       🎮 Entrar
     </button>
-
+<button class="enter-btn" onclick="changeWorld()">
+  🌎 Cambiar mundo
+</button>
   </div>
 
 </div>
@@ -1759,6 +1761,24 @@ function checkProfileOnLoad(){
     showScreen("studentLogin");
   }
 
+}
+  function changeWorld(){
+
+  const nombre =
+    document.getElementById("studentNameInput").value.trim();
+
+  const apellido =
+    document.getElementById("studentLastNameInput").value.trim();
+
+  if(nombre){
+    localStorage.setItem("studentName", nombre);
+  }
+
+  if(apellido){
+    localStorage.setItem("studentLastName", apellido);
+  }
+
+  showScreen("home");
 }
   </script>
 <!-- DUPLICADO BORRADO -->
