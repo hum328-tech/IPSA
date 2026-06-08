@@ -929,12 +929,18 @@ localStorage.setItem("colorIndex", currentColorIndex);
 localStorage.setItem("quizIndex", currentQuiz);
 }   
 function openLevel(level){
+
   currentLevel = level;
-  document.getElementById("levelTitle").innerText = level + " - Elige un idioma";
+
+  localStorage.setItem("studentLevel", level);
+  localStorage.setItem("level", level);
+
+  document.getElementById("levelTitle").innerText =
+    level + " - Elige un idioma";
+
   showScreen("languages");
   sound();
 }
-
 function goHome(){
   showScreen("home");
   sound();
@@ -1604,11 +1610,20 @@ function speakQuizColor(){
 
   const savedStudentName = localStorage.getItem("studentName");
   const savedStudentLastName = localStorage.getItem("studentLastName");
+const savedStudentLevel = localStorage.getItem("studentLevel");
+ if(!savedStudentName || !savedStudentLastName){
+  showScreen("studentLogin");
+  return;
+}
 
-  if(!savedStudentName || !savedStudentLastName){
-    showScreen("studentLogin");
-    return;
-  }
+if(!savedStudentLevel){
+  showScreen("home");
+  return;
+}
+
+currentLevel = savedStudentLevel;
+showScreen("languages");
+return;
 
   const savedScreen = localStorage.getItem("screen");
   const savedLevel = localStorage.getItem("level");
