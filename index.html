@@ -625,6 +625,11 @@ h1{
 <!-- PANTALLA INICIAL -->
 <div id="home" class="screen">
     <h2 class="title">Elige tu mundo</h2>
+  <div style="text-align:center; margin-bottom:15px;">
+  <button class="enter-btn" onclick="openProfile()">
+    👤 Perfil
+  </button>
+</div>
 
     <div class="grid">
       <div class="card k1" onclick="openLevel('K1')">
@@ -1595,7 +1600,15 @@ function speakQuizColor(){
 
   speechSynthesis.speak(utterance);
 }
-  window.onload = function(){
+ window.onload = function(){
+
+  const savedStudentName = localStorage.getItem("studentName");
+  const savedStudentLastName = localStorage.getItem("studentLastName");
+
+  if(!savedStudentName || !savedStudentLastName){
+    showScreen("studentLogin");
+    return;
+  }
 
   const savedScreen = localStorage.getItem("screen");
   const savedLevel = localStorage.getItem("level");
@@ -1625,17 +1638,8 @@ function speakQuizColor(){
   }
 
   updateAdventureMap();
-    const savedStudentName = localStorage.getItem("studentName");
-const savedStudentLastName = localStorage.getItem("studentLastName");
-
-
-if(!savedStudentName || !savedStudentLastName){
-  showScreen("studentLogin");
-  return;
-}
 
   if(savedScreen === "colorsLesson"){
-
     activeColors =
       shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
 
@@ -1645,7 +1649,6 @@ if(!savedStudentName || !savedStudentLastName){
   }
 
   if(savedScreen === "colorQuiz"){
-
     activeColors =
       shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
 
@@ -1658,10 +1661,12 @@ if(!savedStudentName || !savedStudentLastName){
 
   if(savedScreen){
     showScreen(savedScreen);
+  }else{
+    showScreen("home");
   }
 
 };
-function sendProgress(activityName){
+  function sendProgress(activityName){
 
   fetch(SHEET_URL, {
     method: "POST",
@@ -1717,6 +1722,29 @@ function openLessonGames(lesson){
 
   showScreen("lessonGames");
   sound();
+}
+  function openProfile(){
+
+  document.getElementById("studentNameInput").value =
+    localStorage.getItem("studentName") || "";
+
+  document.getElementById("studentLastNameInput").value =
+    localStorage.getItem("studentLastName") || "";
+
+  showScreen("studentLogin");
+}
+
+function checkProfileOnLoad(){
+
+  const nombre = localStorage.getItem("studentName");
+  const apellido = localStorage.getItem("studentLastName");
+
+  if(nombre && apellido){
+    showScreen("home");
+  }else{
+    showScreen("studentLogin");
+  }
+
 }
   </script>
 <!-- DUPLICADO BORRADO -->
