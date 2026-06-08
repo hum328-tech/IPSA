@@ -890,6 +890,13 @@ let currentLanguage = "";
 let stars = 0;
 let nextAfterPopup = "";
 let currentScreen = "home";
+let unlockedLessons = 1;
+let currentColorIndex = 0;
+let activeColors = [];
+let colorAnsweredCorrectly = false;
+let quizColors = [];
+let currentQuiz = 0;
+let currentLesson = "";
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbyzVsye8bSwGCVdWzgpD8gdXixNxQZnLyui-ajqcVFzkugpK-qLXsTa_z43rG4lE8vQ/exec";
   function testSheet(){
   sendProgress("PRUEBA MANUAL");
@@ -972,7 +979,7 @@ function reward(){
 
   alert("🎉 ¡Muy bien! Ganaste una estrella.");
 }
-  let unlockedLessons = 1;
+  
 
 function openAdventure(index){
 
@@ -1008,7 +1015,10 @@ function updateAdventureMap(){
   lessons[0].setAttribute("onclick","openColorsLesson()");
 
   let percent = (unlockedLessons / 4) * 100;
-  document.getElementById("progressFill").style.width = percent + "%";
+  const progressFill = document.getElementById("progressFill");
+
+if(progressFill){
+  progressFill.style.width = percent + "%";
 }
 function openChest(){
   if(unlockedLessons >= 4){
@@ -1246,10 +1256,7 @@ K2: [
   }
 ]
 };
-
-let currentColorIndex = 0;
-let activeColors = [];
-let colorAnsweredCorrectly = false;
+  
 function openColorsLesson(){
   activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
   currentColorIndex = 0;
@@ -1477,8 +1484,6 @@ function speakTryAgain(){
   victory.play();
 }
 
-let quizColors = [];
-let currentQuiz = 0;
 
 function startColorQuiz(){
   quizColors = shuffleArray([...activeColors]);
@@ -1729,7 +1734,6 @@ function saveStudentName(){
   }
 
 }
-  let currentLesson = "";
 
 function openLessonGames(lesson){
   currentLesson = lesson;
