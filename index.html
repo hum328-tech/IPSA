@@ -730,9 +730,10 @@ h1{
     <div class="path-icon">👨‍👩‍👧</div>
     <h2>Familia</h2>
     <p>⭐</p>
-  </div>
+ </div>
 
-</div> 
+  </div>
+</div>
   <div id="lessonGames" class="screen">
   <button class="back" onclick="showScreen('units')">⬅ Volver</button>
 
@@ -1012,7 +1013,10 @@ function updateAdventureMap(){
     }
   });
 
-  lessons[0].setAttribute("onclick","openColorsLesson()");
+  lessons[0].setAttribute(
+  "onclick",
+  "openLessonGames('Colores')"
+);
 
   let percent = (unlockedLessons / 4) * 100;
   const progressFill = document.getElementById("progressFill");
