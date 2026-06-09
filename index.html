@@ -1754,6 +1754,29 @@ function checkProfileOnLoad(){
 
   showScreen("home");
 } 
+  function startGameOne(){
+  if(currentLesson === "Colores"){
+    openColorsLesson();
+  }else{
+    alert("Próximamente: " + currentLesson);
+  }
+}
+
+function startGameTwo(){
+  if(currentLesson === "Colores"){
+    startColorQuiz();
+  }else{
+    alert("Próximamente: " + currentLesson);
+  }
+}
+
+function startGameThree(){
+  alert("Próximamente: Caza de " + currentLesson);
+}
+
+function startGameFour(){
+  alert("Próximamente: Di " + currentLesson);
+}
   </script>
 <!-- DUPLICADO BORRADO -->
 
