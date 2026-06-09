@@ -835,6 +835,33 @@ h1{
     </div>
   </div>
 </div>
+  <div id="colorHunt" class="screen">
+  <button class="home-btn" onclick="goHome()">🏠</button>
+  <button class="back" onclick="showScreen('lessonGames')">⬅ Volver</button>
+
+  <h2 class="title">🎯 Caza del color</h2>
+
+  <div class="adventure-map">
+    <div id="huntMascot" style="font-size:70px;">🐼</div>
+
+    <button class="enter-btn" onclick="speakHuntColor()">
+      🔊 Escuchar color
+    </button>
+
+    <div id="huntGrid" style="
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:15px;
+      margin-top:20px;">
+    </div>
+
+    <div id="huntFeedback" style="
+      margin-top:20px;
+      font-size:26px;
+      font-weight:bold;">
+    </div>
+  </div>
+</div>
   <div id="magicPopup" class="magic-popup">
 
   <div class="magic-card">
