@@ -1804,11 +1804,144 @@ function startGameTwo(){
 }
 
 function startGameThree(){
-  alert("Próximamente: Caza de " + currentLesson);
+
+  if(currentLesson === "Colores"){
+    openColorHunt();
+  }else{
+    alert("Próximamente: Caza de " + currentLesson);
+  }
+
 }
 
 function startGameFour(){
   alert("Próximamente: Di " + currentLesson);
+}
+  const huntObjects = [
+  { emoji:"🍎", color:"Rojo" },
+  { emoji:"🚗", color:"Rojo" },
+  { emoji:"🍓", color:"Rojo" },
+
+  { emoji:"🫐", color:"Azul" },
+  { emoji:"🐳", color:"Azul" },
+  { emoji:"🧢", color:"Azul" },
+
+  { emoji:"🍌", color:"Amarillo" },
+  { emoji:"🌽", color:"Amarillo" },
+  { emoji:"⭐", color:"Amarillo" },
+
+  { emoji:"☁️", color:"Blanco" },
+  { emoji:"🥚", color:"Blanco" },
+  { emoji:"🐇", color:"Blanco" }
+];
+
+let huntTarget = null;
+let huntCorrectTotal = 0;
+let huntCorrectFound = 0;
+
+function openColorHunt(){
+
+  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+
+  huntTarget = activeColors[Math.floor(Math.random() * activeColors.length)];
+
+  huntCorrectFound = 0;
+
+  const mascot = document.getElementById("huntMascot");
+
+  if(currentLanguage === "Chino") mascot.innerText = "🐼";
+  if(currentLanguage === "Francés") mascot.innerText = "🐓";
+  if(currentLanguage === "Inglés") mascot.innerText = "🦁";
+  if(currentLanguage === "Español") mascot.innerText = "🦅";
+
+  const grid = document.getElementById("huntGrid");
+  grid.innerHTML = "";
+
+  const correctObjects = huntObjects.filter(o => o.color === huntTarget.es);
+  const wrongObjects = shuffleArray(
+    huntObjects.filter(o => o.color !== huntTarget.es)
+  ).slice(0,6);
+
+  const objectsToShow = shuffleArray([...correctObjects, ...wrongObjects]);
+
+  huntCorrectTotal = correctObjects.length;
+
+  objectsToShow.forEach(obj => {
+    const btn = document.createElement("button");
+
+    btn.innerText = obj.emoji;
+    btn.dataset.color = obj.color;
+
+    btn.style.height = "95px";
+    btn.style.fontSize = "48px";
+    btn.style.border = "none";
+    btn.style.borderRadius = "25px";
+    btn.style.background = "white";
+    btn.style.cursor = "pointer";
+    btn.style.boxShadow = "0 8px 15px rgba(0,0,0,.18)";
+
+    btn.onclick = () => checkHuntObject(btn);
+
+    grid.appendChild(btn);
+  });
+
+  document.getElementById("huntFeedback").innerText =
+    "🔊 Escucha y encuentra todos";
+
+  showScreen("colorHunt");
+
+  setTimeout(speakHuntColor, 500);
+}
+
+function speakHuntColor(){
+
+  let text = huntTarget.zh;
+  let lang = "zh-CN";
+
+  if(currentLanguage === "Francés"){
+    text = huntTarget.fr;
+    lang = "fr-FR";
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.75;
+
+  speechSynthesis.speak(utterance);
+}
+
+function checkHuntObject(btn){
+
+  if(btn.dataset.color === huntTarget.es){
+
+    btn.style.opacity = ".35";
+    btn.disabled = true;
+
+    huntCorrectFound++;
+
+    document.getElementById("huntFeedback").innerText =
+      "✅ Muy bien: " + huntCorrectFound + "/" + huntCorrectTotal;
+
+    sound();
+
+    if(huntCorrectFound >= huntCorrectTotal){
+
+      stars++;
+      document.getElementById("starsCount").innerText = stars;
+
+      sendProgress("Colores - Caza del color");
+
+      soundVictory();
+
+      showMagicPopup("🎯 ¡Encontraste todos los objetos! ⭐ Ganaste una estrella.");
+    }
+
+  }else{
+
+    document.getElementById("huntFeedback").innerText =
+      "🔄 Ese no. Escucha otra vez.";
+
+    speakHuntColor();
+  }
 }
   </script>
 <!-- DUPLICADO BORRADO -->
