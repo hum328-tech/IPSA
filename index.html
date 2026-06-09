@@ -878,9 +878,20 @@ function sound(){
 }
 
 function showScreen(id){
+
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
   });
+
+  document.getElementById(id).classList.add("active");
+
+  history.pushState(
+    { screen: id },
+    "",
+    "#" + id
+  );
+
+}
 
   document.getElementById(id).classList.add("active");
 
