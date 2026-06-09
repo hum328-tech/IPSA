@@ -912,33 +912,7 @@ function showScreen(id){
   localStorage.setItem("colorIndex", currentColorIndex);
   localStorage.setItem("quizIndex", currentQuiz);
 }
-
-  document.getElementById(id).classList.add("active");
-
-  const header = document.querySelector(".header");
-
- if(
-  id === "languages" ||
-  id === "units" ||
-  id === "colorsLesson" ||
-  id === "colorQuiz"
-){
-  header.style.display = "none";
-}else{
-  header.style.display = "flex";
-  }
-currentScreen = id;
-
-if(id !== "studentLogin"){
-  localStorage.setItem("screen", id);
-}
-localStorage.setItem("level", currentLevel);
-localStorage.setItem("language", currentLanguage);
-localStorage.setItem("stars", stars);
-localStorage.setItem("unlockedLessons", unlockedLessons);
-localStorage.setItem("colorIndex", currentColorIndex);
-localStorage.setItem("quizIndex", currentQuiz);
-}   
+ 
   
 function openLevel(level){
 
