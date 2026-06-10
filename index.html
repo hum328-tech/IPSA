@@ -882,9 +882,6 @@ h1{
       🎤 Decir color
     </button>
 
-    <button class="enter-btn" onclick="speakSayColorHint()">
-      🔊 Ayuda
-    </button>
 
     <div id="sayColorFeedback" style="
       margin-top:20px;
@@ -2080,16 +2077,6 @@ function loadSayColorRound(){
 
   document.getElementById("sayColorFeedback").style.background = "white";
 }
-
-function speakSayColorHint(){
-
-  let text = sayColorTarget.color.zh;
-  let lang = "zh-CN";
-
-  if(currentLanguage === "Francés"){
-    text = sayColorTarget.color.fr;
-    lang = "fr-FR";
-  }
 
   speechSynthesis.cancel();
 
