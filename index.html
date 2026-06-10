@@ -2078,15 +2078,6 @@ function loadSayColorRound(){
   document.getElementById("sayColorFeedback").style.background = "white";
 }
 
-  speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  utterance.rate = 0.75;
-
-  speechSynthesis.speak(utterance);
-}
-
 function listenSayColor(){
 
   const feedback = document.getElementById("sayColorFeedback");
