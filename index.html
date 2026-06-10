@@ -1837,14 +1837,15 @@ function startGameFour(){
 let huntTarget = null;
 let huntCorrectTotal = 0;
 let huntCorrectFound = 0;
+  let huntColors = [];
+let huntIndex = 0;
 
 function openColorHunt(){
 
   activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
 
-  huntTarget = activeColors[Math.floor(Math.random() * activeColors.length)];
-
-  huntCorrectFound = 0;
+  huntColors = [...activeColors];
+  huntIndex = 0;
 
   const mascot = document.getElementById("huntMascot");
 
@@ -1853,10 +1854,21 @@ function openColorHunt(){
   if(currentLanguage === "Inglés") mascot.innerText = "🦁";
   if(currentLanguage === "Español") mascot.innerText = "🦅";
 
+  showScreen("colorHunt");
+
+  loadHuntRound();
+}
+
+  function loadHuntRound(){
+
+  huntTarget = huntColors[huntIndex];
+  huntCorrectFound = 0;
+
   const grid = document.getElementById("huntGrid");
   grid.innerHTML = "";
 
   const correctObjects = huntObjects.filter(o => o.color === huntTarget.es);
+
   const wrongObjects = shuffleArray(
     huntObjects.filter(o => o.color !== huntTarget.es)
   ).slice(0,6);
@@ -1885,9 +1897,7 @@ function openColorHunt(){
   });
 
   document.getElementById("huntFeedback").innerText =
-    "🔊 Escucha y encuentra todos";
-
-  showScreen("colorHunt");
+    "🔊 Color " + (huntIndex + 1) + "/" + huntColors.length;
 
   setTimeout(speakHuntColor, 500);
 }
@@ -1923,17 +1933,29 @@ function checkHuntObject(btn){
 
     sound();
 
-    if(huntCorrectFound >= huntCorrectTotal){
+if(huntCorrectFound >= huntCorrectTotal){
 
-      stars++;
-      document.getElementById("starsCount").innerText = stars;
+  huntIndex++;
 
-      sendProgress("Colores - Caza del color");
+  if(huntIndex >= huntColors.length){
 
-      soundVictory();
+    stars++;
+    document.getElementById("starsCount").innerText = stars;
 
-      showMagicPopup("🎯 ¡Encontraste todos los objetos! ⭐ Ganaste una estrella.");
-    }
+    sendProgress("Colores - Caza del color");
+
+    soundVictory();
+
+    showMagicPopup("🎯 ¡Encontraste todos los colores! ⭐ Ganaste una estrella.");
+
+  }else{
+
+    document.getElementById("huntFeedback").innerText =
+      "🎉 Muy bien. Siguiente color...";
+
+    setTimeout(loadHuntRound, 1000);
+  }
+}
 
   }else{
 
