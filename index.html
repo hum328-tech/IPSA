@@ -11,7 +11,11 @@
 body{
   margin:0;
   font-family:'Trebuchet MS','Comic Sans MS',sans-serif;
-  background:linear-gradient(180deg,#7DDCFF,#FFF3B0);
+ background: linear-gradient(
+  180deg,
+  #F5F5F5,
+  #E2E2E2
+)
   color:#17445E;
   min-height:100vh;
   overflow-x:hidden;
@@ -143,19 +147,28 @@ h1{
 
 .enter-btn{
   margin-top:15px;
-  background:#FFB703;
-  color:#17324D;
+
+  background:#E3562B;
+  color:white;
+
   border:none;
   border-radius:25px;
+
   padding:16px 30px;
+
   font-size:24px;
   font-weight:bold;
+
   cursor:pointer;
+
   box-shadow:0 6px 12px rgba(0,0,0,.18);
+
+  transition:.25s;
 }
 
 .enter-btn:hover{
-  transform:scale(1.05);
+  background:#C94B23;
+  transform:scale(1.03);
 }
 
 .back{
