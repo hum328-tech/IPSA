@@ -862,6 +862,41 @@ h1{
     </div>
   </div>
 </div>
+
+  <div id="sayColorGame" class="screen">
+  <button class="home-btn" onclick="goHome()">🏠</button>
+  <button class="back" onclick="showScreen('lessonGames')">⬅ Volver</button>
+
+  <h2 class="title">🖼️ Di el color</h2>
+
+  <div class="adventure-map">
+    <div id="sayColorMascot" style="font-size:70px;">🐼</div>
+
+    <div id="sayColorObject" style="
+      font-size:110px;
+      margin:25px 0;">
+      🍎
+    </div>
+
+    <button class="enter-btn" onclick="listenSayColor()">
+      🎤 Decir color
+    </button>
+
+    <button class="enter-btn" onclick="speakSayColorHint()">
+      🔊 Ayuda
+    </button>
+
+    <div id="sayColorFeedback" style="
+      margin-top:20px;
+      font-size:26px;
+      font-weight:bold;
+      background:white;
+      border-radius:25px;
+      padding:15px;">
+      Mira el objeto y di su color
+    </div>
+  </div>
+</div>
   <div id="magicPopup" class="magic-popup">
 
   <div class="magic-card">
@@ -1813,9 +1848,7 @@ function startGameThree(){
 
 }
 
-function startGameFour(){
-  alert("Próximamente: Di " + currentLesson);
-}
+
  const huntObjects = [
   // Rojo
   { emoji:"🍎", color:"Rojo" },
@@ -1992,6 +2025,173 @@ if(huntCorrectFound >= huntCorrectTotal){
 
     speakHuntColor();
   }
+}
+  let sayColorRounds = [];
+let sayColorIndex = 0;
+let sayColorTarget = null;
+
+function startGameFour(){
+
+  if(currentLesson === "Colores"){
+    openSayColorGame();
+  }else{
+    alert("Próximamente: Di " + currentLesson);
+  }
+
+}
+
+function openSayColorGame(){
+
+  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+
+  sayColorRounds = activeColors.map(color => {
+    const objects = huntObjects.filter(o => o.color === color.es);
+    const randomObject = shuffleArray([...objects])[0];
+
+    return {
+      color: color,
+      object: randomObject
+    };
+  });
+
+  sayColorRounds = shuffleArray(sayColorRounds);
+  sayColorIndex = 0;
+
+  const mascot = document.getElementById("sayColorMascot");
+
+  if(currentLanguage === "Chino") mascot.innerText = "🐼";
+  if(currentLanguage === "Francés") mascot.innerText = "🐓";
+  if(currentLanguage === "Inglés") mascot.innerText = "🦁";
+  if(currentLanguage === "Español") mascot.innerText = "🦅";
+
+  showScreen("sayColorGame");
+  loadSayColorRound();
+}
+
+function loadSayColorRound(){
+
+  sayColorTarget = sayColorRounds[sayColorIndex];
+
+  document.getElementById("sayColorObject").innerText =
+    sayColorTarget.object.emoji;
+
+  document.getElementById("sayColorFeedback").innerText =
+    "🎤 Di el color del objeto " + (sayColorIndex + 1) + "/" + sayColorRounds.length;
+
+  document.getElementById("sayColorFeedback").style.background = "white";
+}
+
+function speakSayColorHint(){
+
+  let text = sayColorTarget.color.zh;
+  let lang = "zh-CN";
+
+  if(currentLanguage === "Francés"){
+    text = sayColorTarget.color.fr;
+    lang = "fr-FR";
+  }
+
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.75;
+
+  speechSynthesis.speak(utterance);
+}
+
+function listenSayColor(){
+
+  const feedback = document.getElementById("sayColorFeedback");
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+    feedback.innerText = "⚠️ Usa Google Chrome para activar el micrófono.";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  if(currentLanguage === "Francés"){
+    recognition.lang = "fr-FR";
+  }else{
+    recognition.lang = "zh-CN";
+  }
+
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  feedback.innerText = "🎧 Te escucho...";
+  feedback.style.background = "white";
+
+  recognition.start();
+
+  recognition.onresult = function(event){
+
+    const said = event.results[0][0].transcript;
+
+    let cleanSaid;
+    let expected;
+    let accepted;
+
+    if(currentLanguage === "Francés"){
+      cleanSaid = said.toLowerCase().trim();
+      expected = sayColorTarget.color.fr.toLowerCase().trim();
+      accepted = sayColorTarget.color.acceptFr || [expected];
+    }else{
+      cleanSaid = normalizeChinese(said);
+      expected = normalizeChinese(sayColorTarget.color.zh);
+      accepted = sayColorTarget.color.acceptZh || [expected];
+    }
+
+    if(
+      cleanSaid.includes(expected) ||
+      expected.includes(cleanSaid) ||
+      accepted.some(option => cleanSaid.includes(option))
+    ){
+
+      feedback.innerText = "🎉 ¡Correcto! Dijiste: " + said;
+      feedback.style.background = "#B9FBC0";
+
+      sound();
+
+      sayColorIndex++;
+
+      setTimeout(() => {
+
+        if(sayColorIndex >= sayColorRounds.length){
+
+          stars++;
+          document.getElementById("starsCount").innerText = stars;
+
+          sendProgress("Colores - Di el color");
+
+          soundVictory();
+
+          showMagicPopup("🖼️ ¡Dijiste todos los colores! ⭐ Ganaste una estrella.");
+
+        }else{
+
+          loadSayColorRound();
+
+        }
+
+      }, 900);
+
+    }else{
+
+      feedback.innerText = "🔄 Dijiste: " + said + " | Intenta otra vez";
+      feedback.style.background = "#FFD6D6";
+
+    }
+  };
+
+  recognition.onerror = function(){
+    feedback.innerText = "🎤 Toca otra vez e inténtalo de nuevo.";
+    feedback.style.background = "#FFF3B0";
+  };
 }
   </script>
 <!-- DUPLICADO BORRADO -->
