@@ -1715,6 +1715,30 @@ function speakQuizColor(){
 
   const target = quizColors[currentQuiz];
 
+  if(currentLanguage === "Chino"){
+
+    if(target.zh === "红色"){
+      playWord("hongse");
+      return;
+    }
+
+    if(target.zh === "蓝色"){
+      playWord("lanse");
+      return;
+    }
+
+    if(target.zh === "黄色"){
+      playWord("huangse");
+      return;
+    }
+
+    if(target.zh === "白色"){
+      playWord("baise");
+      return;
+    }
+
+  }
+
   let text = target.zh;
   let lang = "zh-CN";
 
@@ -1723,14 +1747,15 @@ function speakQuizColor(){
     lang = "fr-FR";
   }
 
-  const utterance = new SpeechSynthesisUtterance(text);
+  speechSynthesis.cancel();
 
+  const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
   utterance.rate = 0.75;
 
   speechSynthesis.speak(utterance);
 }
-window.onload = function(){
+  window.onload = function(){
 
   const savedStudentName = localStorage.getItem("studentName");
   const savedStudentLastName = localStorage.getItem("studentLastName");
