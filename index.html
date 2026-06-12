@@ -1397,7 +1397,6 @@ function speakColor(){
 
   const color = activeColors[currentColorIndex];
 
-  // Primero intentamos usar los audios grabados
   if(currentLanguage === "Chino"){
 
     if(color.zh === "红色"){
@@ -1405,9 +1404,23 @@ function speakColor(){
       return;
     }
 
+    if(color.zh === "蓝色"){
+      playWord("lanse");
+      return;
+    }
+
+    if(color.zh === "黄色"){
+      playWord("huangse");
+      return;
+    }
+
+    if(color.zh === "白色"){
+      playWord("baise");
+      return;
+    }
+
   }
 
-  // Respaldo usando speechSynthesis
   let textToSpeak = color.zh;
   let langToSpeak = "zh-CN";
 
@@ -1423,9 +1436,7 @@ function speakColor(){
   utterance.rate = 0.75;
 
   speechSynthesis.speak(utterance);
-
 }
-
 function finishColors(){
   stars++;
   document.getElementById("starsCount").innerText = stars;
