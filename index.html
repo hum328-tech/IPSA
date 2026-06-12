@@ -1462,33 +1462,52 @@ function normalizeChinese(text){
     .replace(/[，。！？,.!?]/g, "");
 }
 
+let recognitionActive = null;
+
 function listenStudentColor(){
+
   const feedback = document.getElementById("voiceFeedback");
+  const repeatBtn = document.querySelector('button[onclick="listenStudentColor()"]');
   const color = activeColors[currentColorIndex];
 
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if(!SpeechRecognition){
     feedback.innerText = "⚠️ Usa Google Chrome para activar el micrófono.";
     return;
   }
 
-  const recognition = new SpeechRecognition();
-
-  if(currentLanguage === "Francés"){
-    recognition.lang = "fr-FR";
-  }else{
-    recognition.lang = "zh-CN";
+  if(recognitionActive){
+    recognitionActive.abort();
+    recognitionActive = null;
   }
 
+  const recognition = new SpeechRecognition();
+  recognitionActive = recognition;
+
+  recognition.lang = currentLanguage === "Francés" ? "fr-FR" : "zh-CN";
   recognition.interimResults = false;
   recognition.maxAlternatives = 3;
 
-  feedback.innerText = "🎧 Te escucho...";
+  feedback.innerText = "🎤 Te escucho...";
+  feedback.style.background = "#FFF3B0";
+
+  repeatBtn.disabled = true;
+  repeatBtn.style.opacity = ".45";
 
   recognition.start();
 
+  const timeout = setTimeout(() => {
+    try{
+      recognition.stop();
+    }catch(e){}
+  }, 5000);
+
   recognition.onresult = function(event){
+
+    clearTimeout(timeout);
+
     let said = event.results[0][0].transcript;
     let cleanSaid;
     let expected;
@@ -1501,24 +1520,16 @@ function listenStudentColor(){
       expected = normalizeChinese(color.zh);
     }
 
-let accepted =
-  currentLanguage === "Francés"
-    ? (color.acceptFr || [expected])
-    : (color.acceptZh || [expected]);
+    let accepted =
+      currentLanguage === "Francés"
+        ? (color.acceptFr || [expected])
+        : (color.acceptZh || [expected]);
 
-if(
-  cleanSaid.includes(expected) ||
-  expected.includes(cleanSaid) ||
-  accepted.some(option => cleanSaid.includes(option)) ||
-  (currentLanguage === "Francés" &&
-    expected === "vert" &&
-    (
-      cleanSaid.includes("ver") ||
-      cleanSaid.includes("vair") ||
-      cleanSaid.includes("vert")
-    )
-  )
-){
+    if(
+      cleanSaid.includes(expected) ||
+      expected.includes(cleanSaid) ||
+      accepted.some(option => cleanSaid.includes(option))
+    ){
       feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
       feedback.style.background = "#B9FBC0";
 
@@ -1526,20 +1537,27 @@ if(
       document.getElementById("nextColorBtn").disabled = false;
       document.getElementById("nextColorBtn").style.opacity = "1";
 
-      speakPraise();
+      sound();
+
     }else{
       feedback.innerText = "🔄 Dijiste: " + said + " | Intenta otra vez";
       feedback.style.background = "#FFD6D6";
-      speakTryAgain();
     }
   };
 
   recognition.onerror = function(){
-    feedback.innerText = "🎤 Toca repetir e inténtalo otra vez.";
+    feedback.innerText = "🎤 No escuché bien. Toca repetir.";
     feedback.style.background = "#FFF3B0";
   };
-}
 
+  recognition.onend = function(){
+    clearTimeout(timeout);
+    recognitionActive = null;
+
+    repeatBtn.disabled = false;
+    repeatBtn.style.opacity = "1";
+  };
+}
   
 
 function speakPraise(){
