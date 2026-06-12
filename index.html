@@ -1382,10 +1382,32 @@ function nextColor(){
 
   updateColorCard();
 }
+function playWord(fileName){
 
+  const audio = new Audio(
+    "https://hum328-tech.github.io/IPSA/audio/zh/" +
+    fileName +
+    ".mp3"
+  );
+
+  audio.play();
+
+}
 function speakColor(){
+
   const color = activeColors[currentColorIndex];
 
+  // Primero intentamos usar los audios grabados
+  if(currentLanguage === "Chino"){
+
+    if(color.zh === "红色"){
+      playWord("hongse");
+      return;
+    }
+
+  }
+
+  // Respaldo usando speechSynthesis
   let textToSpeak = color.zh;
   let langToSpeak = "zh-CN";
 
@@ -1394,11 +1416,14 @@ function speakColor(){
     langToSpeak = "fr-FR";
   }
 
+  speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(textToSpeak);
   utterance.lang = langToSpeak;
   utterance.rate = 0.75;
 
   speechSynthesis.speak(utterance);
+
 }
 
 function finishColors(){
@@ -2184,6 +2209,36 @@ function listenSayColor(){
     feedback.innerText = "🎤 Toca otra vez e inténtalo de nuevo.";
     feedback.style.background = "#FFF3B0";
   };
+}
+  function playWord(word){
+
+  const base =
+    "https://hum328-tech.github.io/IPSA/audio/";
+
+  let folder = "";
+
+  if(currentLanguage === "Chino"){
+    folder = "zh/";
+  }
+
+  if(currentLanguage === "Francés"){
+    folder = "fr/";
+  }
+
+  if(currentLanguage === "Inglés"){
+    folder = "en/";
+  }
+
+  if(currentLanguage === "Español"){
+    folder = "es/";
+  }
+
+  const audio = new Audio(
+    base + folder + word + ".mp3"
+  );
+
+  audio.play();
+
 }
   </script>
 <!-- DUPLICADO BORRADO -->
