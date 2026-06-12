@@ -1604,11 +1604,17 @@ function speakTryAgain(){
 
 
 function startColorQuiz(){
-  quizColors = shuffleArray([...activeColors]);
+
+  activeColors =
+    shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+
+  quizColors = [...activeColors];
   currentQuiz = 0;
 
   document.getElementById("quizMascot").innerText =
-    document.getElementById("colorMascot").innerText;
+    currentLanguage === "Francés" ? "🐓" :
+    currentLanguage === "Inglés" ? "🦁" :
+    currentLanguage === "Español" ? "🦅" : "🐼";
 
   showScreen("colorQuiz");
   loadQuizQuestion();
@@ -1921,11 +1927,13 @@ function checkProfileOnLoad(){
 }
 
 function startGameTwo(){
+
   if(currentLesson === "Colores"){
     startColorQuiz();
   }else{
     alert("Próximamente: " + currentLesson);
   }
+
 }
 
 function startGameThree(){
