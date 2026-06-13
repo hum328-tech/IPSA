@@ -28,7 +28,8 @@ color:#384F83;
 }
 
 .header{
-  background:white;
+  background:#384F83;
+  color:white;
   border-radius:30px;
   padding:18px 25px;
   display:flex;
@@ -87,7 +88,8 @@ h1{
 }
 
 .card{
-  background:white;
+  background:#FFFFFF;
+  border:6px solid #F3C05B;
   border-radius:35px;
   padding:30px;
   text-align:center;
@@ -104,7 +106,7 @@ h1{
 
 .card:hover{
   transform:scale(1.05) rotate(-1deg);
-  border-color:#FFD93D;
+  border-color:#E3562B;
 }
 
 .card:active{
@@ -269,7 +271,8 @@ h1{
 .adventure-map{
   max-width:520px;
   margin:auto;
-  background:rgba(255,255,255,.55);
+  background:#FFFFFF;
+  border:5px solid #F3C05B;
   border-radius:40px;
   padding:30px;
   text-align:center;
@@ -278,6 +281,7 @@ h1{
 
 .lesson-node{
   background:white;
+  border:6px solid #384F83;
   border-radius:35px;
   padding:22px;
   cursor:pointer;
@@ -570,6 +574,19 @@ h1{
   cursor:pointer;
   z-index:9999;
   box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+  .card h2,
+.lesson-node h2{
+  color:#384F83;
+}
+  .card p,
+.lesson-node p,
+.subtitle{
+  color:#384F83;
+}
+  .header h1,
+.header .subtitle{
+  color:white;
 }
 </style>
 </head>
