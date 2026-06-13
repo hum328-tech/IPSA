@@ -15,8 +15,8 @@ body{
   180deg,
   #F5F5F5,
   #E2E2E2
-)
-  color:#17445E;
+);
+color:#384F83;
   min-height:100vh;
   overflow-x:hidden;
 }
@@ -126,24 +126,25 @@ h1{
   margin:5px 0;
 }
 
-.k1{background:#FFE8A3}
-.k2{background:#B9FBC0}
-.k3{background:#CDB4DB}
+.k1{background:#F3C05B}
+.k2{background:#F4B9EF}
+.k3{background:#569456}
 
 .chino{
-  background:linear-gradient(180deg,#FFADAD,#FFD6A5);
+  background:linear-gradient(180deg,#F3C05B,#E3562B);
 }
 
 .frances{
-  background:linear-gradient(180deg,#A0C4FF,#FFFFFF);
+  background:linear-gradient(180deg,#384F83,#0D3CB3);
+  color:white;
 }
 
 .ingles{
-  background:linear-gradient(180deg,#FFD166,#FFE8A3);
+  background:linear-gradient(180deg,#F3C05B,#F4B9EF);
 }
 
 .espanol{
-  background:linear-gradient(180deg,#B9FBC0,#FFE66D);
+  background:linear-gradient(180deg,#569456,#F3C05B);
 }
 
 .enter-btn{
@@ -2272,7 +2273,7 @@ function listenSayColor(){
     feedback.style.background = "#FFF3B0";
   };
 }
-  function playWord(word){
+function playWord(word){
 
   const base =
     "https://hum328-tech.github.io/IPSA/audio/";
@@ -2283,24 +2284,11 @@ function listenSayColor(){
     folder = "zh/";
   }
 
-  if(currentLanguage === "Francés"){
-    folder = "fr/";
-  }
-
-  if(currentLanguage === "Inglés"){
-    folder = "en/";
-  }
-
-  if(currentLanguage === "Español"){
-    folder = "es/";
-  }
-
   const audio = new Audio(
     base + folder + word + ".mp3"
   );
 
   audio.play();
-
 }
   </script>
 <!-- DUPLICADO BORRADO -->
