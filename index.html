@@ -1085,14 +1085,72 @@ function openModule(moduleNumber){
   showScreen("languages");
   sound();
 }
-  
-function enterLanguage(language){
+
+  const k1Modules = {
+  1: [
+    { title:"Colors", icon:"🌈" },
+    { title:"Family", icon:"👨‍👩‍👧" },
+    { title:"Animals", icon:"🐶" }
+  ],
+  2: [
+    { title:"Numbers 1-5", icon:"🔢" },
+    { title:"House", icon:"🏠" },
+    { title:"Food", icon:"🍎" }
+  ],
+  3: [
+    { title:"Toys", icon:"🚗" },
+    { title:"Numbers 6-10", icon:"🔟" },
+    { title:"Vowels", icon:"🔤" }
+  ]
+};
+  function enterLanguage(language){
+
   currentLanguage = language;
-  document.getElementById("unitTitle").innerText = currentLevel + " - " + currentLanguage;
+
+  document.getElementById("unitTitle").innerText =
+    currentLevel + " - Módulo " + currentModule + " - " + currentLanguage;
+
+  loadModuleLessons();
+
   showScreen("units");
   sound();
 }
 
+function loadModuleLessons(){
+
+  const lessons =
+    currentLevel === "K1"
+      ? k1Modules[currentModule]
+      : k1Modules[1];
+
+  const map = document.querySelector("#units .adventure-map");
+
+  map.innerHTML = "";
+
+  lessons.forEach((lesson, index) => {
+
+    const node = document.createElement("div");
+    node.className = "lesson-node unlocked";
+    node.onclick = () => openLessonGames(lesson.title);
+
+    node.innerHTML = `
+      <div class="path-icon">${lesson.icon}</div>
+      <h2>${lesson.title}</h2>
+      <p>⭐</p>
+    `;
+
+    map.appendChild(node);
+
+    if(index < lessons.length - 1){
+      const road = document.createElement("div");
+      road.className = "road";
+      road.innerText = "⬇️";
+      map.appendChild(road);
+    }
+
+  });
+}
+  
 function reward(){
   stars++;
   document.getElementById("starsCount").innerText = stars;
