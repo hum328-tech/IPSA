@@ -1577,6 +1577,23 @@ function updateColorCard(){
   document.getElementById("colorMeaning").innerText = "";
 }
 
+document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
+document.getElementById("voiceFeedback").style.background = "white";
+
+if(currentColorIndex === activeColors.length - 1){
+  document.getElementById("finishBtn").style.display = "inline-block";
+}else{
+  document.getElementById("finishBtn").style.display = "none";
+}
+
+colorAnsweredCorrectly = false;
+document.getElementById("nextColorBtn").disabled = true;
+document.getElementById("nextColorBtn").style.opacity = ".45";
+
+}
+
+function nextColor(){
+
 function nextColor(){
   currentColorIndex++;
 
@@ -1784,7 +1801,7 @@ function speakTryAgain(){
 function startColorQuiz(){
 
   activeColors =
-    shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+    shuffleArray([...getCurrentLessonItems()]);
 
   quizColors = [...activeColors];
   currentQuiz = 0;
@@ -2151,7 +2168,7 @@ let huntIndex = 0;
 
 function openColorHunt(){
 
-  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+  activeColors = shuffleArray([...getCurrentLessonItems()]);
 
   huntColors = [...activeColors];
   huntIndex = 0;
@@ -2296,7 +2313,7 @@ function startGameFour(){
 
 function openSayColorGame(){
 
-  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+  activeColors = shuffleArray([...getCurrentLessonItems()]);
 
   sayColorRounds = activeColors.map(color => {
     const objects = huntObjects.filter(o => o.color === color.es);
