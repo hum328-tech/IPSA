@@ -684,11 +684,39 @@ h1{
       </div>
     </div>
   </div>
+<!-- PANTALLA DE MÓDULOS -->
+<div id="modules" class="screen">
+  <button class="back" onclick="showScreen('home')">⬅ Volver</button>
 
-  <!-- PANTALLA DE IDIOMAS -->
+  <h2 class="title" id="moduleTitle">Elige tu módulo</h2>
+
+  <div class="grid">
+
+    <div class="card k1" onclick="openModule(1)">
+      <div class="big-icon">📗</div>
+      <h2>Módulo 1</h2>
+      <p>Colors · Family · Animals</p>
+    </div>
+
+    <div class="card k2" onclick="openModule(2)">
+      <div class="big-icon">📘</div>
+      <h2>Módulo 2</h2>
+      <p>Numbers 1-5 · House · Food</p>
+    </div>
+
+    <div class="card k3" onclick="openModule(3)">
+      <div class="big-icon">📙</div>
+      <h2>Módulo 3</h2>
+      <p>Toys · Numbers 6-10 · Vowels</p>
+    </div>
+
+  </div>
+</div>
+
 <!-- PANTALLA DE IDIOMAS -->
 <div id="languages" class="screen">
-  <button class="back" onclick="showScreen('studentLogin')">👤 Perfil</button>
+ <button class="back" onclick="openProfile()">👤 Perfil</button>
+<button class="back" onclick="showScreen('modules')">⬅ Módulos</button>
 
   <h2 class="title" id="levelTitle">Elige tu amigo</h2>
 
@@ -958,6 +986,7 @@ let colorAnsweredCorrectly = false;
 let quizColors = [];
 let currentQuiz = 0;
 let currentLesson = "";
+let currentModule = 1;
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbyzVsye8bSwGCVdWzgpD8gdXixNxQZnLyui-ajqcVFzkugpK-qLXsTa_z43rG4lE8vQ/exec";
   function testSheet(){
   sendProgress("PRUEBA MANUAL");
@@ -1012,10 +1041,10 @@ function openLevel(level){
   localStorage.setItem("studentLevel", level);
   localStorage.setItem("level", level);
 
-  document.getElementById("levelTitle").innerText =
-    level + " - Elige un idioma";
+  document.getElementById("moduleTitle").innerText =
+    level + " - Elige tu módulo";
 
-  showScreen("languages");
+  showScreen("modules");
   sound();
 }
 function goHome(){
@@ -1044,7 +1073,19 @@ function goLanguages(){
   showScreen("languages");
   sound();
 }
+function openModule(moduleNumber){
 
+  currentModule = moduleNumber;
+
+  localStorage.setItem("module", moduleNumber);
+
+  document.getElementById("levelTitle").innerText =
+    currentLevel + " - Módulo " + moduleNumber + " - Elige un idioma";
+
+  showScreen("languages");
+  sound();
+}
+  
 function enterLanguage(language){
   currentLanguage = language;
   document.getElementById("unitTitle").innerText = currentLevel + " - " + currentLanguage;
