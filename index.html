@@ -1601,23 +1601,10 @@ function nextColor(){
 
   updateColorCard();
 }
-function playWord(fileName){
 
-  const audio = new Audio(
-    "https://hum328-tech.github.io/IPSA/audio/zh/" +
-    fileName +
-    ".mp3"
-  );
-
-  audio.play();
-
-}
 function speakColor(){
   const item = activeColors[currentColorIndex];
   speakItem(item);
-}
-
-  playColorAudio(color);
 }
 function finishColors(){
   stars++;
@@ -2373,9 +2360,8 @@ function playWord(word){
   const audio = new Audio(base + folder + word + ".mp3");
 
   audio.play().catch(() => {
-    speakByLanguage(word);
-  });
-}
+  console.log("No se pudo reproducir el audio:", word);
+});
   function getSpeakText(item){
 
   if(currentLanguage === "Inglés") return item.en || item.es;
