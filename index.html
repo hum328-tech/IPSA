@@ -2045,34 +2045,18 @@ function checkProfileOnLoad(){
 
   showScreen("home");
 } 
+  
   function startGameOne(){
-  if(currentLesson === "Colores"){
-    openColorsLesson();
-  }else{
-    alert("Próximamente: " + currentLesson);
-  }
+  openColorsLesson();
 }
 
 function startGameTwo(){
-
-  if(currentLesson === "Colores"){
-    startColorQuiz();
-  }else{
-    alert("Próximamente: " + currentLesson);
-  }
-
+  startColorQuiz();
 }
 
 function startGameThree(){
-
-  if(currentLesson === "Colores"){
-    openColorHunt();
-  }else{
-    alert("Próximamente: Caza de " + currentLesson);
-  }
-
+  openColorHunt();
 }
-
 
  const huntObjects = [
   // Rojo
@@ -2256,13 +2240,7 @@ let sayColorIndex = 0;
 let sayColorTarget = null;
 
 function startGameFour(){
-
-  if(currentLesson === "Colores"){
-    openSayColorGame();
-  }else{
-    alert("Próximamente: Di " + currentLesson);
-  }
-
+  openSayColorGame();
 }
 
 function openSayColorGame(){
