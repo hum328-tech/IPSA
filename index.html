@@ -1613,20 +1613,9 @@ function playWord(fileName){
 
 }
 function speakColor(){
-
-  const color = activeColors[currentColorIndex];
-
-  if(currentLanguage === "Inglés"){
-
-    speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(color.en);
-    utterance.lang = "en-US";
-    utterance.rate = 0.75;
-
-    speechSynthesis.speak(utterance);
-    return;
-  }
+  const item = activeColors[currentColorIndex];
+  speakItem(item);
+}
 
   playColorAudio(color);
 }
@@ -1661,7 +1650,7 @@ function listenStudentColor(){
 
   const feedback = document.getElementById("voiceFeedback");
   const repeatBtn = document.querySelector('button[onclick="listenStudentColor()"]');
-  const color = activeColors[currentColorIndex];
+  const item = activeColors[currentColorIndex];
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1679,7 +1668,7 @@ function listenStudentColor(){
   const recognition = new SpeechRecognition();
   recognitionActive = recognition;
 
-  recognition.lang = currentLanguage === "Francés" ? "fr-FR" : "zh-CN";
+  recognition.lang = getSpeechLang();
   recognition.interimResults = false;
   recognition.maxAlternatives = 3;
 
@@ -1701,22 +1690,27 @@ function listenStudentColor(){
 
     clearTimeout(timeout);
 
-    let said = event.results[0][0].transcript;
-    let cleanSaid;
-    let expected;
+    const said = event.results[0][0].transcript;
+    const cleanSaid =
+      currentLanguage === "Chino"
+        ? normalizeChinese(said)
+        : said.toLowerCase().trim();
 
-    if(currentLanguage === "Francés"){
-      cleanSaid = said.toLowerCase().trim();
-      expected = color.fr.toLowerCase().trim();
-    }else{
-      cleanSaid = normalizeChinese(said);
-      expected = normalizeChinese(color.zh);
+    const expectedRaw = getSpeakText(item);
+    const expected =
+      currentLanguage === "Chino"
+        ? normalizeChinese(expectedRaw)
+        : expectedRaw.toLowerCase().trim();
+
+    let accepted = [expected];
+
+    if(currentLanguage === "Chino" && item.acceptZh){
+      accepted = item.acceptZh.map(x => normalizeChinese(x));
     }
 
-    let accepted =
-      currentLanguage === "Francés"
-        ? (color.acceptFr || [expected])
-        : (color.acceptZh || [expected]);
+    if(currentLanguage === "Francés" && item.acceptFr){
+      accepted = item.acceptFr.map(x => x.toLowerCase().trim());
+    }
 
     if(
       cleanSaid.includes(expected) ||
@@ -1911,73 +1905,9 @@ function soundVictory(){
   victory.play();
 }
 function speakQuizColor(){
-
-  const target = quizColors[currentQuiz];
-
-  if(currentLanguage === "Chino"){
-
-    if(target.zh === "红色"){
-      playWord("hongse");
-      return;
-    }
-
-    if(target.zh === "蓝色"){
-      playWord("lanse");
-      return;
-    }
-
-    if(target.zh === "黄色"){
-      playWord("huangse");
-      return;
-    }
-
-    if(target.zh === "白色"){
-      playWord("baise");
-      return;
-    }
-
-  }
-
-  let text = target.zh;
-  let lang = "zh-CN";
-
-  if(currentLanguage === "Francés"){
-    text = target.fr;
-    lang = "fr-FR";
-  }
-
-  speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  utterance.rate = 0.75;
-
-  speechSynthesis.speak(utterance);
+  const item = quizColors[currentQuiz];
+  speakItem(item);
 }
-  window.onload = function(){
-
-  const savedStudentName = localStorage.getItem("studentName");
-  const savedStudentLastName = localStorage.getItem("studentLastName");
-  const savedStudentLevel = localStorage.getItem("studentLevel");
-
-  if(!savedStudentName || !savedStudentLastName){
-    showScreen("studentLogin");
-    return;
-  }
-
-  if(!savedStudentLevel){
-    showScreen("home");
-    return;
-  }
-
-  currentLevel = savedStudentLevel;
-
-  document.getElementById("levelTitle").innerText =
-    currentLevel + " - Elige un idioma";
-
-  showScreen("languages");
-
-};
   function sendProgress(activityName){
 
   fetch(SHEET_URL, {
@@ -2239,22 +2169,8 @@ grid.innerHTML = "";
 }
 
 function speakHuntColor(){
-
-  let text = huntTarget.zh;
-  let lang = "zh-CN";
-
-  if(currentLanguage === "Francés"){
-    text = huntTarget.fr;
-    lang = "fr-FR";
-  }
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  utterance.rate = 0.75;
-
-  speechSynthesis.speak(utterance);
+  speakItem(huntTarget);
 }
-
 function checkHuntObject(btn){
 
   if(btn.dataset.color === huntTarget.es){
@@ -2445,20 +2361,73 @@ function listenSayColor(){
 }
 function playWord(word){
 
-  const base =
-    "https://hum328-tech.github.io/IPSA/audio/";
+  const base = "https://hum328-tech.github.io/IPSA/audio/";
 
   let folder = "";
 
+  if(currentLanguage === "Chino") folder = "zh/";
+  if(currentLanguage === "Francés") folder = "fr/";
+  if(currentLanguage === "Inglés") folder = "en/";
+  if(currentLanguage === "Español") folder = "es/";
+
+  const audio = new Audio(base + folder + word + ".mp3");
+
+  audio.play().catch(() => {
+    speakByLanguage(word);
+  });
+}
+  function getSpeakText(item){
+
+  if(currentLanguage === "Inglés") return item.en || item.es;
+  if(currentLanguage === "Francés") return item.fr || item.en || item.es;
+  if(currentLanguage === "Español") return item.es;
+  return item.zh || item.en || item.es;
+}
+
+function getSpeechLang(){
+
+  if(currentLanguage === "Inglés") return "en-US";
+  if(currentLanguage === "Francés") return "fr-FR";
+  if(currentLanguage === "Español") return "es-MX";
+  return "zh-CN";
+}
+
+function speakItem(item){
+
+  speechSynthesis.cancel();
+
   if(currentLanguage === "Chino"){
-    folder = "zh/";
+
+    if(item.zh === "红色"){
+      playWord("hongse");
+      return;
+    }
+
+    if(item.zh === "蓝色"){
+      playWord("lanse");
+      return;
+    }
+
+    if(item.zh === "黄色"){
+      playWord("huangse");
+      return;
+    }
+
+    if(item.zh === "白色"){
+      playWord("baise");
+      return;
+    }
+
   }
 
-  const audio = new Audio(
-    base + folder + word + ".mp3"
-  );
+  const text = getSpeakText(item);
+  const lang = getSpeechLang();
 
-  audio.play();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.75;
+
+  speechSynthesis.speak(utterance);
 }
   </script>
 <!-- DUPLICADO BORRADO -->
