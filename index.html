@@ -1965,7 +1965,7 @@ function openLessonGames(lesson){
   currentLesson = lesson;
 
   document.getElementById("lessonGamesTitle").innerText =
-    currentLevel + " - " + currentLanguage + " - " + lesson;
+    currentLevel + " - Módulo " + currentModule + " - " + currentLanguage + " - " + lesson;
 
   const map = document.getElementById("lessonGamesMap");
 
@@ -1988,7 +1988,7 @@ function openLessonGames(lesson){
 
     <div class="lesson-node unlocked" onclick="startGameThree()">
       <div class="path-icon">🎯</div>
-      <h2>Caza del color</h2>
+      <h2>Caza visual</h2>
       <p>⭐</p>
     </div>
 
@@ -1996,7 +1996,7 @@ function openLessonGames(lesson){
 
     <div class="lesson-node unlocked" onclick="startGameFour()">
       <div class="path-icon">🖼️</div>
-      <h2>Di el color</h2>
+      <h2>Di la palabra</h2>
       <p>⭐</p>
     </div>
   `;
