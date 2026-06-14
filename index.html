@@ -1447,12 +1447,99 @@ K2: [
   }
 ]
 };
+
+const k1EnglishVocabulary = {
+  1: {
+    "Colors": [
+      { es:"Red", en:"red", emoji:"🟥", bg:"#E63946" },
+      { es:"Blue", en:"blue", emoji:"🟦", bg:"#457B9D" },
+      { es:"Yellow", en:"yellow", emoji:"🟨", bg:"#FFD93D" },
+      { es:"Green", en:"green", emoji:"🟩", bg:"#569456" },
+      { es:"Orange", en:"orange", emoji:"🟧", bg:"#E3562B" }
+    ],
+    "Family": [
+      { es:"Mother", en:"mother", emoji:"👩" },
+      { es:"Father", en:"father", emoji:"👨" },
+      { es:"Daughter", en:"daughter", emoji:"👧" },
+      { es:"Baby", en:"baby", emoji:"👶" },
+      { es:"Son", en:"son", emoji:"👦" }
+    ],
+    "Animals": [
+      { es:"Dog", en:"dog", emoji:"🐶" },
+      { es:"Chick", en:"chick", emoji:"🐥" },
+      { es:"Hen", en:"hen", emoji:"🐔" },
+      { es:"Rabbit", en:"rabbit", emoji:"🐇" },
+      { es:"Fish", en:"fish", emoji:"🐟" },
+      { es:"Cat", en:"cat", emoji:"🐱" }
+    ]
+  },
+
+  2: {
+    "Numbers 1-5": [
+      { es:"One", en:"one", emoji:"1️⃣" },
+      { es:"Two", en:"two", emoji:"2️⃣" },
+      { es:"Three", en:"three", emoji:"3️⃣" },
+      { es:"Four", en:"four", emoji:"4️⃣" },
+      { es:"Five", en:"five", emoji:"5️⃣" }
+    ],
+    "House": [
+      { es:"Door", en:"door", emoji:"🚪" },
+      { es:"Window", en:"window", emoji:"🪟" },
+      { es:"Chair", en:"chair", emoji:"🪑" },
+      { es:"Bed", en:"bed", emoji:"🛏️" },
+      { es:"Table", en:"table", emoji:"🪵" }
+    ],
+    "Food": [
+      { es:"Fruit", en:"fruit", emoji:"🍎" },
+      { es:"Soup", en:"soup", emoji:"🍲" },
+      { es:"Cereal", en:"cereal", emoji:"🥣" },
+      { es:"Milk", en:"milk", emoji:"🥛" },
+      { es:"Candies", en:"candies", emoji:"🍬" },
+      { es:"Egg", en:"egg", emoji:"🥚" }
+    ]
+  },
+
+  3: {
+    "Toys": [
+      { es:"Car", en:"car", emoji:"🚗" },
+      { es:"Ball", en:"ball", emoji:"⚽" },
+      { es:"Truck", en:"truck", emoji:"🚚" },
+      { es:"Doll", en:"doll", emoji:"🧸" },
+      { es:"Bicycle", en:"bicycle", emoji:"🚲" },
+      { es:"Skates", en:"skates", emoji:"🛼" }
+    ],
+    "Numbers 6-10": [
+      { es:"Six", en:"six", emoji:"6️⃣" },
+      { es:"Seven", en:"seven", emoji:"7️⃣" },
+      { es:"Eight", en:"eight", emoji:"8️⃣" },
+      { es:"Nine", en:"nine", emoji:"9️⃣" },
+      { es:"Ten", en:"ten", emoji:"🔟" }
+    ],
+    "Vowels": [
+      { es:"A", en:"A", emoji:"🔤" },
+      { es:"E", en:"E", emoji:"🔤" },
+      { es:"I", en:"I", emoji:"🔤" },
+      { es:"O", en:"O", emoji:"🔤" },
+      { es:"U", en:"U", emoji:"🔤" }
+    ]
+  }
+};
+
+function getCurrentLessonItems(){
+
+  if(currentLanguage === "Inglés"){
+    return k1EnglishVocabulary[currentModule][currentLesson];
+  }
+
+  return colorLessons[currentLevel] || colorLessons.K1;
+}
   
 function openColorsLesson(){
-  activeColors = shuffleArray([...(colorLessons[currentLevel] || colorLessons.K1)]);
+  activeColors = shuffleArray([...getCurrentLessonItems()]);
   currentColorIndex = 0;
 
-  document.getElementById("colorsTitle").innerText = currentLevel + " - " + currentLanguage + " - Colores";
+  document.getElementById("colorsTitle").innerText =
+  currentLevel + " - Módulo " + currentModule + " - " + currentLanguage + " - " + currentLesson;
 
   if(currentLanguage === "Chino") document.getElementById("colorMascot").innerText = "🐼";
   if(currentLanguage === "Francés") document.getElementById("colorMascot").innerText = "🐓";
@@ -1476,28 +1563,18 @@ function updateColorCard(){
   document.getElementById("colorBox").style.background = color.bg;
   document.getElementById("colorBox").innerText = color.emoji;
 
-  if(currentLanguage === "Francés"){
-    document.getElementById("colorWord").innerText = color.fr;
-    document.getElementById("colorPronunciation").innerText = "";
-    document.getElementById("colorMeaning").innerText = "";
-  }else{
-    document.getElementById("colorWord").innerText = color.zh;
-    document.getElementById("colorPronunciation").innerText = color.py;
-    document.getElementById("colorMeaning").innerText = "";
-  }
-
-  document.getElementById("voiceFeedback").innerText = "🎧 Escucha y repite";
-  document.getElementById("voiceFeedback").style.background = "white";
-
-  if(currentColorIndex === activeColors.length - 1){
-    document.getElementById("finishBtn").style.display = "inline-block";
-  }else{
-    document.getElementById("finishBtn").style.display = "none";
-  }
-
-  colorAnsweredCorrectly = false;
-  document.getElementById("nextColorBtn").disabled = true;
-  document.getElementById("nextColorBtn").style.opacity = ".45";
+ if(currentLanguage === "Inglés"){
+  document.getElementById("colorWord").innerText = color.en;
+  document.getElementById("colorPronunciation").innerText = "";
+  document.getElementById("colorMeaning").innerText = "";
+}else if(currentLanguage === "Francés"){
+  document.getElementById("colorWord").innerText = color.fr;
+  document.getElementById("colorPronunciation").innerText = "";
+  document.getElementById("colorMeaning").innerText = "";
+}else{
+  document.getElementById("colorWord").innerText = color.zh;
+  document.getElementById("colorPronunciation").innerText = color.py;
+  document.getElementById("colorMeaning").innerText = "";
 }
 
 function nextColor(){
@@ -1524,45 +1601,19 @@ function speakColor(){
 
   const color = activeColors[currentColorIndex];
 
-  if(currentLanguage === "Chino"){
+  if(currentLanguage === "Inglés"){
 
-    if(color.zh === "红色"){
-      playWord("hongse");
-      return;
-    }
+    speechSynthesis.cancel();
 
-    if(color.zh === "蓝色"){
-      playWord("lanse");
-      return;
-    }
+    const utterance = new SpeechSynthesisUtterance(color.en);
+    utterance.lang = "en-US";
+    utterance.rate = 0.75;
 
-    if(color.zh === "黄色"){
-      playWord("huangse");
-      return;
-    }
-
-    if(color.zh === "白色"){
-      playWord("baise");
-      return;
-    }
-
+    speechSynthesis.speak(utterance);
+    return;
   }
 
-  let textToSpeak = color.zh;
-  let langToSpeak = "zh-CN";
-
-  if(currentLanguage === "Francés"){
-    textToSpeak = color.fr;
-    langToSpeak = "fr-FR";
-  }
-
-  speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(textToSpeak);
-  utterance.lang = langToSpeak;
-  utterance.rate = 0.75;
-
-  speechSynthesis.speak(utterance);
+  playColorAudio(color);
 }
 function finishColors(){
   stars++;
