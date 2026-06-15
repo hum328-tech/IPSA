@@ -2104,43 +2104,31 @@ function openColorHunt(){
 
   huntTarget = huntColors[huntIndex];
   huntCorrectFound = 0;
+  huntCorrectTotal = 1;
 
   const grid = document.getElementById("huntGrid");
   grid.innerHTML = "";
 
-  // Elegimos solo 3 correctos al azar
-const correctObjects = shuffleArray(
-  huntObjects.filter(o => o.color === huntTarget.es)
-).slice(0,3);
+  const wrongObjects = shuffleArray(
+    activeColors.filter(item => item.es !== huntTarget.es)
+  ).slice(0,8);
 
-// Elegimos 6 distractores al azar
-const wrongObjects = shuffleArray(
-  huntObjects.filter(o => o.color !== huntTarget.es)
-).slice(0,6);
+  const objectsToShow = shuffleArray([
+    huntTarget,
+    ...wrongObjects
+  ]);
 
-// Mezclamos todo
-const objectsToShow = shuffleArray([
-  ...correctObjects,
-  ...wrongObjects
-]);
-
-huntCorrectTotal = correctObjects.length;
-
-  huntCorrectTotal = correctObjects.length;
-    
-grid.innerHTML = "";
-    
   objectsToShow.forEach(obj => {
     const btn = document.createElement("button");
 
     btn.innerText = obj.emoji;
-    btn.dataset.color = obj.color;
+    btn.dataset.answer = obj.es;
 
     btn.style.height = "95px";
     btn.style.fontSize = "48px";
     btn.style.border = "none";
     btn.style.borderRadius = "25px";
-    btn.style.background = "white";
+    btn.style.background = obj.bg || "white";
     btn.style.cursor = "pointer";
     btn.style.boxShadow = "0 8px 15px rgba(0,0,0,.18)";
 
@@ -2150,51 +2138,42 @@ grid.innerHTML = "";
   });
 
   document.getElementById("huntFeedback").innerText =
-    "🔊 Color " + (huntIndex + 1) + "/" + huntColors.length;
+    "🔊 Pregunta " + (huntIndex + 1) + "/" + huntColors.length;
 
-  setTimeout(speakHuntColor, 500);
+  setTimeout(speakHuntColor, 700);
 }
-
 function speakHuntColor(){
   speakItem(huntTarget);
 }
 function checkHuntObject(btn){
 
-  if(btn.dataset.color === huntTarget.es){
+  if(btn.dataset.answer === huntTarget.es){
 
     btn.style.opacity = ".35";
     btn.disabled = true;
 
-    huntCorrectFound++;
-
     document.getElementById("huntFeedback").innerText =
-      "✅ Muy bien: " + huntCorrectFound + "/" + huntCorrectTotal;
+      "✅ Muy bien";
 
     sound();
 
-if(huntCorrectFound >= huntCorrectTotal){
+    huntIndex++;
 
-  huntIndex++;
+    if(huntIndex >= huntColors.length){
 
-  if(huntIndex >= huntColors.length){
+      stars++;
+      document.getElementById("starsCount").innerText = stars;
 
-    stars++;
-    document.getElementById("starsCount").innerText = stars;
+      sendProgress(currentLesson + " - Caza visual");
 
-    sendProgress("Colores - Caza del color");
+      soundVictory();
 
-    soundVictory();
+      showMagicPopup("🎯 ¡Completaste la caza visual! ⭐ Ganaste una estrella.");
 
-    showMagicPopup("🎯 ¡Encontraste todos los colores! ⭐ Ganaste una estrella.");
+    }else{
 
-  }else{
-
-    document.getElementById("huntFeedback").innerText =
-      "🎉 Muy bien. Siguiente color...";
-
-    setTimeout(loadHuntRound, 1000);
-  }
-}
+      setTimeout(loadHuntRound, 900);
+    }
 
   }else{
 
@@ -2204,9 +2183,6 @@ if(huntCorrectFound >= huntCorrectTotal){
     speakHuntColor();
   }
 }
-  let sayColorRounds = [];
-let sayColorIndex = 0;
-let sayColorTarget = null;
 
 function startGameFour(){
   openSayColorGame();
