@@ -2359,10 +2359,13 @@ function playWord(word){
 
   const audio = new Audio(base + folder + word + ".mp3");
 
-  audio.play().catch(() => {
+ audio.play().catch(() => {
   console.log("No se pudo reproducir el audio:", word);
 });
-  function getSpeakText(item){
+
+}  
+
+function getSpeakText(item){
 
   if(currentLanguage === "Inglés") return item.en || item.es;
   if(currentLanguage === "Francés") return item.fr || item.en || item.es;
