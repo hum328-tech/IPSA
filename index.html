@@ -1257,7 +1257,7 @@ K1: [
     es:"Blanco",
     zh:"白色",
     py:"bái sè",
-    fr:"Rose",
+    fr:"Blanc",
     emoji:"⬜",
     bg:"#FFFFFF",
     acceptZh:["白色","bai se","bái sè","pai se","pay se","baise"],
@@ -1450,12 +1450,48 @@ K2: [
 
 const k1EnglishVocabulary = {
   1: {
-    "Colors": [
-      { es:"Red", en:"red", emoji:"🟥", bg:"#E63946" },
-      { es:"Blue", en:"blue", emoji:"🟦", bg:"#457B9D" },
-      { es:"Yellow", en:"yellow", emoji:"🟨", bg:"#FFD93D" },
-      { es:"Green", en:"green", emoji:"🟩", bg:"#569456" },
-      { es:"Orange", en:"orange", emoji:"🟧", bg:"#E3562B" }
+   const huntObjects = [
+  { emoji:"🍎", key:"red" },
+  { emoji:"🚗", key:"red" },
+  { emoji:"🍓", key:"red" },
+  { emoji:"🌹", key:"red" },
+  { emoji:"🎈", key:"red" },
+  { emoji:"🍅", key:"red" },
+
+  { emoji:"🐳", key:"blue" },
+  { emoji:"🧢", key:"blue" },
+  { emoji:"🐟", key:"blue" },
+  { emoji:"🚙", key:"blue" },
+  { emoji:"💧", key:"blue" },
+  { emoji:"🥶", key:"blue" },
+
+  { emoji:"🍌", key:"yellow" },
+  { emoji:"🌽", key:"yellow" },
+  { emoji:"⭐", key:"yellow" },
+  { emoji:"🌞", key:"yellow" },
+  { emoji:"🐥", key:"yellow" },
+  { emoji:"🍋", key:"yellow" },
+
+  { emoji:"☁️", key:"white" },
+  { emoji:"🥚", key:"white" },
+  { emoji:"🐇", key:"white" },
+  { emoji:"🦢", key:"white" },
+  { emoji:"🥛", key:"white" },
+  { emoji:"🍚", key:"white" },
+
+  { emoji:"🥬", key:"green" },
+  { emoji:"🥦", key:"green" },
+  { emoji:"🐸", key:"green" },
+  { emoji:"🌲", key:"green" },
+  { emoji:"🍏", key:"green" },
+  { emoji:"🥒", key:"green" },
+
+  { emoji:"🍊", key:"orange" },
+  { emoji:"🥕", key:"orange" },
+  { emoji:"🎃", key:"orange" },
+  { emoji:"🏀", key:"orange" },
+  { emoji:"🦊", key:"orange" },
+  { emoji:"🧡", key:"orange" }
     ],
     "Family": [
       { es:"Mother", en:"mother", emoji:"👩" },
@@ -2114,11 +2150,11 @@ let objectsToShow = [];
 if(currentLesson === "Colors" || currentLesson === "Colores"){
 
   const correctObjects = shuffleArray(
-    huntObjects.filter(o => o.color === huntTarget.es)
+    huntObjects.filter(o => o.key === huntTarget.key)
   ).slice(0,3);
 
   const wrongObjects = shuffleArray(
-    huntObjects.filter(o => o.color !== huntTarget.es)
+    huntObjects.filter(o => o.key !== huntTarget.key)
   ).slice(0,6);
 
   objectsToShow = shuffleArray([
