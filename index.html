@@ -1261,7 +1261,7 @@ K1: [
     emoji:"⬜",
     bg:"#FFFFFF",
     acceptZh:["白色","bai se","bái sè","pai se","pay se","baise"],
-    acceptFr:["rose","ros"]
+    acceptFr:["blanc","blan"]
   }
 ],
 
@@ -2040,43 +2040,57 @@ function startGameTwo(){
 function startGameThree(){
   openColorHunt();
 }
+const huntObjects = [
 
- const huntObjects = [
+  // RED
+  { emoji:"🍎", key:"red" },
+  { emoji:"🚗", key:"red" },
+  { emoji:"🍓", key:"red" },
+  { emoji:"🌹", key:"red" },
+  { emoji:"🎈", key:"red" },
+  { emoji:"🧯", key:"red" },
 
-  // Rojo
-  { emoji:"🍎", color:"Rojo" },
-  { emoji:"🚗", color:"Rojo" },
-  { emoji:"🍓", color:"Rojo" },
-  { emoji:"🌹", color:"Rojo" },
-  { emoji:"🎈", color:"Rojo" },
-  { emoji:"🧯", color:"Rojo" },
+  // BLUE
+  { emoji:"🐟", key:"blue" },
+  { emoji:"🐳", key:"blue" },
+  { emoji:"🧢", key:"blue" },
+  { emoji:"💧", key:"blue" },
+  { emoji:"🦋", key:"blue" },
+  { emoji:"🔵", key:"blue" },
 
-  // Azul
-  { emoji:"🐟", color:"Azul" },
-  { emoji:"🐳", color:"Azul" },
-  { emoji:"🧢", color:"Azul" },
-  { emoji:"💧", color:"Azul" },
-  { emoji:"🦋", color:"Azul" },
-  { emoji:"🔵", color:"Azul" },
+  // YELLOW
+  { emoji:"🍌", key:"yellow" },
+  { emoji:"🌽", key:"yellow" },
+  { emoji:"⭐", key:"yellow" },
+  { emoji:"🌞", key:"yellow" },
+  { emoji:"🐥", key:"yellow" },
+  { emoji:"🧀", key:"yellow" },
 
-  // Amarillo
-  { emoji:"🍌", color:"Amarillo" },
-  { emoji:"🌽", color:"Amarillo" },
-  { emoji:"⭐", color:"Amarillo" },
-  { emoji:"🌞", color:"Amarillo" },
-  { emoji:"🐥", color:"Amarillo" },
-  { emoji:"🧀", color:"Amarillo" },
+  // WHITE
+  { emoji:"☁️", key:"white" },
+  { emoji:"🥚", key:"white" },
+  { emoji:"🐇", key:"white" },
+  { emoji:"🦢", key:"white" },
+  { emoji:"⚪", key:"white" },
+  { emoji:"🥛", key:"white" },
 
-  // Blanco
-  { emoji:"☁️", color:"Blanco" },
-  { emoji:"🥚", color:"Blanco" },
-  { emoji:"🐇", color:"Blanco" },
-  { emoji:"🦢", color:"Blanco" },
-  { emoji:"⚪", color:"Blanco" },
-  { emoji:"🥛", color:"Blanco" }
+  // GREEN
+  { emoji:"🥬", key:"green" },
+  { emoji:"🥦", key:"green" },
+  { emoji:"🐸", key:"green" },
+  { emoji:"🌲", key:"green" },
+  { emoji:"🍏", key:"green" },
+  { emoji:"🥒", key:"green" },
+
+  // ORANGE
+  { emoji:"🍊", key:"orange" },
+  { emoji:"🥕", key:"orange" },
+  { emoji:"🎃", key:"orange" },
+  { emoji:"🏀", key:"orange" },
+  { emoji:"🦊", key:"orange" },
+  { emoji:"🧡", key:"orange" }
 
 ];
-
 let huntTarget = null;
 let huntCorrectTotal = 0;
 let huntCorrectFound = 0;
@@ -2146,7 +2160,7 @@ if(currentLesson === "Colors" || currentLesson === "Colores"){
   btn.innerText = obj.emoji;
 
 if(currentLesson === "Colors" || currentLesson === "Colores"){
-  btn.dataset.answer = obj.color;
+  btn.dataset.answer = obj.key;
 }else{
   btn.dataset.answer = obj.es;
 }
@@ -2174,7 +2188,7 @@ function speakHuntColor(){
 }
 function checkHuntObject(btn){
 
-  if(btn.dataset.answer === huntTarget.es){
+  if(currentLesson === "Colors" || currentLesson === "Colores"){      if(btn.dataset.answer === huntTarget.key){          ...{
 
     btn.style.opacity = ".35";
     btn.disabled = true;
