@@ -2109,26 +2109,51 @@ function openColorHunt(){
   const grid = document.getElementById("huntGrid");
   grid.innerHTML = "";
 
+let objectsToShow = [];
+
+if(currentLesson === "Colors" || currentLesson === "Colores"){
+
+  const correctObjects = shuffleArray(
+    huntObjects.filter(o => o.color === huntTarget.es)
+  ).slice(0,3);
+
+  const wrongObjects = shuffleArray(
+    huntObjects.filter(o => o.color !== huntTarget.es)
+  ).slice(0,6);
+
+  objectsToShow = shuffleArray([
+    ...correctObjects,
+    ...wrongObjects
+  ]);
+
+}else{
+
   const wrongObjects = shuffleArray(
     activeColors.filter(item => item.es !== huntTarget.es)
   ).slice(0,8);
 
-  const objectsToShow = shuffleArray([
+  objectsToShow = shuffleArray([
     huntTarget,
     ...wrongObjects
   ]);
+}
 
   objectsToShow.forEach(obj => {
     const btn = document.createElement("button");
 
-    btn.innerText = obj.emoji;
-    btn.dataset.answer = obj.es;
+  btn.innerText = obj.emoji;
+
+if(currentLesson === "Colors" || currentLesson === "Colores"){
+  btn.dataset.answer = obj.color;
+}else{
+  btn.dataset.answer = obj.es;
+}
 
     btn.style.height = "95px";
     btn.style.fontSize = "48px";
     btn.style.border = "none";
     btn.style.borderRadius = "25px";
-    btn.style.background = obj.bg || "white";
+    btn.style.background = "white";
     btn.style.cursor = "pointer";
     btn.style.boxShadow = "0 8px 15px rgba(0,0,0,.18)";
 
