@@ -2188,7 +2188,15 @@ function speakHuntColor(){
 }
 function checkHuntObject(btn){
 
-  if(currentLesson === "Colors" || currentLesson === "Colores"){      if(btn.dataset.answer === huntTarget.key){          ...{
+  let correcta = false;
+
+  if(currentLesson === "Colors" || currentLesson === "Colores"){
+    correcta = (btn.dataset.answer === huntTarget.key);
+  }else{
+    correcta = (btn.dataset.answer === huntTarget.es);
+  }
+
+  if(correcta){
 
     btn.style.opacity = ".35";
     btn.disabled = true;
@@ -2209,11 +2217,14 @@ function checkHuntObject(btn){
 
       soundVictory();
 
-      showMagicPopup("🎯 ¡Completaste la caza visual! ⭐ Ganaste una estrella.");
+      showMagicPopup(
+        "🎯 ¡Completaste la caza visual! ⭐ Ganaste una estrella."
+      );
 
     }else{
 
-      setTimeout(loadHuntRound, 900);
+      setTimeout(loadHuntRound,900);
+
     }
 
   }else{
@@ -2222,7 +2233,9 @@ function checkHuntObject(btn){
       "🔄 Ese no. Escucha otra vez.";
 
     speakHuntColor();
+
   }
+
 }
 
 function startGameFour(){
