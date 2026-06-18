@@ -1451,26 +1451,26 @@ K2: [
 const k1EnglishVocabulary = {
   1: {
    "Colors": [
-      { es:"Red", key:"red", en:"red", emoji:"🟥", bg:"#E63946" },
-      { es:"Blue", key:"blue", en:"blue", emoji:"🟦", bg:"#457B9D" },
-      { es:"Yellow", key:"yellow", en:"yellow", emoji:"🟨", bg:"#FFD93D" },
-      { es:"Green", key:"green", en:"green", emoji:"🟩", bg:"#569456" },
-      { es:"Orange", key:"orange", en:"orange", emoji:"🟧", bg:"#E3562B" }
+  { es:"Red", key:"red", en:"red", audio:"red", emoji:"🟥", bg:"#E63946" }
+{ es:"Blue", key:"blue", en:"blue", audio:"blue", emoji:"🟦", bg:"#457B9D" }
+{ es:"Yellow", key:"yellow", en:"yellow", audio:"yellow", emoji:"🟨", bg:"#FFD93D" }
+{ es:"Green", key:"green", en:"green", audio:"green", emoji:"🟩", bg:"#569456" }
+{ es:"Orange", key:"orange", en:"orange", audio:"orange", emoji:"🟧", bg:"#E3562B" }
     ],
     "Family": [
-      { es:"Mother", en:"mother", emoji:"👩" },
-      { es:"Father", en:"father", emoji:"👨" },
-      { es:"Daughter", en:"daughter", emoji:"👧" },
-      { es:"Baby", en:"baby", emoji:"👶" },
-      { es:"Son", en:"son", emoji:"👦" }
+      { es:"Mother", en:"mother", audio:"mother", emoji:"👩" }
+{ es:"Father", en:"father", audio:"father", emoji:"👨" }
+{ es:"Daughter", en:"daughter", audio:"daughter", emoji:"👧" }
+{ es:"Baby", en:"baby", audio:"baby", emoji:"👶" }
+{ es:"Son", en:"son", audio:"son", emoji:"👦" }
     ],
     "Animals": [
-      { es:"Dog", en:"dog", emoji:"🐶" },
-      { es:"Chick", en:"chick", emoji:"🐥" },
-      { es:"Hen", en:"hen", emoji:"🐔" },
-      { es:"Rabbit", en:"rabbit", emoji:"🐇" },
-      { es:"Fish", en:"fish", emoji:"🐟" },
-      { es:"Cat", en:"cat", emoji:"🐱" }
+{ es:"Dog", en:"dog", audio:"dog", emoji:"🐶" }
+{ es:"Chick", en:"chick", audio:"chick", emoji:"🐥" }
+{ es:"Hen", en:"hen", audio:"hen", emoji:"🐔" }
+{ es:"Rabbit", en:"rabbit", audio:"rabbit", emoji:"🐇" }
+{ es:"Fish", en:"fish", audio:"fish", emoji:"🐟" }
+{ es:"Cat", en:"cat", audio:"cat", emoji:"🐱" }
     ]
   },
 
@@ -2412,8 +2412,14 @@ function getSpeechLang(){
 }
 
 function speakItem(item){
+  
 
   speechSynthesis.cancel();
+
+  if(currentLanguage === "Inglés" && item.audio){
+  playWord(item.audio);
+  return;
+}
 
   if(currentLanguage === "Chino"){
 
