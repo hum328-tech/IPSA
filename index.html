@@ -1223,46 +1223,24 @@ function openChest(){
   updateAdventureMap();
   const colorLessons = {
 K1: [
-  {
-    es:"Rojo",
-    zh:"红色",
-    py:"hóng sè",
-    fr:"Rouge",
-    emoji:"🟥",
-    bg:"#E63946",
-    acceptZh:["红色","hong se","hóng sè","jon se","hon se","on se"],
-    acceptFr:["rouge","ruj","rush"]
-  },
-  {
-    es:"Azul",
-    zh:"蓝色",
-    py:"lán sè",
-    fr:"Bleu",
-    emoji:"🟦",
-    bg:"#457B9D",
-    acceptZh:["蓝色","lan se","lán sè","lanse","la se"],
-    acceptFr:["bleu","ble","blu"]
-  },
-  {
-    es:"Amarillo",
-    zh:"黄色",
-    py:"huáng sè",
-    fr:"Jaune",
-    emoji:"🟨",
-    bg:"#FFD93D",
-    acceptZh:["黄色","huang se","huáng sè","juan se","wan se","jon se"],
-    acceptFr:["jaune","yon","youn","jon"]
-  },
-  {
-    es:"Blanco",
-    zh:"白色",
-    py:"bái sè",
-    fr:"Blanc",
-    emoji:"⬜",
-    bg:"#FFFFFF",
-    acceptZh:["白色","bai se","bái sè","pai se","pay se","baise"],
-    acceptFr:["blanc","blan"]
-  }
+  { es:"Rojo", key:"red", zh:"红色", py:"hóng sè", audio:"hongse", fr:"Rouge", emoji:"🟥", bg:"#E63946", acceptZh:["红色","hongse","hong se","hóng sè","hon se"] },
+  { es:"Azul", key:"blue", zh:"蓝色", py:"lán sè", audio:"lanse", fr:"Bleu", emoji:"🟦", bg:"#457B9D", acceptZh:["蓝色","lanse","lan se","lán sè"] },
+  { es:"Amarillo", key:"yellow", zh:"黄色", py:"huáng sè", audio:"huangse", fr:"Jaune", emoji:"🟨", bg:"#FFD93D", acceptZh:["黄色","huangse","huang se","huáng sè"] },
+  { es:"Verde", key:"green", zh:"绿色", py:"lǜ sè", audio:"lvse", fr:"Vert", emoji:"🟩", bg:"#569456", acceptZh:["绿色","lvse","lü se","lu se","luse"] },
+  { es:"Naranja", key:"orange", zh:"橙色", py:"chéng sè", audio:"chengse", fr:"Orange", emoji:"🟧", bg:"#E3562B", acceptZh:["橙色","chengse","cheng se","chéng sè"] },
+
+  { es:"Mamá", zh:"妈妈", py:"māma", audio:"mama", emoji:"👩", acceptZh:["妈妈","mama","ma ma"] },
+  { es:"Papá", zh:"爸爸", py:"bàba", audio:"baba", emoji:"👨", acceptZh:["爸爸","baba","ba ba"] },
+  { es:"Niña", zh:"女孩子", py:"nǚ háizi", audio:"nuhaizi", emoji:"👧", acceptZh:["女孩子","nuhaizi","nu hai zi"] },
+  { es:"Bebé", zh:"宝宝", py:"bǎobao", audio:"baobao", emoji:"👶", acceptZh:["宝宝","baobao","bao bao"] },
+  { es:"Niño", zh:"男孩子", py:"nán háizi", audio:"nanhaizi", emoji:"👦", acceptZh:["男孩子","nanhaizi","nan hai zi"] },
+
+  { es:"Perro", zh:"小狗", py:"xiǎo gǒu", audio:"xiaogou", emoji:"🐶", acceptZh:["小狗","xiaogou","xiao gou"] },
+  { es:"Pollito", zh:"小鸡", py:"xiǎo jī", audio:"xiaoji", emoji:"🐥", acceptZh:["小鸡","xiaoji","xiao ji"] },
+  { es:"Gallina", zh:"母鸡", py:"mǔ jī", audio:"muji", emoji:"🐔", acceptZh:["母鸡","muji","mu ji"] },
+  { es:"Conejo", zh:"兔子", py:"tùzi", audio:"tuzi", emoji:"🐇", acceptZh:["兔子","tuzi","tu zi"] },
+  { es:"Pez", zh:"小鱼", py:"xiǎo yú", audio:"xiaoyu", emoji:"🐟", acceptZh:["小鱼","xiaoyu","xiao yu"] },
+  { es:"Gato", zh:"小猫", py:"xiǎo māo", audio:"xiaomao", emoji:"🐱", acceptZh:["小猫","xiaomao","xiao mao"] }
 ],
 
 K2: [
