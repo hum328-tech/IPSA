@@ -2407,6 +2407,11 @@ function speakItem(item){
 
   speechSynthesis.cancel();
 
+  if(currentLanguage === "Chino" && item.audio){
+  playWord(item.audio);
+  return;
+}
+
   if(currentLanguage === "Inglés" && item.audio){
   playWord(item.audio);
   return;
