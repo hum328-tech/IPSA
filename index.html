@@ -599,6 +599,7 @@ h1{
   color:white;
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -984,6 +985,14 @@ h1{
 
 </div>
 <script>
+  const SUPABASE_URL = "https://epbvltwzwgftujloenla.supabase.co/rest/v1/";
+
+const SUPABASE_KEY = "sb_publishable_EKdbN3hcfSuNYpstQczPkg_yhdjiYWh";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 let currentLevel = "";
 let currentLanguage = "";
 let stars = 0;
