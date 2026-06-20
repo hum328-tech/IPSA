@@ -627,8 +627,6 @@ h1{
 
 <div id="studentLogin" class="screen active">
 
-  <h2 class="title">👋 Bienvenido</h2>
-
   <div class="adventure-map">
 
     <img src="assets/logo.png" style="
@@ -1047,17 +1045,20 @@ function showScreen(id){
 
   const header = document.querySelector(".header");
 
-  if(
-    id === "languages" ||
-    id === "units" ||
-    id === "lessonGames" ||
-    id === "colorsLesson" ||
-    id === "colorQuiz"
-  ){
-    header.style.display = "none";
-  }else{
-    header.style.display = "flex";
-  }
+ if(
+  id === "studentLogin" ||
+  id === "languages" ||
+  id === "units" ||
+  id === "lessonGames" ||
+  id === "colorsLesson" ||
+  id === "colorQuiz" ||
+  id === "colorHunt" ||
+  id === "sayColorGame"
+){
+  header.style.display = "none";
+}else{
+  header.style.display = "flex";
+}
 
   currentScreen = id;
 
