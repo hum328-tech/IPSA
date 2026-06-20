@@ -671,8 +671,73 @@ h1{
 
     <button
       class="enter-btn"
-      onclick="showRegister()">
+      onclick="showScreen('registerScreen')">
       ✨ Crear cuenta
+    </button>
+
+  </div>
+
+</div>
+
+  <!-- REGISTRO -->
+
+<div id="registerScreen" class="screen">
+
+  <div class="adventure-map">
+
+    <img
+      src="assets/logo.png"
+      style="width:140px;margin-bottom:20px;">
+
+    <input
+      id="registerName"
+      type="text"
+      placeholder="Nombre del alumno"
+      class="loginInput">
+
+    <input
+      id="registerLastName"
+      type="text"
+      placeholder="Apellido del alumno"
+      class="loginInput">
+
+    <select
+      id="registerGrade"
+      class="loginInput">
+
+      <option value="">Selecciona grado</option>
+      <option>K1</option>
+      <option>K2</option>
+      <option>K3</option>
+
+    </select>
+
+    <input
+      id="registerEmail"
+      type="email"
+      placeholder="Correo del padre o tutor"
+      class="loginInput">
+
+    <input
+      id="registerPassword"
+      type="password"
+      placeholder="Contraseña"
+      class="loginInput">
+
+    <button
+      class="enter-btn"
+      onclick="registerUser()">
+
+      Crear cuenta
+
+    </button>
+
+    <button
+      class="enter-btn"
+      onclick="showScreen('studentLogin')">
+
+      Volver
+
     </button>
 
   </div>
