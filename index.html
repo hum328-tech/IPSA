@@ -623,15 +623,18 @@ h1{
   </div>
 
  <!-- PANTALLA NOMBRE DEL ALUMNO -->
+<!-- LOGIN -->
+
 <div id="studentLogin" class="screen active">
 
   <h2 class="title">👋 Bienvenido</h2>
 
   <div class="adventure-map">
 
-    <input id="studentNameInput"
-      type="text"
-      placeholder="Nombre"
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="Correo del padre o tutor"
       style="
         width:90%;
         padding:18px;
@@ -642,9 +645,10 @@ h1{
         margin-bottom:15px;
       ">
 
-    <input id="studentLastNameInput"
-      type="text"
-      placeholder="Apellido"
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Contraseña"
       style="
         width:90%;
         padding:18px;
@@ -655,13 +659,24 @@ h1{
         margin-bottom:15px;
       ">
 
-<input id="studentLevelInput" type="hidden">
- <button class="enter-btn" onclick="saveStudentName()">
-      🎮 Entrar
+    <button
+      class="enter-btn"
+      onclick="loginUser()">
+      🔑 Iniciar sesión
     </button>
-<button class="enter-btn" onclick="changeWorld()">
-  🌎 Cambiar mundo
-</button>
+
+    <button
+      class="enter-btn"
+      onclick="showRegister()">
+      ✨ Crear cuenta
+    </button>
+
+    <button
+      class="enter-btn"
+      onclick="changeWorld()">
+      🌎 Cambiar mundo
+    </button>
+
   </div>
 
 </div>
