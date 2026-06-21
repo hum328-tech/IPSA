@@ -775,9 +775,7 @@ h1{
 <div id="home" class="screen">
     <h2 class="title">Elige tu mundo</h2>
   <div style="text-align:center; margin-bottom:15px;">
-  <button class="enter-btn" onclick="openProfile()">
-    👤 Perfil
-  </button>
+  
 </div>
 
     <div class="grid">
@@ -2052,33 +2050,6 @@ function speakQuizColor(){
   });
 
 }
-function saveStudentName(){
-
-  const nombre =
-    document.getElementById("studentNameInput").value.trim();
-
-  const apellido =
-    document.getElementById("studentLastNameInput").value.trim();
-
-  if(!nombre || !apellido){
-
-    alert("⚠️ Debes escribir nombre y apellido.");
-
-    return;
-  }
-
-  localStorage.setItem("studentName", nombre);
-  localStorage.setItem("studentLastName", apellido);
-
-  const savedLevel = localStorage.getItem("studentLevel");
-
-  if(savedLevel){
-    currentLevel = savedLevel;
-    showScreen("languages");
-  }else{
-    showScreen("home");
-  }
-}
 
 function openLessonGames(lesson){
 
@@ -2124,47 +2095,6 @@ function openLessonGames(lesson){
   showScreen("lessonGames");
   sound();
 }
-  function openProfile(){
-
-  document.getElementById("studentNameInput").value =
-    localStorage.getItem("studentName") || "";
-
-  document.getElementById("studentLastNameInput").value =
-    localStorage.getItem("studentLastName") || "";
-
-  showScreen("studentLogin");
-}
-
-function checkProfileOnLoad(){
-
-  const nombre = localStorage.getItem("studentName");
-  const apellido = localStorage.getItem("studentLastName");
-  
-  if(nombre && apellido){
-    showScreen("home");
-  }else{
-    showScreen("studentLogin");
-  }
-
-}
-  function changeWorld(){
-
-  const nombre =
-    document.getElementById("studentNameInput").value.trim();
-
-  const apellido =
-    document.getElementById("studentLastNameInput").value.trim();
-
-  if(nombre){
-    localStorage.setItem("studentName", nombre);
-  }
-
-  if(apellido){
-    localStorage.setItem("studentLastName", apellido);
-  }
-
-  showScreen("home");
-} 
   
   function startGameOne(){
   openColorsLesson();
@@ -2596,8 +2526,78 @@ function speakItem(item){
 
   speechSynthesis.speak(utterance);
 }
-  showScreen("studentLogin");
+checkSession();
+async function registerUser(){
 
+  const name = document.getElementById("registerName").value.trim();
+  const lastName = document.getElementById("registerLastName").value.trim();
+  const grade = document.getElementById("registerGrade").value;
+  const email = document.getElementById("registerEmail").value.trim();
+  const password = document.getElementById("registerPassword").value;
+
+  if(!name || !lastName || !grade || !email || !password){
+    alert("Completa todos los campos.");
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        student_name: name,
+        student_lastname: lastName,
+        grade: grade
+      }
+    }
+  });
+
+  if(error){
+    alert("Error: " + error.message);
+    return;
+  }
+
+  alert("Cuenta creada. Revisa el correo del padre o tutor para confirmar la cuenta.");
+  showScreen("studentLogin");
+}
+  async function loginUser(){
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if(!email || !password){
+    alert("Escribe correo y contraseña.");
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if(error){
+    alert("No se pudo iniciar sesión: " + error.message);
+    return;
+  }
+
+  showScreen("home");
+}
+  async function logoutUser(){
+
+  await supabaseClient.auth.signOut();
+
+  showScreen("studentLogin");
+}
+  async function checkSession(){
+
+  const { data } = await supabaseClient.auth.getSession();
+
+  if(data.session){
+    showScreen("home");
+  }else{
+    showScreen("studentLogin");
+  }
+}
 </script>
 <!-- DUPLICADO BORRADO -->
 
