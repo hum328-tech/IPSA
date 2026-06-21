@@ -968,7 +968,7 @@ h1{
 </div> <!-- adventure-map -->
 </div> <!-- colorsLesson -->
 
-<div class="rewards only-stars">
+<div id="starsPanel" class="rewards only-stars">
 
   <div style="font-size:48px;">⭐</div>
 
@@ -1123,43 +1123,50 @@ function sound(){
 
 function showScreen(id){
 
-  document.querySelectorAll(".screen").forEach(screen => {
+  document.querySelectorAll(".screen").forEach(screen=>{
     screen.classList.remove("active");
   });
 
   document.getElementById(id).classList.add("active");
 
   const header = document.querySelector(".header");
+  const starsPanel = document.getElementById("starsPanel");
 
- if(
-  id === "studentLogin" ||
-  id === "languages" ||
-  id === "units" ||
-  id === "lessonGames" ||
-  id === "colorsLesson" ||
-  id === "colorQuiz" ||
-  id === "colorHunt" ||
-  id === "sayColorGame"
-){
-  header.style.display = "none";
-}else{
-  header.style.display = "flex";
-}
+  if(
+    id==="studentLogin" ||
+    id==="registerScreen"
+  ){
 
-  currentScreen = id;
+    header.style.display="none";
 
-  if(id !== "studentLogin"){
-    localStorage.setItem("screen", id);
+    if(starsPanel){
+      starsPanel.style.display="none";
+    }
+
+  }else{
+
+    header.style.display="flex";
+
+    if(starsPanel){
+      starsPanel.style.display="flex";
+    }
+
   }
 
-  localStorage.setItem("level", currentLevel);
-  localStorage.setItem("language", currentLanguage);
-  localStorage.setItem("stars", stars);
-  localStorage.setItem("unlockedLessons", unlockedLessons);
-  localStorage.setItem("colorIndex", currentColorIndex);
-  localStorage.setItem("quizIndex", currentQuiz);
-}
- 
+  currentScreen=id;
+
+  if(id!=="studentLogin"){
+    localStorage.setItem("screen",id);
+  }
+
+  localStorage.setItem("level",currentLevel);
+  localStorage.setItem("language",currentLanguage);
+  localStorage.setItem("stars",stars);
+  localStorage.setItem("unlockedLessons",unlockedLessons);
+  localStorage.setItem("colorIndex",currentColorIndex);
+  localStorage.setItem("quizIndex",currentQuiz);
+
+} 
   
 function openLevel(level){
 
