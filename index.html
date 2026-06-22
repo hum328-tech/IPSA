@@ -735,6 +735,76 @@ h1{
     text-align:center;
   }
 }
+  .student-full-header{
+  flex-direction:column;
+  align-items:stretch;
+  gap:12px;
+  padding:22px 28px;
+}
+
+.student-main-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.student-identity{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.student-avatar{
+  width:70px;
+  height:70px;
+  background:white;
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  box-shadow:0 5px 12px rgba(0,0,0,.18);
+}
+
+.student-name{
+  font-size:30px;
+  font-weight:bold;
+  color:white;
+}
+
+.student-grade{
+  font-size:20px;
+  color:white;
+  font-weight:bold;
+}
+
+.student-actions{
+  display:flex;
+  gap:10px;
+}
+
+.full-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.full-progress{
+  width:100%;
+}
+
+@media(max-width:768px){
+  .student-name{
+    font-size:23px;
+  }
+
+  .student-avatar{
+    width:58px;
+    height:58px;
+    font-size:34px;
+  }
+}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -746,48 +816,47 @@ h1{
 <div class="cloud three">☁️</div>
 
 <div class="app">
+<div class="header student-full-header">
 
- <div class="header student-dashboard-header">
+  <div class="student-main-row">
 
-  <div class="logo">
-    <div class="logo-icon">🌈</div>
-    <div>
-      <h1>Instituto Políglota Kids</h1>
-      <p class="subtitle">Aprende jugando, escuchando y tocando</p>
-    </div>
-  </div>
-
-  <div class="student-mini-panel">
-
-    <div class="student-top-row">
-      <div id="studentHeaderInfo" class="student-name-pill">
-        👤 Alumno · 🎓 K1
+    <div class="student-identity">
+      <div class="student-avatar">🐼</div>
+      <div>
+        <div id="studentHeaderInfo" class="student-name">
+          Alumno
+        </div>
+        <div class="student-grade">
+          🎓 <span id="headerGrade">K1</span>
+        </div>
       </div>
+    </div>
 
+    <div class="student-actions">
       <button class="settings-btn" onclick="openSettingsPanel()">⚙️</button>
       <button class="settings-btn" onclick="logoutUser()">🚪</button>
     </div>
 
-    <div class="student-stats-row">
-      <div class="stat-pill">⭐ <span id="headerStars">0</span></div>
-      <div class="stat-pill">🏆 <span id="headerBadges">0</span></div>
-      <div class="stat-pill">🔥 <span id="headerStreak">0</span></div>
+  </div>
+
+  <div class="student-stats-row full-stats">
+    <div class="stat-pill">⭐ <span id="headerStars">0</span></div>
+    <div class="stat-pill">🏆 <span id="headerBadges">0</span></div>
+    <div class="stat-pill">🔥 <span id="headerStreak">1</span></div>
+  </div>
+
+  <div class="mini-progress-wrap full-progress">
+    <div class="mini-progress-label">
+      <span>Progreso general</span>
+      <span id="headerProgressText">0%</span>
     </div>
-
-    <div class="mini-progress-wrap">
-      <div class="mini-progress-label">
-        <span>Progreso</span>
-        <span id="headerProgressText">0%</span>
-      </div>
-
-      <div class="mini-progress-bar">
-        <div id="headerProgressFill"></div>
-      </div>
+    <div class="mini-progress-bar">
+      <div id="headerProgressFill"></div>
     </div>
-
   </div>
 
 </div>
+ </div>
   </div>
 
  <!-- PANTALLA NOMBRE DEL ALUMNO -->
@@ -2746,17 +2815,16 @@ const { data, error } = await supabaseClient.auth.signUp({
   const badges = Math.floor(stars / 5);
   const streak = localStorage.getItem("studentStreak") || 1;
 
-  document.getElementById("studentHeaderInfo").innerHTML =
-    `👤 ${name} ${lastName} · 🎓 ${grade}`;
+  document.getElementById("studentHeaderInfo").innerText =
+    name + " " + lastName;
 
+  document.getElementById("headerGrade").innerText = grade;
   document.getElementById("headerStars").innerText = stars;
   document.getElementById("headerBadges").innerText = badges;
   document.getElementById("headerStreak").innerText = streak;
 
   document.getElementById("headerProgressText").innerText = progress + "%";
   document.getElementById("headerProgressFill").style.width = progress + "%";
-    function openSettingsPanel(){
-  alert("Próximamente: editar perfil, avatar, contraseña y configuración.");
 }
 }</script>
 <!-- DUPLICADO BORRADO -->
