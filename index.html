@@ -735,47 +735,49 @@ h1{
     text-align:center;
   }
 }
-  .student-full-header{
+.student-full-header{
+  display:flex;
   flex-direction:column;
-  align-items:stretch;
-  gap:12px;
-  padding:22px 28px;
+  gap:10px;
+  padding:16px 22px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#384F83,#2f4270);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  margin-bottom:28px;
 }
 
 .student-main-row{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:15px;
 }
 
 .student-identity{
   display:flex;
   align-items:center;
-  gap:15px;
+  gap:14px;
 }
 
 .student-avatar{
-  width:70px;
-  height:70px;
+  width:64px;
+  height:64px;
   background:white;
-  border-radius:24px;
+  border-radius:22px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:42px;
-  box-shadow:0 5px 12px rgba(0,0,0,.18);
+  font-size:40px;
 }
 
 .student-name{
-  font-size:30px;
+  font-size:28px;
   font-weight:bold;
   color:white;
 }
 
 .student-grade{
-  font-size:20px;
-  color:white;
+  font-size:19px;
+  color:#F3C05B;
   font-weight:bold;
 }
 
@@ -784,17 +786,68 @@ h1{
   gap:10px;
 }
 
+.settings-btn{
+  border:none;
+  background:white;
+  color:#384F83;
+  border-radius:16px;
+  width:44px;
+  height:44px;
+  font-size:22px;
+  cursor:pointer;
+}
+
 .full-stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  gap:10px;
+}
+
+.stat-pill{
+  background:white;
+  color:#384F83;
+  border-radius:18px;
+  padding:9px;
+  font-weight:bold;
+  text-align:center;
+  font-size:18px;
 }
 
 .full-progress{
-  width:100%;
+  background:white;
+  border-radius:18px;
+  padding:10px 12px;
+}
+
+.mini-progress-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:15px;
+  font-weight:bold;
+  color:#384F83;
+  margin-bottom:6px;
+}
+
+.mini-progress-bar{
+  height:14px;
+  background:#E2E2E2;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+#headerProgressFill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#F3C05B,#569456);
+  border-radius:20px;
 }
 
 @media(max-width:768px){
+  .student-full-header{
+    padding:14px;
+    margin-bottom:22px;
+  }
+
   .student-name{
     font-size:23px;
   }
@@ -804,6 +857,24 @@ h1{
     height:58px;
     font-size:34px;
   }
+}
+  body{
+  overflow-y:auto;
+}
+
+.app{
+  padding-bottom:120px;
+}
+
+#home .grid,
+#modules .grid,
+#languages .grid{
+  margin-bottom:120px;
+}
+  #home .title,
+#modules .title{
+  margin-top:10px;
+  margin-bottom:22px;
 }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
