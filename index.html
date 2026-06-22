@@ -645,7 +645,9 @@ h1{
       </div>
     </div>
 
-    <div class="teacher">Modo Kinder</div>
+    <div class="teacher" id="studentHeaderInfo">
+  ⭐ 0 estrellas
+</div>
   </div>
 
  <!-- PANTALLA NOMBRE DEL ALUMNO -->
@@ -1163,6 +1165,7 @@ function showScreen(id){
   localStorage.setItem("unlockedLessons",unlockedLessons);
   localStorage.setItem("colorIndex",currentColorIndex);
   localStorage.setItem("quizIndex",currentQuiz);
+  updateStudentHeader();
 
 } 
   
@@ -2598,6 +2601,21 @@ const { data, error } = await supabaseClient.auth.signUp({
   }else{
     showScreen("studentLogin");
   }
+}
+  async function updateStudentHeader(){
+
+  const { data } = await supabaseClient.auth.getUser();
+
+  if(!data.user){
+    return;
+  }
+
+  const name = data.user.user_metadata.student_name || "Alumno";
+  const lastName = data.user.user_metadata.student_lastname || "";
+  const grade = data.user.user_metadata.grade || "";
+
+  document.getElementById("studentHeaderInfo").innerHTML =
+    `👤 ${name} ${lastName} · 🎓 ${grade} · ⭐ ${stars}`;
 }
 </script>
 <!-- DUPLICADO BORRADO -->
