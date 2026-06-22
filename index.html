@@ -2540,17 +2540,18 @@ async function registerUser(){
     return;
   }
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      data: {
-        student_name: name,
-        student_lastname: lastName,
-        grade: grade
-      }
+const { data, error } = await supabaseClient.auth.signUp({
+  email: email,
+  password: password,
+  options: {
+    emailRedirectTo: "https://hum328-tech.github.io/IPSA/",
+    data: {
+      student_name: name,
+      student_lastname: lastName,
+      grade: grade
     }
-  });
+  }
+});
 
   if(error){
     alert("Error: " + error.message);
