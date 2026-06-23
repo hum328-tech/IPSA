@@ -1463,17 +1463,19 @@ function showScreen(id){
 
  if(header){
 
-  if(
-    id==="studentLogin" ||
-    id==="registerScreen"
-  ){
+ if(
+  id==="studentLogin" ||
+  id==="registerScreen"
+){
 
+  if(header){
     header.style.display="none";
+  }
 
-  }else{
+}else{
 
+  if(header){
     header.style.display="flex";
-
   }
 
 }
