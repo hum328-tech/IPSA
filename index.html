@@ -913,6 +913,9 @@ h1{
   }
 
 }
+  #studentDashboard{
+  display:none;
+}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -924,7 +927,8 @@ h1{
 <div class="cloud three">☁️</div>
 
 <div class="app">
-<div class="student-compact-dashboard">
+
+<div id="studentDashboard" class="student-compact-dashboard">
 
   <div class="student-main-row">
 
@@ -965,7 +969,7 @@ h1{
 
 </div>
  </div>
-  </div>
+ 
 
  <!-- PANTALLA NOMBRE DEL ALUMNO -->
 <!-- LOGIN -->
@@ -1434,21 +1438,20 @@ function showScreen(id){
 
   document.getElementById(id).classList.add("active");
 
-  const header = document.querySelector(".student-compact-dashboard");
-  const starsPanel = document.getElementById("starsPanel");
+  const header = document.getElementById("studentDashboard");
 
- if(header){
+if (header) {
 
-  if(
-    id==="studentLogin" ||
-    id==="registerScreen"
-  ){
+  if (
+      id === "studentLogin" ||
+      id === "registerScreen"
+  ) {
 
-    header.style.display="none";
+      header.style.display = "none";
 
-  }else{
+  } else {
 
-    header.style.display="flex";
+      header.style.display = "grid";
 
   }
 
