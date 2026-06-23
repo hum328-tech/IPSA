@@ -926,70 +926,46 @@ h1{
 <div class="app">
 <div class="student-compact-dashboard">
 
-<div class="dash-left">
+  <div class="student-main-row">
 
-  <div class="student-avatar">🐼</div>
-
-  <div>
-    <div id="studentHeaderInfo" class="student-name">
-      Alumno
+    <div class="student-identity">
+      <div class="student-avatar">🐼</div>
+      <div>
+        <div id="studentHeaderInfo" class="student-name">
+          Alumno
+        </div>
+        <div class="student-grade">
+          🎓 <span id="headerGrade">K1</span>
+        </div>
+      </div>
     </div>
 
-    <div class="student-grade">
-      🎓 <span id="headerGrade">K1</span>
-    </div>
-  </div>
-
-</div>
-
-<div class="dash-center">
-
-  <div class="dash-stats">
-
-    <div class="stat-pill">
-      ⭐ <span id="headerStars">0</span>
-    </div>
-
-    <div class="stat-pill">
-      🏆 <span id="headerBadges">0</span>
-    </div>
-
-    <div class="stat-pill">
-      🔥 <span id="headerStreak">1</span>
+    <div class="student-actions">
+      <button class="settings-btn" onclick="openSettingsPanel()">⚙️</button>
+      <button class="settings-btn" onclick="logoutUser()">🚪</button>
     </div>
 
   </div>
 
-  <div class="mini-progress-wrap">
+  <div class="student-stats-row full-stats">
+    <div class="stat-pill">⭐ <span id="headerStars">0</span></div>
+    <div class="stat-pill">🏆 <span id="headerBadges">0</span></div>
+    <div class="stat-pill">🔥 <span id="headerStreak">1</span></div>
+  </div>
 
+  <div class="mini-progress-wrap full-progress">
     <div class="mini-progress-label">
-      <span>Progreso</span>
+      <span>Progreso general</span>
       <span id="headerProgressText">0%</span>
     </div>
-
     <div class="mini-progress-bar">
       <div id="headerProgressFill"></div>
     </div>
-
   </div>
 
 </div>
-
-<div class="dash-actions">
-
-  <button
-    class="settings-btn"
-    onclick="openSettingsPanel()">
-    ⚙️
-  </button>
-
-  <button
-    class="settings-btn"
-    onclick="logoutUser()">
-    🚪
-  </button>
-
-</div>
+ </div>
+  </div>
 
  <!-- PANTALLA NOMBRE DEL ALUMNO -->
 <!-- LOGIN -->
@@ -1463,19 +1439,17 @@ function showScreen(id){
 
  if(header){
 
- if(
-  id==="studentLogin" ||
-  id==="registerScreen"
-){
+  if(
+    id==="studentLogin" ||
+    id==="registerScreen"
+  ){
 
-  if(header){
     header.style.display="none";
-  }
 
-}else{
+  }else{
 
-  if(header){
     header.style.display="flex";
+
   }
 
 }
