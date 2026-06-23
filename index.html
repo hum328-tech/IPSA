@@ -2081,6 +2081,13 @@ let recognitionActive = null;
 function listenStudentColor(){
 
   const feedback = document.getElementById("voiceFeedback");
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+  if(isIOS){
+    feedback.innerText = "📱 En iPhone esta actividad puede fallar. Usa computadora o Android con Chrome.";
+    feedback.style.background = "#FFF3B0";
+    return;
+  }
   const repeatBtn = document.querySelector('button[onclick="listenStudentColor()"]');
   const item = activeColors[currentColorIndex];
 
