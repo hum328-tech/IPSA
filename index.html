@@ -1438,43 +1438,37 @@ function showScreen(id){
 
   document.getElementById(id).classList.add("active");
 
-  const header = document.getElementById("studentDashboard");
+  const dashboard = document.getElementById("studentDashboard");
 
-if (header) {
+  if(dashboard){
 
-  if (
+    if(
       id === "studentLogin" ||
       id === "registerScreen"
-  ) {
-
-      header.style.display = "none";
-
-  } else {
-
-      header.style.display = "grid";
-
-  }
-
-}
-    if(starsPanel){
-      starsPanel.style.display="flex";
+    ){
+      dashboard.style.display = "none";
+    }else{
+      dashboard.style.display = "grid";
     }
 
-  currentScreen=id;
-
-  if(id!=="studentLogin"){
-    localStorage.setItem("screen",id);
   }
 
-  localStorage.setItem("level",currentLevel);
-  localStorage.setItem("language",currentLanguage);
-  localStorage.setItem("stars",stars);
-  localStorage.setItem("unlockedLessons",unlockedLessons);
-  localStorage.setItem("colorIndex",currentColorIndex);
-  localStorage.setItem("quizIndex",currentQuiz);
+  currentScreen = id;
+
+  if(id !== "studentLogin"){
+    localStorage.setItem("screen", id);
+  }
+
+  localStorage.setItem("level", currentLevel);
+  localStorage.setItem("language", currentLanguage);
+  localStorage.setItem("stars", stars);
+  localStorage.setItem("unlockedLessons", unlockedLessons);
+  localStorage.setItem("colorIndex", currentColorIndex);
+  localStorage.setItem("quizIndex", currentQuiz);
+
   updateStudentHeader();
 
-} 
+}
   
 function openLevel(level){
 
