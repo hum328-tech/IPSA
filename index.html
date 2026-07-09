@@ -1324,7 +1324,7 @@ h1{
   <button class="home-btn" onclick="goHome()">🏠</button>
   <button class="back" onclick="showScreen('lessonGames')">⬅ Volver</button>
 
-  <h2 class="title">🎯 Caza del color</h2>
+  <h2 class="title" id="huntTitle">🎯 Caza de palabra</h2>
 
   <div class="adventure-map">
     <div id="huntMascot" style="font-size:70px;">🐼</div>
@@ -1352,7 +1352,7 @@ h1{
   <button class="home-btn" onclick="goHome()">🏠</button>
   <button class="back" onclick="showScreen('lessonGames')">⬅ Volver</button>
 
-  <h2 class="title">🖼️ Di el color</h2>
+  <h2 class="title" id="sayWordTitle">🖼️ Di la palabra</h2>
 
   <div class="adventure-map">
     <div id="sayColorMascot" style="font-size:70px;">🐼</div>
@@ -1375,7 +1375,7 @@ h1{
       background:white;
       border-radius:25px;
       padding:15px;">
-      Mira el objeto y di su color
+      Mira la imagen y di la palabra
     </div>
   </div>
 </div>
@@ -1391,9 +1391,9 @@ h1{
       Ganaste una estrella
     </p>
 
-    <button onclick="closeMagicPopup()">
-      Continuar
-    </button>
+    <div id="magicActions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="closeMagicPopup()">Continuar</button>
+    </div>
 
   </div>
 
@@ -1420,6 +1420,14 @@ let quizColors = [];
 let currentQuiz = 0;
 let currentLesson = "";
 let currentModule = 1;
+let nextGameAfterPopup = "";
+let restartGameAfterPopup = "";
+let sayColorRounds = [];
+let sayColorIndex = 0;
+let sayColorTarget = null;
+let isBrowserHistoryNavigation = false;
+let internalScreenStack = [];
+let lastHistoryScreen = "studentLogin";
   const SHEET_URL = "https://script.google.com/macros/s/AKfycbyzVsye8bSwGCVdWzgpD8gdXixNxQZnLyui-ajqcVFzkugpK-qLXsTa_z43rG4lE8vQ/exec";
   function testSheet(){
   sendProgress("PRUEBA MANUAL");
@@ -1430,13 +1438,21 @@ function sound(){
   audio.play();
 }
 
-function showScreen(id){
+function showScreen(id, options = {}){
+
+  const targetScreen = document.getElementById(id);
+
+  if(!targetScreen){
+    return;
+  }
+
+  const previousScreen = currentScreen;
 
   document.querySelectorAll(".screen").forEach(screen=>{
     screen.classList.remove("active");
   });
 
-  document.getElementById(id).classList.add("active");
+  targetScreen.classList.add("active");
 
   const dashboard = document.getElementById("studentDashboard");
 
@@ -1468,7 +1484,63 @@ function showScreen(id){
 
   updateStudentHeader();
 
+  if(
+    !isBrowserHistoryNavigation &&
+    !options.skipHistory &&
+    previousScreen !== id
+  ){
+    internalScreenStack.push(previousScreen || "home");
+    lastHistoryScreen = id;
+    history.pushState(
+      {
+        screen: id,
+        previous: previousScreen || "home"
+      },
+      "",
+      "#" + id
+    );
+  }
+
 }
+
+function setupInternalBrowserNavigation(){
+
+  history.replaceState(
+    {
+      screen: currentScreen || "studentLogin",
+      previous: null
+    },
+    "",
+    "#" + (currentScreen || "studentLogin")
+  );
+
+  window.addEventListener("popstate", function(event){
+
+    const previousScreen = internalScreenStack.pop();
+
+    if(previousScreen){
+      isBrowserHistoryNavigation = true;
+      showScreen(previousScreen, { skipHistory:true });
+      isBrowserHistoryNavigation = false;
+      lastHistoryScreen = previousScreen;
+      return;
+    }
+
+    history.pushState(
+      {
+        screen: currentScreen,
+        previous: null
+      },
+      "",
+      "#" + currentScreen
+    );
+
+  });
+
+}
+
+setupInternalBrowserNavigation();
+
   
 function openLevel(level){
 
@@ -1589,7 +1661,7 @@ function loadModuleLessons(){
   
 function reward(){
   stars++;
-  document.getElementById("starsCount").innerText = stars;
+  updateStudentHeader();
 
   const rewards = document.querySelector(".rewards");
   rewards.classList.remove("pop");
@@ -2047,8 +2119,8 @@ function speakColor(){
 }
 function finishColors(){
   stars++;
-  document.getElementById("starsCount").innerText = stars;
-  sendProgress("Colores - Pronunciación");
+  updateStudentHeader();
+  sendProgress(currentLesson + " - Escucha y repite");
 
   if(unlockedLessons < 2){
     unlockedLessons = 2;
@@ -2057,10 +2129,11 @@ function finishColors(){
   updateAdventureMap();
   soundVictory();
 
-  nextAfterPopup = "colorQuiz";
+  nextAfterPopup = "";
 
   showMagicPopup(
-    "🎉 ¡Excelente! ⭐ Ganaste una estrella. Ahora vamos al juego de colores."
+    "🎉 ¡Terminaste Escucha y repite! ⭐ Ganaste una estrella.",
+    { completed:true, nextGame:"gameTwo", restartGame:"gameOne" }
   );
 }
 
@@ -2072,16 +2145,62 @@ function normalizeChinese(text){
 
 let recognitionActive = null;
 
+function compareSpeechToItem(said, item){
+
+  const expectedRaw = getSpeakText(item);
+
+  if(currentLanguage === "Chino"){
+
+    const cleanChinese = normalizeChinese(said);
+    const cleanLatin = said.toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"")
+      .replace(/\s/g,"")
+      .replace(/[，。！？,.!?]/g,"");
+
+    const expectedChinese = normalizeChinese(item.zh || expectedRaw);
+    const accepted = (item.acceptZh || [expectedRaw]).map(option => {
+      return {
+        chinese: normalizeChinese(option),
+        latin: option.toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g,"")
+          .replace(/\s/g,"")
+          .replace(/[，。！？,.!?]/g,"")
+      };
+    });
+
+    return cleanChinese.includes(expectedChinese) ||
+      expectedChinese.includes(cleanChinese) ||
+      accepted.some(option =>
+        cleanChinese.includes(option.chinese) ||
+        option.chinese.includes(cleanChinese) ||
+        cleanLatin.includes(option.latin) ||
+        option.latin.includes(cleanLatin)
+      );
+  }
+
+  const cleanSaid = said.toLowerCase().trim();
+  const expected = expectedRaw.toLowerCase().trim();
+
+  let accepted = [expected];
+
+  if(currentLanguage === "Francés" && item.acceptFr){
+    accepted = item.acceptFr.map(x => x.toLowerCase().trim());
+  }
+
+  if(currentLanguage === "Inglés" && item.acceptEn){
+    accepted = item.acceptEn.map(x => x.toLowerCase().trim());
+  }
+
+  return cleanSaid.includes(expected) ||
+    expected.includes(cleanSaid) ||
+    accepted.some(option => cleanSaid.includes(option));
+}
+
 function listenStudentColor(){
 
   const feedback = document.getElementById("voiceFeedback");
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-  if(isIOS){
-    feedback.innerText = "📱 En iPhone esta actividad puede fallar. Usa computadora o Android con Chrome.";
-    feedback.style.background = "#FFF3B0";
-    return;
-  }
   const repeatBtn = document.querySelector('button[onclick="listenStudentColor()"]');
   const item = activeColors[currentColorIndex];
 
@@ -2089,7 +2208,7 @@ function listenStudentColor(){
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if(!SpeechRecognition){
-    feedback.innerText = "⚠️ Usa Google Chrome para activar el micrófono.";
+    feedback.innerText = "⚠️ Usa Chrome o Safari compatible para activar el micrófono.";
     return;
   }
 
@@ -2103,7 +2222,8 @@ function listenStudentColor(){
 
   recognition.lang = getSpeechLang();
   recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
+  recognition.maxAlternatives = 5;
+  recognition.continuous = false;
 
   feedback.innerText = "🎤 Te escucho...";
   feedback.style.background = "#FFF3B0";
@@ -2117,39 +2237,17 @@ function listenStudentColor(){
     try{
       recognition.stop();
     }catch(e){}
-  }, 5000);
+  }, 6500);
 
   recognition.onresult = function(event){
 
     clearTimeout(timeout);
 
-    const said = event.results[0][0].transcript;
-    const cleanSaid =
-      currentLanguage === "Chino"
-        ? normalizeChinese(said)
-        : said.toLowerCase().trim();
+    const alternatives = Array.from(event.results[0]).map(result => result.transcript);
+    const said = alternatives[0] || "";
+    const accepted = alternatives.some(option => compareSpeechToItem(option, item));
 
-    const expectedRaw = getSpeakText(item);
-    const expected =
-      currentLanguage === "Chino"
-        ? normalizeChinese(expectedRaw)
-        : expectedRaw.toLowerCase().trim();
-
-    let accepted = [expected];
-
-    if(currentLanguage === "Chino" && item.acceptZh){
-      accepted = item.acceptZh.map(x => normalizeChinese(x));
-    }
-
-    if(currentLanguage === "Francés" && item.acceptFr){
-      accepted = item.acceptFr.map(x => x.toLowerCase().trim());
-    }
-
-    if(
-      cleanSaid.includes(expected) ||
-      expected.includes(cleanSaid) ||
-      accepted.some(option => cleanSaid.includes(option))
-    ){
+    if(accepted){
       feedback.innerText = "🎉 ¡Muy bien! Dijiste: " + said;
       feedback.style.background = "#B9FBC0";
 
@@ -2178,6 +2276,7 @@ function listenStudentColor(){
     repeatBtn.style.opacity = "1";
   };
 }
+
   
 
 function speakPraise(){
@@ -2294,7 +2393,7 @@ function checkColorQuiz(answer){
     setTimeout(() => {
       if(currentQuiz >= quizColors.length){
         stars++;
-        document.getElementById("starsCount").innerText = stars;
+        updateStudentHeader();
         sendProgress("Colores - Juego auditivo");
 
         soundVictory();
@@ -2302,7 +2401,8 @@ function checkColorQuiz(answer){
         nextAfterPopup = "";
 
         showMagicPopup(
-          "🏆 ¡Ganaste el juego de colores! ⭐ Otra estrella para ti."
+          "🏆 ¡Terminaste Escucha y toca! ⭐ Ganaste una estrella.",
+          { completed:true, nextGame:"gameThree", restartGame:"gameTwo" }
         );
       }else{
         loadQuizQuestion();
@@ -2315,9 +2415,72 @@ function checkColorQuiz(answer){
   }
 }
 
-  function showMagicPopup(message){
+  function showMagicPopup(message, options = {}){
   document.getElementById("magicText").innerText = message;
+
+  nextGameAfterPopup = options.nextGame || "";
+  restartGameAfterPopup = options.restartGame || "";
+
+  const actions = document.getElementById("magicActions");
+
+  if(options.completed){
+    actions.innerHTML = `
+      <button onclick="goNextGameFromPopup()">Siguiente juego</button>
+      <button onclick="restartCurrentGameFromPopup()">Reiniciar</button>
+      <button onclick="closeMagicPopup()">Mapa</button>
+    `;
+  }else{
+    actions.innerHTML = `<button onclick="closeMagicPopup()">Continuar</button>`;
+  }
+
   document.getElementById("magicPopup").style.display = "flex";
+}
+
+function goNextGameFromPopup(){
+  document.getElementById("magicPopup").style.display = "none";
+
+  if(nextGameAfterPopup === "gameTwo"){
+    startGameTwo();
+    return;
+  }
+
+  if(nextGameAfterPopup === "gameThree"){
+    startGameThree();
+    return;
+  }
+
+  if(nextGameAfterPopup === "gameFour"){
+    startGameFour();
+    return;
+  }
+
+  showScreen("lessonGames");
+}
+
+function restartCurrentGameFromPopup(){
+  document.getElementById("magicPopup").style.display = "none";
+
+  if(restartGameAfterPopup === "gameOne"){
+    startGameOne();
+    return;
+  }
+
+  if(restartGameAfterPopup === "gameTwo"){
+    startGameTwo();
+    return;
+  }
+
+  if(restartGameAfterPopup === "gameThree"){
+    startGameThree();
+    return;
+  }
+
+  if(restartGameAfterPopup === "gameFour"){
+    startGameFour();
+    return;
+  }
+
+  showScreen("lessonGames");
 }
 
 function closeMagicPopup(){
@@ -2489,59 +2652,71 @@ function openColorHunt(){
   if(currentLanguage === "Inglés") mascot.innerText = "🦁";
   if(currentLanguage === "Español") mascot.innerText = "🦅";
 
+  const title = document.getElementById("huntTitle");
+  if(currentLesson === "Colors" || currentLesson === "Colores"){
+    title.innerText = "🎯 Caza del color";
+  }else if(currentLesson === "Family" || currentLesson === "Familia"){
+    title.innerText = "🎯 Caza de familiar";
+  }else{
+    title.innerText = "🎯 Caza de palabra";
+  }
+
   showScreen("colorHunt");
 
   loadHuntRound();
 }
 
-  function loadHuntRound(){
+function loadHuntRound(){
 
   huntTarget = huntColors[huntIndex];
   huntCorrectFound = 0;
-  huntCorrectTotal = 1;
 
   const grid = document.getElementById("huntGrid");
   grid.innerHTML = "";
 
-let objectsToShow = [];
+  let objectsToShow = [];
 
-if(currentLesson === "Colors" || currentLesson === "Colores"){
+  if(currentLesson === "Colors" || currentLesson === "Colores"){
 
-  const correctObjects = shuffleArray(
-    huntObjects.filter(o => o.key === huntTarget.key)
-  ).slice(0,3);
+    const correctObjects = shuffleArray(
+      huntObjects.filter(o => o.key === huntTarget.key)
+    ).slice(0,3);
 
-  const wrongObjects = shuffleArray(
-    huntObjects.filter(o => o.key !== huntTarget.key)
-  ).slice(0,6);
+    const wrongObjects = shuffleArray(
+      huntObjects.filter(o => o.key !== huntTarget.key)
+    ).slice(0,6);
 
-  objectsToShow = shuffleArray([
-    ...correctObjects,
-    ...wrongObjects
-  ]);
+    huntCorrectTotal = correctObjects.length;
 
-}else{
+    objectsToShow = shuffleArray([
+      ...correctObjects,
+      ...wrongObjects
+    ]);
 
-  const wrongObjects = shuffleArray(
-    activeColors.filter(item => item.es !== huntTarget.es)
-  ).slice(0,8);
+  }else{
 
-  objectsToShow = shuffleArray([
-    huntTarget,
-    ...wrongObjects
-  ]);
-}
+    const wrongObjects = shuffleArray(
+      activeColors.filter(item => item.es !== huntTarget.es)
+    ).slice(0,8);
+
+    huntCorrectTotal = 1;
+
+    objectsToShow = shuffleArray([
+      huntTarget,
+      ...wrongObjects
+    ]);
+  }
 
   objectsToShow.forEach(obj => {
     const btn = document.createElement("button");
 
-  btn.innerText = obj.emoji;
+    btn.innerText = obj.emoji;
 
-if(currentLesson === "Colors" || currentLesson === "Colores"){
-  btn.dataset.answer = obj.key;
-}else{
-  btn.dataset.answer = obj.es;
-}
+    if(currentLesson === "Colors" || currentLesson === "Colores"){
+      btn.dataset.answer = obj.key;
+    }else{
+      btn.dataset.answer = obj.es;
+    }
 
     btn.style.height = "95px";
     btn.style.fontSize = "48px";
@@ -2557,13 +2732,13 @@ if(currentLesson === "Colors" || currentLesson === "Colores"){
   });
 
   document.getElementById("huntFeedback").innerText =
-    "🔊 Pregunta " + (huntIndex + 1) + "/" + huntColors.length;
-
-  setTimeout(speakHuntColor, 700);
+    "🔊 Toca escuchar. Pregunta " + (huntIndex + 1) + "/" + huntColors.length;
 }
+
 function speakHuntColor(){
   speakItem(huntTarget);
 }
+
 function checkHuntObject(btn){
 
   let correcta = false;
@@ -2578,6 +2753,14 @@ function checkHuntObject(btn){
 
     btn.style.opacity = ".35";
     btn.disabled = true;
+    huntCorrectFound++;
+
+    if(huntCorrectFound < huntCorrectTotal){
+      document.getElementById("huntFeedback").innerText =
+        "✅ Muy bien. Busca otro igual.";
+      sound();
+      return;
+    }
 
     document.getElementById("huntFeedback").innerText =
       "✅ Muy bien";
@@ -2589,14 +2772,15 @@ function checkHuntObject(btn){
     if(huntIndex >= huntColors.length){
 
       stars++;
-      document.getElementById("starsCount").innerText = stars;
+      updateStudentHeader();
 
       sendProgress(currentLesson + " - Caza visual");
 
       soundVictory();
 
       showMagicPopup(
-        "🎯 ¡Completaste la caza visual! ⭐ Ganaste una estrella."
+        "🎯 ¡Terminaste la caza visual! ⭐ Ganaste una estrella.",
+        { completed:true, nextGame:"gameFour", restartGame:"gameThree" }
       );
 
     }else{
@@ -2608,9 +2792,7 @@ function checkHuntObject(btn){
   }else{
 
     document.getElementById("huntFeedback").innerText =
-      "🔄 Ese no. Escucha otra vez.";
-
-    speakHuntColor();
+      "🔄 Ese no. Toca escuchar otra vez.";
 
   }
 
@@ -2624,15 +2806,28 @@ function openSayColorGame(){
 
   activeColors = shuffleArray([...getCurrentLessonItems()]);
 
-  sayColorRounds = activeColors.map(color => {
-    const objects = huntObjects.filter(o => o.color === color.es);
-    const randomObject = shuffleArray([...objects])[0];
+  if(currentLesson === "Colors" || currentLesson === "Colores"){
 
-    return {
-      color: color,
-      object: randomObject
-    };
-  });
+    sayColorRounds = activeColors.map(color => {
+      const objects = huntObjects.filter(o => o.key === color.key);
+      const randomObject = shuffleArray([...objects])[0] || { emoji: color.emoji, key: color.key };
+
+      return {
+        item: color,
+        object: randomObject
+      };
+    });
+
+  }else{
+
+    sayColorRounds = activeColors.map(item => {
+      return {
+        item: item,
+        object: { emoji: item.emoji }
+      };
+    });
+
+  }
 
   sayColorRounds = shuffleArray(sayColorRounds);
   sayColorIndex = 0;
@@ -2643,6 +2838,11 @@ function openSayColorGame(){
   if(currentLanguage === "Francés") mascot.innerText = "🐓";
   if(currentLanguage === "Inglés") mascot.innerText = "🦁";
   if(currentLanguage === "Español") mascot.innerText = "🦅";
+
+  document.getElementById("sayWordTitle").innerText =
+    (currentLesson === "Colors" || currentLesson === "Colores")
+      ? "🖼️ Di el color"
+      : "🖼️ Di la palabra";
 
   showScreen("sayColorGame");
   loadSayColorRound();
@@ -2656,7 +2856,7 @@ function loadSayColorRound(){
     sayColorTarget.object.emoji;
 
   document.getElementById("sayColorFeedback").innerText =
-    "🎤 Di el color del objeto " + (sayColorIndex + 1) + "/" + sayColorRounds.length;
+    "🎤 Mira la imagen y di la palabra " + (sayColorIndex + 1) + "/" + sayColorRounds.length;
 
   document.getElementById("sayColorFeedback").style.background = "white";
 }
@@ -2664,54 +2864,52 @@ function loadSayColorRound(){
 function listenSayColor(){
 
   const feedback = document.getElementById("sayColorFeedback");
+  const sayBtn = document.querySelector('button[onclick="listenSayColor()"]');
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if(!SpeechRecognition){
-    feedback.innerText = "⚠️ Usa Google Chrome para activar el micrófono.";
+    feedback.innerText = "⚠️ Usa Chrome o Safari compatible para activar el micrófono.";
     return;
   }
 
-  const recognition = new SpeechRecognition();
-
-  if(currentLanguage === "Francés"){
-    recognition.lang = "fr-FR";
-  }else{
-    recognition.lang = "zh-CN";
+  if(recognitionActive){
+    recognitionActive.abort();
+    recognitionActive = null;
   }
 
+  const recognition = new SpeechRecognition();
+  recognitionActive = recognition;
+
+  recognition.lang = getSpeechLang();
   recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
+  recognition.maxAlternatives = 5;
+  recognition.continuous = false;
 
   feedback.innerText = "🎧 Te escucho...";
-  feedback.style.background = "white";
+  feedback.style.background = "#FFF3B0";
+
+  sayBtn.disabled = true;
+  sayBtn.style.opacity = ".45";
 
   recognition.start();
 
+  const timeout = setTimeout(() => {
+    try{
+      recognition.stop();
+    }catch(e){}
+  }, 6500);
+
   recognition.onresult = function(event){
 
-    const said = event.results[0][0].transcript;
+    clearTimeout(timeout);
 
-    let cleanSaid;
-    let expected;
-    let accepted;
+    const alternatives = Array.from(event.results[0]).map(result => result.transcript);
+    const said = alternatives[0] || "";
+    const accepted = alternatives.some(option => compareSpeechToItem(option, sayColorTarget.item));
 
-    if(currentLanguage === "Francés"){
-      cleanSaid = said.toLowerCase().trim();
-      expected = sayColorTarget.color.fr.toLowerCase().trim();
-      accepted = sayColorTarget.color.acceptFr || [expected];
-    }else{
-      cleanSaid = normalizeChinese(said);
-      expected = normalizeChinese(sayColorTarget.color.zh);
-      accepted = sayColorTarget.color.acceptZh || [expected];
-    }
-
-    if(
-      cleanSaid.includes(expected) ||
-      expected.includes(cleanSaid) ||
-      accepted.some(option => cleanSaid.includes(option))
-    ){
+    if(accepted){
 
       feedback.innerText = "🎉 ¡Correcto! Dijiste: " + said;
       feedback.style.background = "#B9FBC0";
@@ -2725,13 +2923,16 @@ function listenSayColor(){
         if(sayColorIndex >= sayColorRounds.length){
 
           stars++;
-          document.getElementById("starsCount").innerText = stars;
+          updateStudentHeader();
 
-          sendProgress("Colores - Di el color");
+          sendProgress(currentLesson + " - Di la palabra");
 
           soundVictory();
 
-          showMagicPopup("🖼️ ¡Dijiste todos los colores! ⭐ Ganaste una estrella.");
+          showMagicPopup(
+            "🖼️ ¡Terminaste Di la palabra! ⭐ Ganaste una estrella.",
+            { completed:true, restartGame:"gameFour" }
+          );
 
         }else{
 
@@ -2753,8 +2954,17 @@ function listenSayColor(){
     feedback.innerText = "🎤 Toca otra vez e inténtalo de nuevo.";
     feedback.style.background = "#FFF3B0";
   };
+
+  recognition.onend = function(){
+    clearTimeout(timeout);
+    recognitionActive = null;
+
+    sayBtn.disabled = false;
+    sayBtn.style.opacity = "1";
+  };
 }
-function playWord(word){
+
+function playWord(word, fallbackText = "", fallbackLang = "zh-CN"){
 
   const base = "https://hum328-tech.github.io/IPSA/audio/";
 
@@ -2767,9 +2977,26 @@ function playWord(word){
 
   const audio = new Audio(base + folder + word + ".mp3");
 
- audio.play().catch(() => {
-  console.log("No se pudo reproducir el audio:", word);
-});
+  let fallbackUsed = false;
+
+  function useVoiceFallback(){
+    if(fallbackUsed || !fallbackText){
+      console.log("No se pudo reproducir el audio:", word);
+      return;
+    }
+
+    fallbackUsed = true;
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(fallbackText);
+    utterance.lang = fallbackLang;
+    utterance.rate = 0.72;
+    speechSynthesis.speak(utterance);
+  }
+
+  audio.onerror = useVoiceFallback;
+
+  audio.play().catch(useVoiceFallback);
 
 }  
 
@@ -2795,34 +3022,34 @@ function speakItem(item){
   speechSynthesis.cancel();
 
   if(currentLanguage === "Chino" && item.audio){
-  playWord(item.audio);
+  playWord(item.audio, getSpeakText(item), getSpeechLang());
   return;
 }
 
   if(currentLanguage === "Inglés" && item.audio){
-  playWord(item.audio);
+  playWord(item.audio, getSpeakText(item), getSpeechLang());
   return;
 }
 
   if(currentLanguage === "Chino"){
 
     if(item.zh === "红色"){
-      playWord("hongse");
+      playWord("hongse", "红色", "zh-CN");
       return;
     }
 
     if(item.zh === "蓝色"){
-      playWord("lanse");
+      playWord("lanse", "蓝色", "zh-CN");
       return;
     }
 
     if(item.zh === "黄色"){
-      playWord("huangse");
+      playWord("huangse", "黄色", "zh-CN");
       return;
     }
 
     if(item.zh === "白色"){
-      playWord("baise");
+      playWord("baise", "白色", "zh-CN");
       return;
     }
 
