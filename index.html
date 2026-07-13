@@ -2193,9 +2193,30 @@ function compareSpeechToItem(said, item){
     accepted = item.acceptEn.map(x => x.toLowerCase().trim());
   }
 
-  return cleanSaid.includes(expected) ||
-    expected.includes(cleanSaid) ||
-    accepted.some(option => cleanSaid.includes(option));
+ function similarity(a, b){
+
+  let matches = 0;
+
+  const min = Math.min(a.length, b.length);
+
+  for(let i=0;i<min;i++){
+    if(a[i]===b[i]) matches++;
+  }
+
+  return matches / Math.max(a.length,b.length);
+}
+
+const result = accepted.some(option=>{
+
+  return (
+      cleanSaid.includes(option) ||
+      option.includes(cleanSaid) ||
+      similarity(cleanSaid, option) >= 0.60
+  );
+
+});
+
+return result;
 }
 
 function listenStudentColor(){
