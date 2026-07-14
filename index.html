@@ -1963,28 +1963,28 @@ const k1EnglishVocabulary = {
   2: {
 
     "Numbers 1-5": [
-      { es:"One", en:"one", emoji:"1️⃣" },
-      { es:"Two", en:"two", emoji:"2️⃣" },
-      { es:"Three", en:"three", emoji:"3️⃣" },
-      { es:"Four", en:"four", emoji:"4️⃣" },
-      { es:"Five", en:"five", emoji:"5️⃣" }
+      { es:"One", en:"one", audio:"one", emoji:"1️⃣" },
+      { es:"Two", en:"two", audio:"two", emoji:"2️⃣" },
+      { es:"Three", en:"three", audio:"three", emoji:"3️⃣" },
+      { es:"Four", en:"four", audio:"four", emoji:"4️⃣" },
+      { es:"Five", en:"five", audio:"five", emoji:"5️⃣" }
     ],
 
     "House": [
-      { es:"Door", en:"door", emoji:"🚪" },
-      { es:"Window", en:"window", emoji:"🪟" },
-      { es:"Chair", en:"chair", emoji:"🪑" },
-      { es:"Bed", en:"bed", emoji:"🛏️" },
-      { es:"Table", en:"table", emoji:"🪵" }
+      { es:"Door", en:"door", audio:"door", emoji:"🚪" },
+      { es:"Window", en:"window", audio:"window", emoji:"🪟" },
+      { es:"Chair", en:"chair", audio:"chair", emoji:"🪑" },
+      { es:"Bed", en:"bed", audio:"bed", emoji:"🛏️" },
+      { es:"Table", en:"table", audio:"table", emoji:"🪵" }
     ],
 
     "Food": [
-      { es:"Fruit", en:"fruit", emoji:"🍎" },
-      { es:"Soup", en:"soup", emoji:"🍲" },
-      { es:"Cereal", en:"cereal", emoji:"🥣" },
-      { es:"Milk", en:"milk", emoji:"🥛" },
-      { es:"Candies", en:"candies", emoji:"🍬" },
-      { es:"Egg", en:"egg", emoji:"🥚" }
+      { es:"Fruit", en:"fruit", audio:"fruit", emoji:"🍎" },
+      { es:"Soup", en:"soup", audio:"soup", emoji:"🍲" },
+      { es:"Cereal", en:"cereal", audio:"cereal", emoji:"🥣" },
+      { es:"Milk", en:"milk", audio:"milk", emoji:"🥛" },
+      { es:"Candies", en:"candies", audio:"candies", emoji:"🍬" },
+      { es:"Egg", en:"egg", audio:"egg", emoji:"🥚" }
     ]
 
   },
@@ -1992,28 +1992,28 @@ const k1EnglishVocabulary = {
   3: {
 
     "Toys": [
-      { es:"Car", en:"car", emoji:"🚗" },
-      { es:"Ball", en:"ball", emoji:"⚽" },
-      { es:"Truck", en:"truck", emoji:"🚚" },
-      { es:"Doll", en:"doll", emoji:"🧸" },
-      { es:"Bicycle", en:"bicycle", emoji:"🚲" },
-      { es:"Skates", en:"skates", emoji:"🛼" }
+      { es:"Car", en:"car", audio:"car", emoji:"🚗" },
+      { es:"Ball", en:"ball", audio:"ball", emoji:"⚽" },
+      { es:"Truck", en:"truck", audio:"truck", emoji:"🚚" },
+      { es:"Doll", en:"doll", audio:"doll", emoji:"🧸" },
+      { es:"Bicycle", en:"bicycle", audio:"bicycle", emoji:"🚲" },
+      { es:"Skates", en:"skates", audio:"skates", emoji:"🛼" }
     ],
 
     "Numbers 6-10": [
-      { es:"Six", en:"six", emoji:"6️⃣" },
-      { es:"Seven", en:"seven", emoji:"7️⃣" },
-      { es:"Eight", en:"eight", emoji:"8️⃣" },
-      { es:"Nine", en:"nine", emoji:"9️⃣" },
-      { es:"Ten", en:"ten", emoji:"🔟" }
+      { es:"Six", en:"six", audio:"six", emoji:"6️⃣" },
+      { es:"Seven", en:"seven", audio:"seven", emoji:"7️⃣" },
+      { es:"Eight", en:"eight", audio:"eight", emoji:"8️⃣" },
+      { es:"Nine", en:"nine", audio:"nine", emoji:"9️⃣" },
+      { es:"Ten", en:"ten", audio:"ten", emoji:"🔟" }
     ],
 
     "Vowels": [
-      { es:"A", en:"A", emoji:"🔤" },
-      { es:"E", en:"E", emoji:"🔤" },
-      { es:"I", en:"I", emoji:"🔤" },
-      { es:"O", en:"O", emoji:"🔤" },
-      { es:"U", en:"U", emoji:"🔤" }
+      { es:"A", en:"A", audio:"a", emoji:"🔤" },
+      { es:"E", en:"E", audio:"e", emoji:"🔤" },
+      { es:"I", en:"I", audio:"i", emoji:"🔤" },
+      { es:"O", en:"O", audio:"o", emoji:"🔤" },
+      { es:"U", en:"U", audio:"u", emoji:"🔤" }
     ]
 
   }
@@ -3001,6 +3001,22 @@ function playWord(word, fallbackText = "", fallbackLang = "zh-CN"){
   let fallbackUsed = false;
 
   function useVoiceFallback(){
+    // K1 inglés debe usar exclusivamente los MP3 alojados en GitHub.
+    if(currentLanguage === "Inglés" && currentLevel === "K1"){
+      console.error("No se pudo cargar el audio de GitHub:", audio.src);
+
+      const feedback =
+        document.getElementById("voiceFeedback") ||
+        document.getElementById("quizFeedback") ||
+        document.getElementById("huntFeedback") ||
+        document.getElementById("sayColorFeedback");
+
+      if(feedback){
+        feedback.innerText = "⚠️ No se pudo cargar el audio. Revisa el archivo: " + word + ".mp3";
+      }
+      return;
+    }
+
     if(fallbackUsed || !fallbackText){
       console.log("No se pudo reproducir el audio:", word);
       return;
@@ -3047,8 +3063,13 @@ function speakItem(item){
   return;
 }
 
-  if(currentLanguage === "Inglés" && item.audio){
-  playWord(item.audio, getSpeakText(item), getSpeechLang());
+  if(currentLanguage === "Inglés" && currentLevel === "K1"){
+  const englishAudioFile = item.audio || String(item.en || item.es || "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-");
+
+  playWord(englishAudioFile);
   return;
 }
 
